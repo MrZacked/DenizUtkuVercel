@@ -7,17 +7,16 @@ A modern portfolio website built with Next.js, showcasing my projects and skills
 - Next.js & React
 - TypeScript
 - Tailwind CSS
-- Three.js
 - Framer Motion
 
 ## Features
 
 - Modern UI with smooth animations
 - Responsive design
-- Interactive 3D elements
-- Dark/Light mode
 - Project showcase
 - Experience timeline
+- Interactive UI elements with hover effects
+- Dark theme optimized
 
 ## Running Locally
 
