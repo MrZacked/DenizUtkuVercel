@@ -80,6 +80,14 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
+    title: "Object Detection with Web Interface",
+    des: "Built an object detection system using YOLO11 and YOLOv8 models with PyTorch for real-time image and video analysis. Implemented a web interface using Streamlit for interactive detection, supporting multiple model variants with configurable confidence thresholds. Features include batch processing, live camera detection, and custom training pipeline. Achieved detection speeds of ~100ms per image with support for 80+ object classes.",
+    img: "/p4.svg",
+    iconLists: ["/app.svg", "/c.svg", "/stream.svg", "/git.svg"],
+    link: "https://github.com/MrZacked"
+  },
+  {
+    id: 2,
     title: "ChatApp Website",
     des: "Developed a real-time chat application with user login, messaging, and online presence features. Built with React, TypeScript, and Fastify.",
     img: "/p1.svg",
@@ -87,15 +95,15 @@ export const projects: Project[] = [
     link: "https://github.com/MrZacked"
   },
   {
-    id: 2,
+    id: 3,
     title: "Foodagram - AI Food Recognition",
     des: "Built an AI-backed food photo verification system that detects if uploaded images are of food and verifies them against given food names. Utilized ResNet50, zero-shot classification, and cosine similarity-based feature vector comparisons. Extended with video-based verification for both frontend and API layers.",
     img: "/p2.svg",
-    iconLists: ["/python.svg", "/tensorflow.svg", "/re.svg", "/next.svg"],
+    iconLists: ["/app.svg", "/c.svg", "/re.svg", "/next.svg"],
     link: "https://github.com/MrZacked"
   },
   {
-    id: 3,
+    id: 4,
     title: "Fitness Tracker App",
     des: "A modern fitness tracking app to monitor your activities, goals, and progress. Features include a dashboard with charts and stats, activity cards, friends list, and a clean, responsive UI. Built using React and Node.js.",
     img: "/p3.svg",
@@ -117,9 +125,9 @@ export const companies = [
   },
   {
     id: 2,
-    name: "python",
-    img: "/python.svg", 
-    nameImg: "/python.svg",
+    name: "app",
+    img: "/app.svg", 
+    nameImg: "/app.svg",
   },
   {
     id: 3,

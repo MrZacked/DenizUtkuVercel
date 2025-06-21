@@ -12,4 +12,4 @@ Built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
 - [@MrZacked](https://github.com/MrZacked)
 - Antalya, Turkey
 
-© 2024 Deniz Utku Ateş
+© 2025 Deniz Utku Ateş

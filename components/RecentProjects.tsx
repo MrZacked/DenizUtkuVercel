@@ -5,6 +5,13 @@ import Image from "next/image";
 
 const projects = [
   {
+    title: "Object Detection with Web Interface",
+    description:
+      "Built an object detection system using YOLO11 and YOLOv8 models with PyTorch for real-time image and video analysis. Implemented a web interface using Streamlit for interactive detection, supporting multiple model variants with configurable confidence thresholds. Features include batch processing, live camera detection, and custom training pipeline. Achieved detection speeds of ~100ms per image with support for 80+ object classes.",
+    link: "https://github.com/MrZacked",
+    technologies: ["Python", "YOLO11", "YOLOv8", "PyTorch", "Streamlit", "Computer Vision", "Real-time Detection"]
+  },
+  {
     title: "ChatApp Website",
     description:
       "Developed a real-time chat application with user login, messaging, and online presence features. Built with React, TypeScript, and Fastify.",
