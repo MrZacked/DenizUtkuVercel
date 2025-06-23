@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 export const BackgroundBeams = ({ className }: { className?: string }) => {
   const beamsRef = useRef<HTMLDivElement>(null);
