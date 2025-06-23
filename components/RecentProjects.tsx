@@ -5,6 +5,13 @@ import Image from "next/image";
 
 const projects = [
   {
+    title: "Sticky Tasks - Full-Stack Todo Application",
+    description:
+      "Built a task management web application using MERN stack with TypeScript. Users can create tasks with priorities and due dates, filter by status, and view completion statistics. Implemented RESTful API with MongoDB aggregation for data processing. Features include task categorization, deadline tracking, progress analytics, and responsive design for seamless productivity management.",
+    link: "https://github.com/MrZacked",
+    technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript", "RESTful API", "MERN Stack"]
+  },
+  {
     title: "Object Detection with Web Interface",
     description:
       "Built an object detection system using YOLO11 and YOLOv8 models with PyTorch for real-time image and video analysis. Implemented a web interface using Streamlit for interactive detection, supporting multiple model variants with configurable confidence thresholds. Features include batch processing, live camera detection, and custom training pipeline. Achieved detection speeds of ~100ms per image with support for 80+ object classes.",
