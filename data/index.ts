@@ -81,7 +81,7 @@ export const projects: Project[] = [
   {
     id: 1,
     title: "Sticky Tasks - Full-Stack Todo Application",
-    des: "Built a task management web application using MERN stack with TypeScript. Users can create tasks with priorities and due dates, filter by status, and view completion statistics. Implemented RESTful API with MongoDB aggregation for data processing. Features include task categorization, deadline tracking, progress analytics, and responsive design for seamless productivity management.",
+    des: "Built a task management web application using MERN stack with TypeScript. Users can create tasks with priorities and due dates, filter by status, and view completion statistics. Implemented RESTful API with MongoDB aggregation for data processing. Features include task categorization, deadline tracking, progress analytics, and responsive design.",
     img: "/p4.svg",
     iconLists: ["/re.svg", "/ts.svg", "/app.svg", "/c.svg"],
     link: "https://github.com/MrZacked"
