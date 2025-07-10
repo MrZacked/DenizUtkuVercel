@@ -23,8 +23,7 @@ const Footer = () => {
             presence to the next level?
           </h1>
           <p className="text-white-200 text-responsive-base max-w-2xl mb-8 leading-relaxed">
-            Reach out to me today and let&apos;s discuss how I can help you
-            achieve your goals.
+            Let&apos;s discuss your project and see how we can work together.
           </p>
           <a href="mailto:denizutku1900@hotmail.com">
             <MagicButton
@@ -38,8 +37,8 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row justify-between items-center responsive-gap border-t border-blue-900 pt-8">
           <div className="text-center lg:text-left">
             <div className="mb-2 text-blue font-bold text-responsive-xl">DENIZ UTKU ATEŞ</div>
-            <div className="mb-2 text-white-200 text-responsive-base">Computer Engineering Student & Full Stack Developer</div>
-            <div className="mb-2 text-white-200 text-responsive-sm">denizutku1900@hotmail.com &bull; Antalya, Turkey &bull; +05538567042</div>
+            <div className="mb-2 text-white-200 text-responsive-base">Computer Engineering Graduate & Full Stack Developer</div>
+            <div className="mb-2 text-white-200 text-responsive-sm">denizutku1900@hotmail.com &bull; Antalya, Turkey &bull; +90 553 856 7042</div>
           </div>
 
           <div className="flex items-center responsive-gap">

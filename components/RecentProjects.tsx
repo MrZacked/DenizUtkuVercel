@@ -7,21 +7,21 @@ const projects = [
   {
     title: "Sticky Tasks - Full-Stack Todo Application",
     description:
-      "Built a task management web application using MERN stack with TypeScript. Users can create tasks with priorities and due dates, filter by status, and view completion statistics. Implemented RESTful API with MongoDB aggregation for data processing. Features include task categorization, deadline tracking, progress analytics, and responsive design for seamless productivity management.",
+      "Built a task management web application using MERN stack with TypeScript. Users can create tasks with priorities and due dates, filter by status, and view completion statistics. Implemented RESTful API with MongoDB aggregation for data processing. Features include task categorization, deadline tracking, progress analytics, and responsive design.",
     link: "https://github.com/MrZacked",
     technologies: ["React", "Node.js", "MongoDB", "Express", "TypeScript", "RESTful API", "MERN Stack"]
   },
   {
-    title: "Object Detection with Web Interface",
+    title: "Object Detection Web App",
     description:
-      "Built an object detection system using YOLO11 and YOLOv8 models with PyTorch for real-time image and video analysis. Implemented a web interface using Streamlit for interactive detection, supporting multiple model variants with configurable confidence thresholds. Features include batch processing, live camera detection, and custom training pipeline. Achieved detection speeds of ~100ms per image with support for 80+ object classes.",
+      "Real-time detection using YOLOv8, v11 + Streamlit. Supported batch/live camera input with 80+ classes. Built an object detection system with PyTorch for real-time image and video analysis. Implemented web interface for interactive detection, supporting multiple model variants with configurable confidence thresholds.",
     link: "https://github.com/MrZacked",
     technologies: ["Python", "YOLO11", "YOLOv8", "PyTorch", "Streamlit", "Computer Vision", "Real-time Detection"]
   },
   {
-    title: "ChatApp Website",
+    title: "ChatApp – Real-Time Communication",
     description:
-      "Developed a real-time chat application with user login, messaging, and online presence features. Built with React, TypeScript, and Fastify.",
+      "React + TypeScript + Fastify-based app with messaging, login, and presence features. Developed a real-time chat application with user login, messaging, and online presence features.",
     link: "https://github.com/MrZacked",
     technologies: ["React", "TypeScript", "Fastify", "Real-time messaging"]
   },

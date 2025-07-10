@@ -56,7 +56,7 @@ const Hero = () => {
             <span className="hidden md:inline text-gray-400">&bull;</span>
             <span className="text-responsive-base text-gray-300 break-words">Antalya, Turkey</span>
             <span className="hidden md:inline text-gray-400">&bull;</span>
-            <span className="text-responsive-base text-gray-300 break-words">+05538567042</span>
+            <span className="text-responsive-base text-gray-300 break-words">+90 553 856 7042</span>
           </div>
           <a 
             href="https://github.com/MrZacked" 
@@ -73,7 +73,7 @@ const Hero = () => {
             />
           </div>
           <p className="text-center max-w-3xl mb-6 md:mb-8 text-responsive-base text-gray-200 leading-relaxed card-padding w-full">
-            Computer Engineering student at Antalya Bilim University (GPA 3.76, Top 3). Proficient in AI/ML and full stack development. Building practical solutions with modern web and machine learning technologies.
+            Computer Engineering graduate from Antalya Bilim University (GPA 3.76, Top 3). Experienced in AI/ML and full stack development. I build web applications and work with machine learning technologies.
           </p>
           <a href="#about" className="scroll-smooth">
             <MagicButton
