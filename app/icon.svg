@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Deniz Utku Ateş">
+  <rect width="64" height="64" rx="12" fill="#0c1520"/>
+  <path d="M12 18h15c12 0 19 7 19 14S39 46 27 46H12V18zm8 7v14h7c7 0 11-2 11-7s-4-7-11-7h-7z" fill="#edf4f7"/>
+  <path d="M48 18h5v28h-5z" fill="#9bd4ea"/>
+</svg>
