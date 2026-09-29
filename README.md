@@ -1,15 +1,14 @@
-# Portfolio
+# Deniz Utku Ateş
 
-👋 Hey! I'm Deniz, and this is my portfolio site.
+Personal portfolio at [denizutkuates.com](https://denizutkuates.com), built with Next.js, TypeScript and CSS.
 
-🔗 [denizutkuates.vercel.app](https://denizutkuates.vercel.app)
+## Run locally
 
-Built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
+```sh
+npm ci
+npm run dev
+```
 
-## Get in Touch
+Open [localhost:3000](http://localhost:3000). For a local production run, use `npm run build` followed by `npm run start`.
 
-- denizutku1900@hotmail.com
-- [@MrZacked](https://github.com/MrZacked)
-- Antalya, Turkey
-
-© 2025 Deniz Utku Ateş
+The public CV is in `public/Deniz_Utku_Ates_Resume.pdf`. To rebuild it after a content change, run `python3 scripts/build_resume.py` with ReportLab installed. This copy leaves out the phone number.
