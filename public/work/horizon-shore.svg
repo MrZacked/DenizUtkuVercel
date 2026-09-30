@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <defs>
+    <linearGradient id="cliff" x1="1270" y1="500" x2="1550" y2="850" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#bb9677"/>
+      <stop offset="0.5" stop-color="#8e745f"/>
+      <stop offset="1" stop-color="#42514a"/>
+    </linearGradient>
+    <linearGradient id="leftShade" x1="0" y1="450" x2="1050" y2="450" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102725" stop-opacity="0.79"/>
+      <stop offset="0.58" stop-color="#102725" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#102725" stop-opacity="0"/>
+    </linearGradient>
+    <g id="shore">
+      <path d="M1421 408c20 10 38 27 56 42l123 26v584h-333v-160l55-122 8-81 32-82-11-72 70-135zM1600 476h160v584h-160z" fill="#344f47"/>
+      <path d="M1351 510c34-16 64-34 89-58l59 26 101 15v245l-100 70-167 39-52-98 33-102z" fill="url(#cliff)"/>
+      <path d="M1393 518l84-43 123 27M1368 568l105-47 127 20m-255 79 140-47 115 12m-277 89 162-54 115 10m-293 93 192-47 101-4" stroke="#e9bd91" stroke-opacity="0.56" stroke-width="5" stroke-linecap="round"/>
+      <path d="M1334 518l-30 99 46 30-28 64 19 64m104-245-43 81 17 62-37 67m129-210-19 103 18 68-23 64" stroke="#455950" stroke-opacity="0.5" stroke-width="5" stroke-linecap="round"/>
+      <path d="M1316 696c30-29 70-36 105-44 61-13 120-11 179 2v406h-410v-160c23-90 62-148 126-204z" fill="#28483e"/>
+      <path d="M1216 842c68-61 145-89 225-80 61 7 114 15 159 33v265h-480v-160z" fill="#17372f"/>
+      <path d="M1298 776c3-38 3-74 0-111m84 125c2-58 3-114 4-169m105 180c-1-51-1-102 2-153" stroke="#233f34" stroke-width="10" stroke-linecap="round"/>
+      <path d="M1240 679c13-30 41-47 73-45 27 1 47 11 60 31-36-3-53 3-71 15-17-9-35-10-62-1zm73-46c27-30 80-34 109-5 10 11 14 23 17 37-25-13-52-13-72-3-21-12-37-19-54-29zm104 22c13-31 43-49 79-47 30 2 58 15 74 36-38-3-63 4-80 17-18-10-43-12-73-6z" fill="#1b4033"/>
+      <path d="M0 1060V780c147-48 304-62 453-40 79 12 158 43 220 77 83 46 153 66 238 83v160H0zM-160 780H0v280h-160z" fill="#173630"/>
+      <path d="M0 852c106-31 203-48 307-44 112 5 213 44 305 92v160H0zM-160 852H0v208h-160z" fill="#102a28"/>
+      <path d="M120 839c13-36 41-57 74-52 25 4 42 16 54 40-24-8-43-6-57 2-18-7-39-5-71 10zm216 14c13-28 38-44 68-42 25 2 47 16 60 38-27-4-43-1-58 8-20-10-41-10-70-4z" fill="#21463b"/>
+    </g>
+    <mask id="shoreMask" x="-160" y="-120" width="1920" height="1180" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+      <use href="#shore"/>
+    </mask>
+  </defs>
+  <use href="#shore"/>
+  <path d="M-160-120h1920v1180H-160z" fill="url(#leftShade)" mask="url(#shoreMask)"/>
+</svg>

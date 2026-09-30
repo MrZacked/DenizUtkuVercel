@@ -1,3 +1,42 @@
+Photo sources
+
+public/work/construction-sunset.jpg
+Title: Construction crane silhouetted against a vibrant sunset
+Photographer: Fatih Kaan
+Source: https://unsplash.com/photos/construction-crane-silhouetted-against-a-vibrant-sunset-oSX8gS7bp90
+License: Unsplash License (https://unsplash.com/license)
+Use: Resized photo used as an illustrative background for the VERO section.
+This is not a photo of a VERO project or workplace.
+
+public/work/healem-room.webp
+Title: brown wooden framed white padded armchairs
+Photographer: Greg Rosenke
+Source: https://unsplash.com/photos/brown-wooden-framed-white-padded-armchairs-1ebbokV07KE
+License: Unsplash License (https://unsplash.com/license)
+Use: WebP copy used as an illustrative interior photo for Healem.
+This is not a screenshot of the app.
+
+public/work/object-detection.jpg
+Title: Cat on a bench near Sultanahmet Meydanı, Istanbul
+Photographer: Jakub Hałun
+Source: https://commons.wikimedia.org/wiki/File:Cat_on_a_bench_near_Sultanahmet_Meydan%C4%B1,_Istanbul,_20260605_0902_0926.jpg
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Changes: Resized photo with detection boxes added.
+
+public/work/color-input.jpg and public/work/color-output.jpg
+Title: Turkey (Izmir-Urla) Late evening street view
+Photographer: Güldem Üstün
+Source: https://commons.wikimedia.org/wiki/File:Izmir-Urla_Late_evening_street_view.jpg
+Original source: https://www.flickr.com/photos/guldem/28902608653/
+License: Creative Commons Attribution 2.0 Generic (CC BY 2.0)
+License URL: https://creativecommons.org/licenses/by/2.0/
+Changes: Resized photo converted to grayscale for the input. The output uses
+estimated colors from a pretrained model (https://github.com/richzhang/colorization).
+
+These photo credits do not imply endorsement by the photographers.
+
+-----------------------------------------------------------
 Inter font
 Source: https://github.com/google/fonts/tree/main/ofl/inter
 

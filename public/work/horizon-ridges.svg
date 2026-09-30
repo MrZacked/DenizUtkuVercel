@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <defs>
+    <linearGradient id="water" x1="800" y1="505" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#456c66"/>
+      <stop offset="0.46" stop-color="#204c4b"/>
+      <stop offset="1" stop-color="#102d30"/>
+    </linearGradient>
+    <linearGradient id="leftShade" x1="0" y1="450" x2="1050" y2="450" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102725" stop-opacity="0.79"/>
+      <stop offset="0.58" stop-color="#102725" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#102725" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="seaLines" width="216" height="37" patternUnits="userSpaceOnUse" patternTransform="skewX(-18)">
+      <path d="M12 12h41m69 0h18m23 13h40M67 30h29" stroke="#b9d0b8" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <path d="M932 465l81-40 73-77 46 23 64-101 47 67 41-24 53 70 50-23 74 69 139 20v113H793z" fill="#b3957d"/>
+  <path d="M977 465l114-122 40 28 65-101 47 67 41-24 54 71 48-24 70 67 95 30" stroke="#f1c6a2" stroke-opacity="0.38" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M752 497l100-73 57 31 88-88 72 46 56-55 93 71 81-33 97 53 204 4v95H657z" fill="#779087"/>
+  <path d="M889 486l110-119 71 45 55-54 94 70" stroke="#d0c0a8" stroke-opacity="0.23" stroke-width="3"/>
+  <path d="M607 514l98-47 80 26 52-35 92 52 83-17 114 22 474-19v130H546z" fill="#526c65"/>
+  <path d="M0 512c197 9 343 4 505 1 320-7 622-4 1095 4v543H0zM-160 525H0v535h-160zM1600 517h160v543h-160z" fill="url(#water)"/>
+  <path d="M0 550c267 4 484-8 682-7 277 2 565 16 918 5M0 615c278-2 419 6 608 1 243-7 584 9 992-3M0 737c270-4 503 4 749-3 308-8 577 2 851-4" stroke="#b3c6aa" stroke-opacity="0.11" stroke-width="3"/>
+  <path fill="url(#seaLines)" d="M-160 530h1920v530H-160z"/>
+  <path d="M1181 523c45 4 113 7 159 5m-104 15c47 6 128 10 182 9m-145 18c65 5 143 7 208 5m-166 21c48 3 126 4 185 2m-146 31c40 4 109 5 165 3m-122 28c50 3 113 1 163-3" stroke="#f6d5a4" stroke-opacity="0.42" stroke-width="3" stroke-linecap="round"/>
+  <path d="M-160-120h1920v1180H-160z" fill="url(#leftShade)"/>
+</svg>
