@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { ColorComparison } from "./color-comparison";
+import { MotionEffects } from "./motion-effects";
 import { ThemeToggle } from "./theme-toggle";
 
 export default function Home() {
@@ -23,117 +25,162 @@ export default function Home() {
         </div>
       </header>
 
-      <main id="main">
-        <section className="hero site-shell" id="top" aria-labelledby="page-title">
-          <div className="hero-name">
-            <p className="hero-role">Software developer in Antalya, Turkey</p>
-            <h1 id="page-title">
-              <span>Deniz Utku</span>
-              <span>Ateş</span>
-            </h1>
+      <main id="main" tabIndex={-1}>
+        <section className="hero" id="top" aria-labelledby="page-title" data-motion-scene="horizon">
+          <div className="hero-scene" aria-hidden="true">
+            <div className="hero-layer hero-layer-sky" />
+            <div className="hero-layer hero-layer-ridges" />
+            <div className="hero-layer hero-layer-shore" />
           </div>
-          <div className="hero-intro">
-            <p>
-              At VERO Digital Solutions I work on a shared Python library, API
-              tests and integrations between business systems. I also build web
-              apps and computer vision projects in my own time.
-            </p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#projects">
-                View projects
-              </a>
-              <a className="text-link" href="mailto:denizutku1900@hotmail.com">
-                Email me
-              </a>
+          <div className="site-shell hero-inner">
+            <div className="hero-name">
+              <p className="hero-role">Software developer in Antalya, Turkey</p>
+              <h1 id="page-title">
+                <span>Deniz Utku</span>
+                <span>Ateş</span>
+              </h1>
+            </div>
+            <div className="hero-intro">
+              <p>
+                At VERO Digital Solutions I work on a shared Python library,
+                API tests and integrations between business systems. Outside
+                work I build web apps and computer vision projects.
+              </p>
+              <div className="hero-actions">
+                <a className="hero-project-link" href="#projects">
+                  View projects <span aria-hidden="true">↘</span>
+                </a>
+                <a className="text-link" href="mailto:denizutku1900@hotmail.com">
+                  Email me
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="site-shell section experience-section" id="experience" aria-labelledby="experience-title">
-          <div className="section-intro">
-            <h2 id="experience-title">Experience</h2>
-          </div>
-
-          <article className="experience-feature">
-            <div className="experience-heading">
-              <p className="experience-date">Sep 2025 - Present</p>
-              <h3>Python Developer</h3>
-              <p className="experience-company">VERO Digital Solutions</p>
+        <section className="section experience-section" id="experience" aria-labelledby="experience-title">
+          <div className="site-shell">
+            <div className="section-intro" data-reveal="copy">
+              <h2 id="experience-title">Experience</h2>
+              <p>Python tools, integrations and testing for construction software.</p>
             </div>
-            <ul className="experience-points">
-              <li>
-                <h4>API testing</h4>
-                <p>
-                  I built and maintained the API testing project with pytest
-                  and YAML. It checks responses across environments, keeps
-                  authentication settings separate and runs in GitLab CI. I
-                  also wrote the setup guide.
-                </p>
-              </li>
-              <li>
-                <h4>Shared Python library</h4>
-                <p>
-                  I made most of the updates to our shared Python library. It
-                  handles configuration, logging, application startup, API
-                  access and data processing. I updated existing scripts to
-                  use it.
-                </p>
-              </li>
-              <li>
-                Built REST and webhook integrations for ERP, HR and accounting
-                systems. Worked on data mapping, validation and duplicate
-                handling.
-              </li>
-              <li>
-                Added vehicle and work-order imports through CLI and FastAPI,
-                including business rules and contact mapping.
-              </li>
-              <li>
-                Built Excel reports for employee hours, project reporting and
-                material lists. Checked the results against existing reports
-                and worked on payroll exports.
-              </li>
-              <li>
-                Built PDF parsers and structured file imports. Wrote unit and
-                regression tests and documented the work.
-              </li>
-            </ul>
-          </article>
 
-          <div className="earlier-work">
-            <h3>Earlier experience</h3>
-            <div className="earlier-work-grid">
-              <article>
-                <p className="experience-date">Jan 2024 - Mar 2024</p>
-                <div>
-                  <h4>Digital Image Processing Intern</h4>
-                  <p>Bulutsoft</p>
+            <article className="experience-feature">
+              <div className="experience-heading" data-motion-scene="photo">
+                <div className="experience-backdrop" aria-hidden="true">
+                  <Image
+                    src="/work/construction-sunset.jpg"
+                    alt=""
+                    fill
+                    sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) calc(100vw - 3rem), 1248px"
+                  />
                 </div>
-                <p>Worked on computer vision and image processing projects.</p>
-              </article>
-              <article>
-                <p className="experience-date">Jul 2023 - Sep 2023</p>
-                <div>
-                  <h4>Full Stack Developer Intern</h4>
-                  <p>Bulutsoft</p>
+                <div className="experience-heading-content" data-reveal="copy">
+                  <p className="experience-date">Sep 2025 - Present</p>
+                  <h3>Python Developer</h3>
+                  <p className="experience-company">VERO Digital Solutions</p>
+                  <p className="experience-lead">
+                    Most of my work starts with a workflow that needs fixing or
+                    extending. I trace the data, make the change and check it
+                    with tests or existing reports.
+                  </p>
                 </div>
-                <p>Worked on web applications and REST APIs.</p>
-              </article>
+              </div>
+              <ul className="experience-points" role="list">
+                <li data-reveal="copy">
+                  <h4>API testing</h4>
+                  <p>
+                    I built and maintained the API testing project with pytest
+                    and YAML. It checks responses across environments, keeps
+                    authentication settings separate and runs in GitLab CI. I
+                    also wrote the setup guide.
+                  </p>
+                </li>
+                <li data-reveal="copy" data-reveal-delay="90">
+                  <h4>Shared Python library</h4>
+                  <p>
+                    I made most of the updates to our shared Python library. It
+                    handles configuration, logging, application startup, API
+                    access and data processing. I updated existing scripts to
+                    use it.
+                  </p>
+                </li>
+                <li data-reveal="copy">
+                  <h4>Integrations and imports</h4>
+                  <p>
+                    I added REST and webhook features to ERP, HR and accounting
+                    integrations. I worked on data mapping, validation, duplicate
+                    handling and vehicle and work-order imports through CLI and
+                    FastAPI.
+                  </p>
+                </li>
+                <li data-reveal="copy" data-reveal-delay="90">
+                  <h4>HR and vehicle data</h4>
+                  <p>
+                    I worked on employee and attendance sync, including employee
+                    matching and records with multiple breaks. I also improved
+                    how vehicle trips matched work orders and time records,
+                    including time-zone handling.
+                  </p>
+                </li>
+                <li data-reveal="copy">
+                  <h4>Reports and documents</h4>
+                  <p>
+                    I built Excel reports for employee hours, project reporting
+                    and material lists. I checked them against existing reports,
+                    worked on payroll exports and made PDF parsers and structured
+                    file imports.
+                  </p>
+                </li>
+                <li data-reveal="copy" data-reveal-delay="90">
+                  <h4>Other tools and quality</h4>
+                  <p>
+                    I built CLI and FastAPI tools for translating text and
+                    software language files, with input checks and caching. I
+                    also updated build tools, wrote unit and regression tests
+                    and made test and code-quality results easier to review.
+                  </p>
+                </li>
+              </ul>
+            </article>
+
+            <div className="earlier-work" data-reveal="copy">
+              <h3>Earlier experience</h3>
+              <div className="earlier-work-grid">
+                <article>
+                  <p className="experience-date">Jan 2024 - Mar 2024</p>
+                  <div>
+                    <h4>Digital Image Processing Intern</h4>
+                    <p>Bulutsoft</p>
+                  </div>
+                  <p>Worked on computer vision and image processing projects.</p>
+                </article>
+                <article>
+                  <p className="experience-date">Jul 2023 - Sep 2023</p>
+                  <div>
+                    <h4>Full Stack Developer Intern</h4>
+                    <p>Bulutsoft</p>
+                  </div>
+                  <p>Worked on web applications and REST APIs.</p>
+                </article>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="site-shell section projects-section" id="projects" aria-labelledby="projects-title">
-          <div className="section-intro">
-            <h2 id="projects-title">Projects</h2>
-          </div>
+        <section className="section projects-section" id="projects" aria-labelledby="projects-title">
+          <div className="site-shell">
+            <div className="section-intro" data-reveal="copy">
+              <h2 id="projects-title">Projects</h2>
+              <p>A few things I made outside work.</p>
+            </div>
 
           <article className="project project-detection">
             <figure className="project-figure detection-figure">
-              <div className="project-image">
+              <div className="project-image" data-reveal="image">
                 <Image
                   src="/work/object-detection.jpg"
-                  alt="Object detection result on a photograph of a cat resting on a bench"
+                  alt="Cat resting on a bench with detection boxes added to the photo"
                   fill
                   sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1000px) calc(55vw - 2.75rem), (max-width: 1296px) calc(64vw - 2rem), 800px"
                 />
@@ -154,7 +201,7 @@ export default function Home() {
                 ) and added the detection boxes.
               </figcaption>
             </figure>
-            <div className="project-copy">
+            <div className="project-copy" data-reveal="copy" data-reveal-delay="100">
               <h3>Object detection</h3>
               <p>
                 I built a Streamlit app that uses pretrained YOLO models to
@@ -174,12 +221,20 @@ export default function Home() {
           </article>
 
           <article className="project project-healem">
-            <div>
+            <figure className="healem-figure">
+              <div className="healem-image" data-reveal="image">
+                <Image
+                  src="/work/healem-room.webp"
+                  alt="Pale upholstered chairs with wooden frames in a sunlit room"
+                  fill
+                  sizes="(max-width: 520px) 100vw, (max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) 42vw, 520px"
+                />
+              </div>
+            </figure>
+            <div className="healem-content" data-reveal="copy" data-reveal-delay="100">
               <p className="project-kind">Demo web app</p>
               <h3>Healem</h3>
-            </div>
-            <div className="healem-copy">
-              <p>
+              <p className="healem-description">
                 A health management app with different user roles, appointments,
                 messaging and APIs for health records.
               </p>
@@ -196,7 +251,7 @@ export default function Home() {
           </article>
 
           <article className="project project-colorization">
-            <div className="colorization-heading">
+            <div className="colorization-heading" data-reveal="copy">
               <div>
                 <h3>Colorization</h3>
                 <p>
@@ -217,30 +272,7 @@ export default function Home() {
               </div>
             </div>
             <figure className="colorization-figure">
-              <div className="comparison">
-                <div>
-                  <div className="comparison-image">
-                    <Image
-                      src="/work/color-input.jpg"
-                      alt="Grayscale view of a street in Urla, İzmir"
-                      fill
-                      sizes="(max-width: 520px) calc(100vw - 2rem), (max-width: 760px) calc(50vw - 1.4rem), (max-width: 1296px) calc(50vw - 1.9rem), 38.6rem"
-                    />
-                  </div>
-                  <span>Grayscale input</span>
-                </div>
-                <div>
-                  <div className="comparison-image">
-                    <Image
-                      src="/work/color-output.jpg"
-                      alt="The same Urla street with colors estimated by the model"
-                      fill
-                      sizes="(max-width: 520px) calc(100vw - 2rem), (max-width: 760px) calc(50vw - 1.4rem), (max-width: 1296px) calc(50vw - 1.9rem), 38.6rem"
-                    />
-                  </div>
-                  <span>Estimated color</span>
-                </div>
-              </div>
+              <ColorComparison />
               <figcaption>
                 {"I used Güldem Üstün's photo, “"}
                 <a
@@ -263,25 +295,29 @@ export default function Home() {
               </figcaption>
             </figure>
           </article>
+          </div>
         </section>
 
-        <section className="site-shell section about-section" id="about" aria-labelledby="about-title">
-          <div className="section-intro">
-            <h2 id="about-title">About</h2>
-          </div>
-          <div className="about-grid">
-            <p>
-              I graduated from Antalya Bilim University in 2025 with a BSc in
-              Computer Engineering. My GPA was 3.76 and I ranked in the top
-              three in my department.
-            </p>
-            <div>
-              <h3>Tools I use</h3>
-              <p>Python, FastAPI, pytest, Docker, Git, SQL, React and TypeScript.</p>
+        <section className="section about-section" id="about" aria-labelledby="about-title" data-motion-scene="print">
+          <div className="site-shell about-inner">
+            <div className="section-intro" data-reveal="copy">
+              <h2 id="about-title">About</h2>
+            </div>
+            <div className="about-copy" data-reveal="copy" data-reveal-delay="90">
+              <p>
+                I graduated from Antalya Bilim University in 2025 with a BSc in
+                Computer Engineering. My GPA was 3.76 and I ranked in the top
+                three in my department.
+              </p>
+              <div className="about-tools">
+                <h3>Tools I use</h3>
+                <p>Python, FastAPI, pytest, Docker, Git, SQL, React and TypeScript.</p>
+              </div>
             </div>
           </div>
         </section>
       </main>
+      <MotionEffects />
 
       <footer className="contact" id="contact">
         <div className="site-shell contact-inner">
