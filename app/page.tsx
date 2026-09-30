@@ -80,14 +80,14 @@ export default function Home() {
                   <h3>Python Developer</h3>
                   <p className="experience-company">VERO Digital Solutions</p>
                   <p className="experience-lead">
-                    Most of my work starts with a workflow that needs fixing or
-                    extending. I trace the data, make the change and check it
-                    with tests or existing reports.
+                    I built the API testing project and made most of the changes
+                    to our shared Python library. I also work on integrations,
+                    reports and data imports for BauBuddy.
                   </p>
                 </div>
               </div>
               <ul className="experience-points" role="list">
-                <li data-reveal="copy">
+                <li>
                   <h4>API testing</h4>
                   <p>
                     I built and maintained the API testing project with pytest
@@ -96,7 +96,7 @@ export default function Home() {
                     also wrote the setup guide.
                   </p>
                 </li>
-                <li data-reveal="copy" data-reveal-delay="90">
+                <li>
                   <h4>Shared Python library</h4>
                   <p>
                     I made most of the updates to our shared Python library. It
@@ -105,7 +105,7 @@ export default function Home() {
                     use it.
                   </p>
                 </li>
-                <li data-reveal="copy">
+                <li>
                   <h4>Integrations and imports</h4>
                   <p>
                     I added REST and webhook features to ERP, HR and accounting
@@ -114,7 +114,7 @@ export default function Home() {
                     FastAPI.
                   </p>
                 </li>
-                <li data-reveal="copy" data-reveal-delay="90">
+                <li>
                   <h4>HR and vehicle data</h4>
                   <p>
                     I worked on employee and attendance sync, including employee
@@ -123,7 +123,7 @@ export default function Home() {
                     including time-zone handling.
                   </p>
                 </li>
-                <li data-reveal="copy">
+                <li>
                   <h4>Reports and documents</h4>
                   <p>
                     I built Excel reports for employee hours, project reporting
@@ -132,7 +132,7 @@ export default function Home() {
                     file imports.
                   </p>
                 </li>
-                <li data-reveal="copy" data-reveal-delay="90">
+                <li>
                   <h4>Other tools and quality</h4>
                   <p>
                     I built CLI and FastAPI tools for translating text and
@@ -215,7 +215,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                View the repository
+                YOLO code
               </a>
             </div>
           </article>
@@ -245,7 +245,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                View the repository
+                Healem code
               </a>
             </div>
           </article>
@@ -267,7 +267,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View the repository
+                  Colorization code
                 </a>
               </div>
             </div>

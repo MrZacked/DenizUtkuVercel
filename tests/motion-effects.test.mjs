@@ -168,11 +168,22 @@ test("visible content is skipped and each offscreen item reveals once", () => {
   assert.equal(image.animations.length, 1);
   assert.equal(visible.animations.length, 0);
   assert.equal(observer.observed.has(image), false);
-  assert.equal(image.animations[0].options.duration, 950);
+  assert.equal(image.animations[0].options.duration, 520);
   assert.equal(image.animations[0].options.delay, 160);
   assert.equal(image.animations[0].options.fill, "backwards");
-  assert.equal(page.footer.animations[0].options.duration, 720);
+  assert.equal(page.footer.animations[0].options.duration, 420);
   assert.equal(page.footer.animations[0].options.delay, 80);
+  page.cleanup();
+});
+
+test("reveals keep images visible and do not fade readable text", () => {
+  const page = mount({ reveals: [{ dataset: { reveal: "image" } }, { dataset: { reveal: "copy" } }] });
+  for (const target of page.targets) page.intersect(page.observers[0], target);
+  const [image, copy] = page.targets.map((target) => target.animations[0]);
+  assert.ok(image.keyframes.every((frame) => frame.opacity >= 0.9));
+  assert.ok(copy.keyframes.every((frame) => frame.opacity === 1));
+  assert.ok(image.options.duration <= 600);
+  assert.ok(copy.options.duration <= 450);
   page.cleanup();
 });
 

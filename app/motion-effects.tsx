@@ -34,11 +34,11 @@ export function MotionEffects() {
             const image = element.dataset.reveal === "image";
             const animation = element.animate(
               [
-                { opacity: 0, transform: image ? "translateY(40px) scale(0.96)" : "translateY(28px)" },
+                { opacity: image ? 0.9 : 1, transform: image ? "translateY(16px) scale(0.99)" : "translateY(12px)" },
                 { opacity: 1, transform: "translateY(0) scale(1)" },
               ],
               {
-                duration: image ? 950 : 720,
+                duration: image ? 520 : 420,
                 delay: Math.min(Number(element.dataset.revealDelay) || 0, 160),
                 easing: "cubic-bezier(0.22, 1, 0.36, 1)",
                 fill: "backwards",
