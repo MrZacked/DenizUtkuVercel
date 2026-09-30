@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="100" y1="0" x2="1480" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09191e"/>
+      <stop offset="0.42" stop-color="#193539"/>
+      <stop offset="0.76" stop-color="#46504a"/>
+      <stop offset="1" stop-color="#7b6c58"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(1260 285) rotate(90) scale(240 290)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c6d4c9" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#c6d4c9" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="moon">
+      <circle cx="1260" cy="284" r="54" fill="white"/>
+      <circle cx="1282" cy="265" r="50" fill="black"/>
+    </mask>
+  </defs>
+  <path fill="url(#sky)" d="M-160-120h1920v1180H-160z"/>
+  <path fill="url(#glow)" d="M-160-120h1920v1180H-160z"/>
+  <path d="M865 78c153-24 303-19 443 5M1030 125c163-26 342-8 461 22M742 208c93-13 180-14 261-5" stroke="#b1c7bd" stroke-opacity="0.1" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="1260" cy="284" r="54" fill="#d5decb" mask="url(#moon)"/>
+  <g fill="#d5decb" opacity="0.5">
+    <circle cx="792" cy="132" r="1.5"/>
+    <circle cx="976" cy="64" r="1"/>
+    <circle cx="1425" cy="113" r="1.5"/>
+    <circle cx="1358" cy="194" r="1"/>
+    <circle cx="1098" cy="194" r="1"/>
+  </g>
+</svg>

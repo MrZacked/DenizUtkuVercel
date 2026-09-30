@@ -25,3 +25,5 @@ npm run build
 Images are stored in `public/work` and served locally. Photo sources and licenses are in `public/licenses.txt`. Required photo credits also stay beside the project images.
 
 Scroll effects use native browser APIs. Reduced motion keeps the page static and background movement is turned off on small screens.
+
+The color theme follows the system setting until a visitor chooses light or dark mode. Section colors and local landscape artwork change together. Photo overlays keep light text for readability in either mode.

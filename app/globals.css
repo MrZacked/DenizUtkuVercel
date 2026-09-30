@@ -4,15 +4,23 @@
   --ink: #1b2922;
   --muted: #46534a;
   --line: #b7bcae;
-  --accent: #9b4426;
+  --accent: #954124;
   --deep: #142820;
   --light: #fbf5e7;
-  --deep-muted: #cbd5c6;
   --warm: #f3b47e;
   --warm-hover: #ffd0a3;
+  --link-hover: #75321d;
+  --header-bg: #f3eee1;
+  --projects-bg: #e3e7da;
+  --contact-bg: #ded6c1;
+  --toggle-border: #778473;
+  --toggle-hover: #e0dfce;
   --clay: #843d29;
   --experience-bg: #f3eee1;
   --about-bg: #e8dfca;
+  --hero-sky: url("/work/horizon-sky.svg");
+  --landscape-filter: none;
+  --photo-filter: saturate(0.85) contrast(1.04);
   --section-space: clamp(4.5rem, 7vw, 8rem);
 }
 
@@ -23,10 +31,19 @@ html[data-theme="dark"] {
   --muted: #c1ccbd;
   --line: #526658;
   --accent: #f4b07b;
-  --deep: #142820;
-  --light: #fbf5e7;
+  --deep: #0d1c1d;
+  --link-hover: #ffd0a3;
+  --header-bg: #102019;
+  --projects-bg: #142820;
+  --contact-bg: #102019;
+  --toggle-border: #839687;
+  --toggle-hover: #274536;
+  --clay: #4f2c24;
   --experience-bg: #1b2b23;
   --about-bg: #24352b;
+  --hero-sky: url("/work/horizon-night.svg");
+  --landscape-filter: brightness(0.65) saturate(0.7);
+  --photo-filter: brightness(0.8) saturate(0.7) contrast(1.04);
 }
 
 * {
@@ -81,8 +98,8 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--deep);
-  color: var(--light);
+  background: var(--header-bg);
+  color: var(--ink);
 }
 
 .header-inner {
@@ -118,7 +135,7 @@ a:focus-visible {
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding-block: 0.65rem;
-  color: #e4e6d8;
+  color: var(--muted);
   font-size: 0.98rem;
   text-decoration: none;
 }
@@ -131,23 +148,23 @@ a:focus-visible {
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  border: 1px solid #839687;
+  border: 1px solid var(--toggle-border);
   border-radius: 0.2rem;
   background: transparent;
-  color: var(--light);
+  color: var(--ink);
   cursor: pointer;
   touch-action: manipulation;
   transition: background-color 150ms ease, border-color 150ms ease;
 }
 
 .theme-toggle:hover {
-  background: #274536;
-  border-color: var(--warm);
-  color: var(--light);
+  background: var(--toggle-hover);
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 .theme-toggle:focus-visible {
-  outline: 3px solid var(--warm);
+  outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -175,13 +192,11 @@ html[data-theme="dark"] .theme-icon-light {
 
 .site-header .site-nav a:hover,
 .site-header .site-name:hover {
-  color: var(--warm);
+  color: var(--link-hover);
 }
 
-.site-header a:focus-visible,
 .hero a:focus-visible,
-.projects-section a:focus-visible,
-.contact a:focus-visible {
+.project-healem a:focus-visible {
   outline-color: var(--warm);
 }
 
@@ -212,17 +227,19 @@ html[data-theme="dark"] .theme-icon-light {
 }
 
 .hero-layer-sky {
-  background-image: url("/work/horizon-sky.svg");
+  background-image: var(--hero-sky);
   transform: translate3d(0, var(--sky-shift, 0px), 0);
 }
 
 .hero-layer-ridges {
   background-image: url("/work/horizon-ridges.svg");
+  filter: var(--landscape-filter);
   transform: translate3d(0, var(--ridge-shift, 0px), 0);
 }
 
 .hero-layer-shore {
   background-image: url("/work/horizon-shore.svg");
+  filter: var(--landscape-filter);
   transform: translate3d(0, var(--shore-shift, 0px), 0);
 }
 
@@ -400,7 +417,7 @@ html[data-theme="dark"] .theme-icon-light {
 .experience-backdrop img {
   object-fit: cover;
   object-position: center 18%;
-  filter: saturate(0.85) contrast(1.04);
+  filter: var(--photo-filter);
 }
 
 .experience-heading::before {
@@ -512,19 +529,19 @@ html[data-theme="dark"] .theme-icon-light {
 }
 
 .projects-section {
-  background: var(--deep);
-  color: var(--light);
+  background: var(--projects-bg);
+  color: var(--ink);
 }
 
 .projects-section .section-intro p,
 .projects-section .project-tools,
 .projects-section figcaption {
-  color: var(--deep-muted);
+  color: var(--muted);
 }
 
 .projects-section .project-link:hover,
 .projects-section figcaption a:hover {
-  color: var(--warm-hover);
+  color: var(--link-hover);
 }
 
 .project-detection {
@@ -553,17 +570,12 @@ html[data-theme="dark"] .theme-icon-light {
 .project-image img {
   object-fit: cover;
   object-position: center bottom;
-  transition: transform 350ms ease;
-}
-
-.project-figure:hover .project-image img {
-  transform: scale(1.025);
 }
 
 .project-figure figcaption,
 .colorization-figure figcaption {
   margin-top: 0.8rem;
-  color: var(--deep-muted);
+  color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.45;
 }
@@ -626,11 +638,7 @@ figcaption a {
 .healem-image img {
   object-fit: cover;
   object-position: center 55%;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.project-healem:hover .healem-image img {
-  transform: scale(1.035);
+  filter: var(--photo-filter);
 }
 
 .healem-content {
@@ -769,7 +777,7 @@ figcaption a {
 }
 
 .comparison-stage:has(.comparison-range:focus-visible) {
-  outline: 3px solid var(--warm);
+  outline: 3px solid var(--accent);
   outline-offset: 5px;
 }
 
@@ -783,14 +791,14 @@ figcaption a {
   justify-content: space-between;
   gap: 1rem;
   margin-top: 0.65rem;
-  color: var(--warm);
+  color: var(--accent);
   font-size: 0.92rem;
   font-weight: 700;
 }
 
 .comparison-help {
   margin: 0.75rem 0 1.25rem;
-  color: var(--deep-muted);
+  color: var(--muted);
   font-size: 0.88rem;
 }
 
@@ -819,7 +827,7 @@ figcaption a {
 }
 
 html[data-theme="dark"] .about-section::before {
-  opacity: 0.72;
+  filter: brightness(0.5) saturate(0.7);
 }
 
 .about-inner {
@@ -860,8 +868,8 @@ html[data-theme="dark"] .about-section::before {
 
 .contact {
   padding-block: clamp(3rem, 5vw, 5rem);
-  background: var(--deep);
-  color: var(--light);
+  background: var(--contact-bg);
+  color: var(--ink);
 }
 
 .contact-inner {
@@ -873,7 +881,7 @@ html[data-theme="dark"] .about-section::before {
 
 .contact p {
   margin: 1rem 0 0;
-  color: var(--deep-muted);
+  color: var(--muted);
   font-size: 1.1rem;
 }
 
@@ -892,7 +900,7 @@ html[data-theme="dark"] .about-section::before {
 }
 
 .contact-links a:hover {
-  color: var(--warm-hover);
+  color: var(--link-hover);
 }
 
 @media (min-width: 761px) {
@@ -1121,9 +1129,7 @@ html[data-theme="dark"] .about-section::before {
 
   .hero-project-link,
   .hero-project-link span,
-  .theme-toggle,
-  .project-image img,
-  .healem-image img {
+  .theme-toggle {
     transition: none;
   }
 
@@ -1137,9 +1143,7 @@ html[data-theme="dark"] .about-section::before {
   .hero-layer,
   .experience-backdrop,
   .about-section::before,
-  .hero-project-link:hover span,
-  .project-figure:hover .project-image img,
-  .project-healem:hover .healem-image img {
+  .hero-project-link:hover span {
     transform: none;
   }
 }
