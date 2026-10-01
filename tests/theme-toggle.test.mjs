@@ -16,7 +16,7 @@ const compiled = ts.transpileModule(source, {
   },
 }).outputText;
 
-function loadComponent({ hooks = React, useTheme }) {
+function loadComponent({ hooks = React, useTheme, browser = {} }) {
   const exportsHolder = { exports: {} };
   const Icon = ({ size, strokeWidth, ...props }) => React.createElement("svg", {
     width: size,
@@ -25,6 +25,7 @@ function loadComponent({ hooks = React, useTheme }) {
     ...props,
   });
   vm.runInNewContext(compiled, {
+    ...browser,
     module: exportsHolder,
     exports: exportsHolder.exports,
     require: (name) => {
@@ -38,14 +39,26 @@ function loadComponent({ hooks = React, useTheme }) {
   return exportsHolder.exports.ThemeToggle;
 }
 
-function mount({ server = false, resolvedTheme = "light" } = {}) {
+function mount({ server = false, resolvedTheme = "light", reducedMotion = false } = {}) {
   let beforeHydration = server;
   let selectedTheme = resolvedTheme;
   let store;
   let tree;
   const changes = [];
+  const attributes = new Map();
+  const timers = new Map();
+  const events = [];
+  const ref = { current: null };
+  let cleanup;
+  let nextTimer = 1;
+  const root = {
+    setAttribute: (name, value) => { attributes.set(name, value); events.push(`set:${name}`); },
+    removeAttribute: (name) => { attributes.delete(name); events.push(`remove:${name}`); },
+  };
   const Component = loadComponent({
     hooks: {
+      useRef: () => ref,
+      useEffect: (effect) => { cleanup ??= effect(); },
       useSyncExternalStore: (subscribe, getSnapshot, getServerSnapshot) => {
         store = { subscribe, getSnapshot, getServerSnapshot };
         return beforeHydration ? getServerSnapshot() : getSnapshot();
@@ -55,9 +68,30 @@ function mount({ server = false, resolvedTheme = "light" } = {}) {
       resolvedTheme: selectedTheme,
       setTheme: (next) => {
         changes.push(next);
+        events.push(`theme:${next}`);
         selectedTheme = next;
       },
     }),
+    browser: {
+      document: { documentElement: root },
+      window: {
+        matchMedia: (query) => {
+          assert.equal(query, "(prefers-reduced-motion: reduce)");
+          return { matches: reducedMotion };
+        },
+        getComputedStyle: (element) => {
+          assert.equal(element, root);
+          events.push("style");
+          return { getPropertyValue: (name) => { assert.equal(name, "color"); return "rgb(27, 41, 34)"; } };
+        },
+        setTimeout: (callback, delay) => {
+          const id = nextTimer++;
+          timers.set(id, { callback, delay });
+          return id;
+        },
+        clearTimeout: (id) => { timers.delete(id); events.push(`cancel:${id}`); },
+      },
+    },
   });
   const render = () => { tree = Component(); };
   render();
@@ -65,6 +99,15 @@ function mount({ server = false, resolvedTheme = "light" } = {}) {
     button: () => tree,
     changes: () => changes,
     store: () => store,
+    attributes: () => attributes,
+    timers: () => timers,
+    events: () => events,
+    finishTransition: () => {
+      const [id, timer] = timers.entries().next().value;
+      timers.delete(id);
+      timer.callback();
+    },
+    unmount: () => cleanup?.(),
     render,
     hydrate: () => {
       beforeHydration = false;
@@ -107,6 +150,7 @@ test("server and client snapshots enable the control only after hydration", () =
   toggle.hydrate();
   assert.equal(toggle.button().props.disabled, false);
   assert.deepEqual(toggle.changes(), []);
+  assert.deepEqual(toggle.events(), []);
 });
 
 test("the dark theme offers light mode in its accessible label and tooltip", () => {
@@ -165,4 +209,55 @@ test("the theme icons are decorative and do not add keyboard stops", () => {
     assert.equal(icon.props.size, 20);
     assert.equal(icon.props.strokeWidth, 1.75);
   }
+});
+
+test("an explicit theme change opts into motion before changing the theme", () => {
+  const toggle = mount();
+  assert.equal(toggle.attributes().size, 0);
+  toggle.click();
+  assert.deepEqual(toggle.events(), ["set:data-theme-transition", "style", "theme:dark"]);
+  assert.equal(toggle.attributes().has("data-theme-transition"), true);
+  assert.equal(toggle.timers().size, 1);
+  assert.equal([...toggle.timers().values()][0].delay, 1000);
+  toggle.finishTransition();
+  assert.equal(toggle.attributes().size, 0);
+  assert.equal(toggle.timers().size, 0);
+});
+
+test("rapid clicks replace the cleanup timer without ending the new transition", () => {
+  const toggle = mount();
+  toggle.click();
+  const firstTimer = [...toggle.timers().keys()][0];
+  toggle.click();
+  assert.equal(toggle.timers().has(firstTimer), false);
+  assert.equal(toggle.timers().size, 1);
+  assert.equal(toggle.attributes().has("data-theme-transition"), true);
+  assert.ok(toggle.events().includes(`cancel:${firstTimer}`));
+  toggle.finishTransition();
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("reduced motion changes themes without starting a transition", () => {
+  const toggle = mount({ reducedMotion: true });
+  toggle.click();
+  assert.deepEqual(toggle.changes(), ["dark"]);
+  assert.equal(toggle.attributes().size, 0);
+  assert.equal(toggle.timers().size, 0);
+  assert.equal(toggle.events().includes("style"), false);
+});
+
+test("unmounting cancels the pending transition and removes its attribute", () => {
+  const toggle = mount();
+  toggle.click();
+  toggle.unmount();
+  assert.equal(toggle.attributes().size, 0);
+  assert.equal(toggle.timers().size, 0);
+});
+
+test("a pre-hydration click cannot write theme or motion state", () => {
+  const toggle = mount({ server: true });
+  toggle.button().props.onClick();
+  assert.deepEqual(toggle.changes(), []);
+  assert.deepEqual(toggle.events(), []);
+  assert.equal(toggle.timers().size, 0);
 });

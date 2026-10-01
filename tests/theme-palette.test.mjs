@@ -65,12 +65,35 @@ test("theme control borders and hover states are visible in both palettes", () =
 });
 
 test("day and night artwork references resolve to local SVG files", () => {
-  assert.notEqual(light["--hero-sky"], dark["--hero-sky"]);
-  for (const palette of [light, dark]) {
-    const path = palette["--hero-sky"].match(/^url\("(\/work\/[^\"]+\.svg)"\)$/)?.[1];
+  assert.notEqual(light["--hero-day"], light["--hero-night"]);
+  for (const name of ["--hero-day", "--hero-night"]) {
+    const path = light[name].match(/^url\("(\/work\/[^\"]+\.svg)"\)$/)?.[1];
     assert.ok(path);
     const artwork = readFileSync(new URL(`../public${path}`, import.meta.url), "utf8");
     assert.match(artwork, /<svg\b/);
     assert.doesNotMatch(artwork, /<script\b|<image\b|href="https?:/i);
   }
+});
+
+test("the celestial bodies stay separate from the sky so they can move independently", () => {
+  for (const file of ["horizon-sky.svg", "horizon-night.svg"]) {
+    const artwork = readFileSync(new URL(`../public/work/${file}`, import.meta.url), "utf8");
+    assert.doesNotMatch(artwork, /r="(?:54|68)"/);
+  }
+  for (const file of ["horizon-sun.svg", "horizon-moon.svg"]) {
+    const artwork = readFileSync(new URL(`../public/work/${file}`, import.meta.url), "utf8");
+    assert.match(artwork, /viewBox="0 0 1600 900"/);
+    assert.doesNotMatch(artwork, /<script\b|<image\b|href="https?:/i);
+  }
+});
+
+test("theme animation is limited to explicit changes and honors reduced motion", () => {
+  const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(layout, /disableTransitionOnChange/);
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\) \{\s*html\[data-theme-transition\]/);
+  for (const name of ["celestial-sun", "celestial-moon", "hero-layer-sky", "hero-layer-night"]) {
+    assert.match(css, new RegExp(`html\\[data-theme-transition\\] :is\\([^)]*\\.${name}[^)]*\\) \\{\\s*transition:`));
+  }
+  const motionRules = css.slice(css.indexOf("@media (prefers-reduced-motion: no-preference)"));
+  assert.doesNotMatch(motionRules, /transition:\s*(?:background-color|color)/);
 });

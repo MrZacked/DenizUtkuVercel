@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ColorComparison } from "./color-comparison";
 import { MotionEffects } from "./motion-effects";
 import { ThemeToggle } from "./theme-toggle";
+import { ForestEdge, ValleyScene, WoodlandScene } from "./landscape-scenes";
 
 export default function Home() {
   return (
@@ -26,149 +27,161 @@ export default function Home() {
       </header>
 
       <main id="main" tabIndex={-1}>
-        <section className="hero" id="top" aria-labelledby="page-title" data-motion-scene="horizon">
-          <div className="hero-scene" aria-hidden="true">
-            <div className="hero-layer hero-layer-sky" />
-            <div className="hero-layer hero-layer-ridges" />
-            <div className="hero-layer hero-layer-shore" />
-          </div>
-          <div className="site-shell hero-inner">
-            <div className="hero-name">
-              <p className="hero-role">Software developer in Antalya, Turkey</p>
-              <h1 id="page-title">
-                <span>Deniz Utku</span>
-                <span>Ateş</span>
-              </h1>
-            </div>
-            <div className="hero-intro">
-              <p>
-                At VERO Digital Solutions I work on a shared Python library,
-                API tests and integrations between business systems. Outside
-                work I build web apps and computer vision projects.
-              </p>
-              <div className="hero-actions">
-                <a className="hero-project-link" href="#projects">
-                  View projects <span aria-hidden="true">↘</span>
-                </a>
-                <a className="text-link" href="mailto:denizutku1900@hotmail.com">
-                  Email me
-                </a>
+        <div className="intro-flow">
+          <section className="hero" id="top" aria-labelledby="page-title" data-motion-scene="horizon">
+            <div className="hero-scene" aria-hidden="true">
+              <div className="hero-layer hero-layer-sky" />
+              <div className="hero-layer hero-layer-night" />
+              <div className="hero-celestial">
+                <div className="hero-layer celestial-sun" />
+                <div className="hero-layer celestial-moon" />
               </div>
+              <div className="hero-layer hero-layer-ridges" />
+              <div className="hero-layer hero-layer-shore" />
             </div>
-          </div>
-        </section>
-
-        <section className="section experience-section" id="experience" aria-labelledby="experience-title">
-          <div className="site-shell">
-            <div className="section-intro" data-reveal="copy">
-              <h2 id="experience-title">Experience</h2>
-              <p>Python tools, integrations and testing for construction software.</p>
-            </div>
-
-            <article className="experience-feature">
-              <div className="experience-heading" data-motion-scene="photo">
-                <div className="experience-backdrop" aria-hidden="true">
-                  <Image
-                    src="/work/construction-sunset.jpg"
-                    alt=""
-                    fill
-                    sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) calc(100vw - 3rem), 1248px"
-                  />
-                </div>
-                <div className="experience-heading-content" data-reveal="copy">
-                  <p className="experience-date">Sep 2025 - Present</p>
-                  <h3>Python Developer</h3>
-                  <p className="experience-company">VERO Digital Solutions</p>
-                  <p className="experience-lead">
-                    I built the API testing project and made most of the changes
-                    to our shared Python library. I also work on integrations,
-                    reports and data imports for BauBuddy.
-                  </p>
+            <div className="site-shell hero-inner">
+              <div className="hero-name">
+                <p className="hero-role">Software developer in Antalya, Turkey</p>
+                <h1 id="page-title">
+                  <span>Deniz Utku</span>
+                  <span>Ateş</span>
+                </h1>
+              </div>
+              <div className="hero-intro">
+                <p>
+                  At VERO Digital Solutions I work on a shared Python library,
+                  API tests and integrations between business systems. Outside
+                  work I build web apps and computer vision projects.
+                </p>
+                <div className="hero-actions">
+                  <a className="hero-project-link" href="#projects">
+                    View projects <span aria-hidden="true">↘</span>
+                  </a>
+                  <a className="text-link" href="mailto:denizutku1900@hotmail.com">
+                    Email me
+                  </a>
                 </div>
               </div>
-              <ul className="experience-points" role="list">
-                <li>
-                  <h4>API testing</h4>
-                  <p>
-                    I built and maintained the API testing project with pytest
-                    and YAML. It checks responses across environments, keeps
-                    authentication settings separate and runs in GitLab CI. I
-                    also wrote the setup guide.
-                  </p>
-                </li>
-                <li>
-                  <h4>Shared Python library</h4>
-                  <p>
-                    I made most of the updates to our shared Python library. It
-                    handles configuration, logging, application startup, API
-                    access and data processing. I updated existing scripts to
-                    use it.
-                  </p>
-                </li>
-                <li>
-                  <h4>Integrations and imports</h4>
-                  <p>
-                    I added REST and webhook features to ERP, HR and accounting
-                    integrations. I worked on data mapping, validation, duplicate
-                    handling and vehicle and work-order imports through CLI and
-                    FastAPI.
-                  </p>
-                </li>
-                <li>
-                  <h4>HR and vehicle data</h4>
-                  <p>
-                    I worked on employee and attendance sync, including employee
-                    matching and records with multiple breaks. I also improved
-                    how vehicle trips matched work orders and time records,
-                    including time-zone handling.
-                  </p>
-                </li>
-                <li>
-                  <h4>Reports and documents</h4>
-                  <p>
-                    I built Excel reports for employee hours, project reporting
-                    and material lists. I checked them against existing reports,
-                    worked on payroll exports and made PDF parsers and structured
-                    file imports.
-                  </p>
-                </li>
-                <li>
-                  <h4>Other tools and quality</h4>
-                  <p>
-                    I built CLI and FastAPI tools for translating text and
-                    software language files, with input checks and caching. I
-                    also updated build tools, wrote unit and regression tests
-                    and made test and code-quality results easier to review.
-                  </p>
-                </li>
-              </ul>
-            </article>
+            </div>
+          </section>
 
-            <div className="earlier-work" data-reveal="copy">
-              <h3>Earlier experience</h3>
-              <div className="earlier-work-grid">
-                <article>
-                  <p className="experience-date">Jan 2024 - Mar 2024</p>
-                  <div>
-                    <h4>Digital Image Processing Intern</h4>
-                    <p>Bulutsoft</p>
-                  </div>
-                  <p>Worked on computer vision and image processing projects.</p>
-                </article>
-                <article>
-                  <p className="experience-date">Jul 2023 - Sep 2023</p>
-                  <div>
-                    <h4>Full Stack Developer Intern</h4>
-                    <p>Bulutsoft</p>
-                  </div>
-                  <p>Worked on web applications and REST APIs.</p>
-                </article>
+          <section className="experience-section" id="experience" aria-labelledby="experience-title">
+            <div className="experience-entry" data-motion-scene="valley">
+              <ValleyScene />
+              <div className="site-shell">
+                <div className="section-intro" data-reveal="copy">
+                  <h2 id="experience-title">Experience</h2>
+                  <p>Python tools, integrations and testing for construction software.</p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+            <div className="site-shell experience-body">
+              <article className="experience-feature">
+                <div className="experience-heading" data-motion-scene="photo">
+                  <div className="experience-backdrop" aria-hidden="true">
+                    <Image
+                      src="/work/construction-sunset.jpg"
+                      alt=""
+                      fill
+                      sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) calc(100vw - 3rem), 1248px"
+                    />
+                  </div>
+                  <div className="experience-heading-content" data-reveal="copy">
+                    <p className="experience-date">Sep 2025 - Present</p>
+                    <h3>Python Developer</h3>
+                    <p className="experience-company">VERO Digital Solutions</p>
+                    <p className="experience-lead">
+                      I built the API testing project and made most of the changes
+                      to our shared Python library. I also work on integrations,
+                      reports and data imports for BauBuddy.
+                    </p>
+                  </div>
+                </div>
+                <ul className="experience-points" role="list">
+                  <li>
+                    <h4>API testing</h4>
+                    <p>
+                      I built and maintained the API testing project with pytest
+                      and YAML. It checks responses across environments, keeps
+                      authentication settings separate and runs in GitLab CI. I
+                      also wrote the setup guide.
+                    </p>
+                  </li>
+                  <li>
+                    <h4>Shared Python library</h4>
+                    <p>
+                      I made most of the updates to our shared Python library. It
+                      handles configuration, logging, application startup, API
+                      access and data processing. I updated existing scripts to
+                      use it.
+                    </p>
+                  </li>
+                  <li>
+                    <h4>Integrations and imports</h4>
+                    <p>
+                      I added REST and webhook features to ERP, HR and accounting
+                      integrations. I worked on data mapping, validation, duplicate
+                      handling and vehicle and work-order imports through CLI and
+                      FastAPI.
+                    </p>
+                  </li>
+                  <li>
+                    <h4>HR and vehicle data</h4>
+                    <p>
+                      I worked on employee and attendance sync, including employee
+                      matching and records with multiple breaks. I also improved
+                      how vehicle trips matched work orders and time records,
+                      including time-zone handling.
+                    </p>
+                  </li>
+                  <li>
+                    <h4>Reports and documents</h4>
+                    <p>
+                      I built Excel reports for employee hours, project reporting
+                      and material lists. I checked them against existing reports,
+                      worked on payroll exports and made PDF parsers and structured
+                      file imports.
+                    </p>
+                  </li>
+                  <li>
+                    <h4>Other tools and quality</h4>
+                    <p>
+                      I built CLI and FastAPI tools for translating text and
+                      software language files, with input checks and caching. I
+                      also updated build tools, wrote unit and regression tests
+                      and made test and code-quality results easier to review.
+                    </p>
+                  </li>
+                </ul>
+              </article>
 
-        <section className="section projects-section" id="projects" aria-labelledby="projects-title">
+              <div className="earlier-work" data-reveal="copy">
+                <h3>Earlier experience</h3>
+                <div className="earlier-work-grid">
+                  <article>
+                    <p className="experience-date">Jan 2024 - Mar 2024</p>
+                    <div>
+                      <h4>Digital Image Processing Intern</h4>
+                      <p>Bulutsoft</p>
+                    </div>
+                    <p>Worked on computer vision and image processing projects.</p>
+                  </article>
+                  <article>
+                    <p className="experience-date">Jul 2023 - Sep 2023</p>
+                    <div>
+                      <h4>Full Stack Developer Intern</h4>
+                      <p>Bulutsoft</p>
+                    </div>
+                    <p>Worked on web applications and REST APIs.</p>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section className="section projects-section" id="projects" aria-labelledby="projects-title" data-motion-scene="forest">
+          <ForestEdge />
           <div className="site-shell">
             <div className="section-intro" data-reveal="copy">
               <h2 id="projects-title">Projects</h2>
@@ -298,7 +311,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section about-section" id="about" aria-labelledby="about-title" data-motion-scene="print">
+        <section className="section about-section" id="about" aria-labelledby="about-title" data-motion-scene="forest">
+          <WoodlandScene />
           <div className="site-shell about-inner">
             <div className="section-intro" data-reveal="copy">
               <h2 id="about-title">About</h2>

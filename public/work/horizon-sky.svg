@@ -16,5 +16,4 @@
   <path fill="url(#glow)" d="M-160-120h1920v1180H-160z"/>
   <path d="M865 78c153-24 303-19 443 5M1030 125c163-26 342-8 461 22M742 208c93-13 180-14 261-5" stroke="#f1d8b2" stroke-opacity="0.14" stroke-width="5" stroke-linecap="round"/>
   <path d="M1115 119c49-8 114-5 172 6M1284 171c63 0 118 5 173 15" stroke="#f5dec2" stroke-opacity="0.23" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="1260" cy="284" r="68" fill="#f7d4a1"/>
 </svg>

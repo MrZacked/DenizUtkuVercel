@@ -18,9 +18,19 @@
   --clay: #843d29;
   --experience-bg: #f3eee1;
   --about-bg: #e8dfca;
-  --hero-sky: url("/work/horizon-sky.svg");
+  --hero-day: url("/work/horizon-sky.svg");
+  --hero-night: url("/work/horizon-night.svg");
   --landscape-filter: none;
   --photo-filter: saturate(0.85) contrast(1.04);
+  --valley-bg: #0b1a17;
+  --scene-distant: #263f37;
+  --scene-middle: #1d362e;
+  --scene-foreground: #142e26;
+  --scene-stone: #5e6250;
+  --forest-distant: #b3bfaa;
+  --forest-middle: #879d87;
+  --forest-foreground: #627861;
+  --forest-trail: #c08b62;
   --section-space: clamp(4.5rem, 7vw, 8rem);
 }
 
@@ -41,9 +51,16 @@ html[data-theme="dark"] {
   --clay: #4f2c24;
   --experience-bg: #1b2b23;
   --about-bg: #24352b;
-  --hero-sky: url("/work/horizon-night.svg");
   --landscape-filter: brightness(0.65) saturate(0.7);
   --photo-filter: brightness(0.8) saturate(0.7) contrast(1.04);
+  --scene-distant: #213730;
+  --scene-middle: #192e27;
+  --scene-foreground: #0d201c;
+  --scene-stone: #37453b;
+  --forest-distant: #3b5142;
+  --forest-middle: #2b4435;
+  --forest-foreground: #152b21;
+  --forest-trail: #796349;
 }
 
 * {
@@ -141,6 +158,7 @@ a:focus-visible {
 }
 
 .theme-toggle {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -172,13 +190,28 @@ a:focus-visible {
   cursor: default;
 }
 
-.theme-icon-light,
-html[data-theme="dark"] .theme-icon-dark {
-  display: none;
+.theme-toggle svg {
+  position: absolute;
+}
+
+.theme-icon-light {
+  opacity: 0;
+  transform: rotate(-60deg) scale(0.6);
+}
+
+.theme-icon-dark {
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 html[data-theme="dark"] .theme-icon-light {
-  display: block;
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+html[data-theme="dark"] .theme-icon-dark {
+  opacity: 0;
+  transform: rotate(60deg) scale(0.6);
 }
 
 .site-nav a:hover,
@@ -200,19 +233,22 @@ html[data-theme="dark"] .theme-icon-light {
   outline-color: var(--warm);
 }
 
+.intro-flow {
+  isolation: isolate;
+}
+
 .hero {
   position: relative;
   display: grid;
   min-height: clamp(42rem, 82svh, 57rem);
   overflow: hidden;
-  isolation: isolate;
   background: var(--deep);
   color: var(--light);
 }
 
 .hero-scene {
   position: absolute;
-  z-index: -2;
+  z-index: 0;
   inset: 0;
   pointer-events: none;
   animation: scene-arrive 1300ms ease-out both;
@@ -227,8 +263,53 @@ html[data-theme="dark"] .theme-icon-light {
 }
 
 .hero-layer-sky {
-  background-image: var(--hero-sky);
+  background-image: var(--hero-day);
+  opacity: 1;
   transform: translate3d(0, var(--sky-shift, 0px), 0);
+}
+
+.hero-layer-night {
+  background-image: var(--hero-night);
+  opacity: 0;
+  transform: translate3d(0, var(--sky-shift, 0px), 0);
+}
+
+.hero-celestial {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, var(--sky-shift, 0px), 0);
+}
+
+.celestial-sun {
+  background-image: url("/work/horizon-sun.svg");
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotate(0);
+  transform-origin: 40% 90%;
+}
+
+.celestial-moon {
+  background-image: url("/work/horizon-moon.svg");
+  opacity: 0;
+  transform: translate3d(-40px, 100px, 0) rotate(-12deg);
+  transform-origin: 40% 90%;
+}
+
+html[data-theme="dark"] .hero-layer-sky {
+  opacity: 0;
+}
+
+html[data-theme="dark"] .hero-layer-night {
+  opacity: 1;
+}
+
+html[data-theme="dark"] .celestial-sun {
+  opacity: 0;
+  transform: translate3d(40px, 100px, 0) rotate(12deg);
+}
+
+html[data-theme="dark"] .celestial-moon {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotate(0);
 }
 
 .hero-layer-ridges {
@@ -245,14 +326,25 @@ html[data-theme="dark"] .theme-icon-light {
 
 .hero::before {
   position: absolute;
-  z-index: -1;
+  z-index: 1;
   inset: 0;
   background: linear-gradient(180deg, rgb(12 30 26 / 10%) 20%, rgb(11 26 23 / 68%) 70%, rgb(11 26 23 / 92%) 100%),
     linear-gradient(90deg, rgb(11 27 23 / 58%), transparent 64%);
   content: "";
 }
 
+.hero::after {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  height: 8rem;
+  background: linear-gradient(transparent, var(--valley-bg));
+  content: "";
+}
+
 .hero-inner {
+  position: relative;
+  z-index: 3;
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
   align-items: end;
@@ -364,6 +456,120 @@ html[data-theme="dark"] .theme-icon-light {
 
 .experience-section {
   background: var(--experience-bg);
+  padding-bottom: var(--section-space);
+}
+
+.experience-entry {
+  position: relative;
+  padding-block: clamp(6rem, 10vw, 9rem) clamp(6rem, 9vw, 8rem);
+  background: var(--valley-bg);
+  color: var(--light);
+}
+
+.experience-entry .section-intro {
+  position: relative;
+  z-index: 3;
+  margin-bottom: 0;
+}
+
+.experience-entry .section-intro p {
+  color: var(--light);
+}
+
+.experience-body {
+  position: relative;
+  z-index: 3;
+  margin-top: -2.5rem;
+}
+
+.valley-scene,
+.forest-edge,
+.woodland-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.valley-scene {
+  z-index: 2;
+  top: calc(-1 * clamp(7rem, 12vw, 12rem));
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent, black 7rem);
+}
+
+.valley-layer {
+  position: absolute;
+  inset: -3rem 0;
+}
+
+.valley-layer svg,
+.valley-ground,
+.forest-layer svg,
+.woodland-layer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.valley-layer-back {
+  transform: translate3d(0, var(--valley-back-shift, 0px), 0);
+}
+
+.valley-layer-front {
+  transform: translate3d(0, var(--valley-front-shift, 0px), 0);
+}
+
+.landscape-distant {
+  fill: var(--scene-distant);
+}
+
+.landscape-middle {
+  fill: var(--scene-middle);
+}
+
+.landscape-foreground {
+  fill: var(--scene-foreground);
+}
+
+.landscape-stone {
+  fill: var(--scene-stone);
+}
+
+.landscape-contour {
+  fill: none;
+  stroke: var(--warm);
+  stroke-width: 3;
+  opacity: 0.25;
+}
+
+.valley-ground {
+  position: absolute;
+  bottom: -1px;
+  height: 5rem;
+  fill: var(--experience-bg);
+}
+
+.forest-edge {
+  bottom: auto;
+  height: 22rem;
+  overflow: hidden;
+  background: var(--experience-bg);
+}
+
+.forest-layer {
+  position: absolute;
+  inset: -2rem 0;
+  transform: translate3d(0, var(--forest-shift, 0px), 0);
+}
+
+.forest-ground {
+  fill: var(--projects-bg);
+}
+
+.forest-trees {
+  fill: var(--forest-middle);
+  opacity: 0.45;
 }
 
 .section-intro {
@@ -529,6 +735,9 @@ html[data-theme="dark"] .theme-icon-light {
 }
 
 .projects-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background: var(--projects-bg);
   color: var(--ink);
 }
@@ -809,7 +1018,6 @@ figcaption a {
   background: var(--about-bg);
 }
 
-.about-section::before,
 .about-section::after {
   position: absolute;
   inset: 0;
@@ -817,17 +1025,42 @@ figcaption a {
   content: "";
 }
 
-.about-section::before {
-  background: url("/work/about-print.svg") right center / cover no-repeat;
-  transform: translate3d(0, var(--scene-shift, 0px), 0);
+.woodland-scene {
+  overflow: hidden;
+}
+
+.woodland-layer {
+  position: absolute;
+  inset: -2.5rem 0;
+}
+
+.woodland-layer-back {
+  transform: translate3d(0, var(--forest-shift, 0px), 0);
+}
+
+.woodland-layer-front {
+  transform: translate3d(0, calc(var(--forest-shift, 0px) * -0.6), 0);
+}
+
+.woodland-scene .landscape-distant {
+  fill: var(--forest-distant);
+}
+
+.woodland-scene .landscape-middle {
+  fill: var(--forest-middle);
+}
+
+.woodland-scene .landscape-foreground {
+  fill: var(--forest-foreground);
+}
+
+.woodland-trail {
+  fill: var(--forest-trail);
 }
 
 .about-section::after {
-  background: linear-gradient(90deg, var(--about-bg) 0%, var(--about-bg) 26%, transparent 67%);
-}
-
-html[data-theme="dark"] .about-section::before {
-  filter: brightness(0.5) saturate(0.7);
+  background: linear-gradient(0deg, var(--contact-bg), transparent 12%),
+    linear-gradient(90deg, var(--about-bg) 0%, var(--about-bg) 26%, transparent 67%);
 }
 
 .about-inner {
@@ -903,12 +1136,6 @@ html[data-theme="dark"] .about-section::before {
   color: var(--link-hover);
 }
 
-@media (min-width: 761px) {
-  .about-section::before {
-    inset-block: -2.5rem;
-  }
-}
-
 @media (max-width: 1000px) {
   .hero-inner {
     grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
@@ -926,13 +1153,14 @@ html[data-theme="dark"] .about-section::before {
     padding-bottom: clamp(20rem, 48vw, 29rem);
   }
 
-  .about-section::before {
-    background-position: right bottom;
-    background-size: auto clamp(20rem, 48vw, 29rem);
+  .woodland-scene {
+    inset: auto 0 0;
+    height: clamp(20rem, 48vw, 29rem);
   }
 
   .about-section::after {
-    background: linear-gradient(180deg, var(--about-bg) 0%, var(--about-bg) 52%, transparent 80%);
+    background: linear-gradient(0deg, var(--contact-bg), transparent 8%),
+      linear-gradient(180deg, var(--about-bg) 0%, var(--about-bg) 52%, transparent 80%);
   }
 }
 
@@ -984,6 +1212,18 @@ html[data-theme="dark"] .about-section::before {
   .hero-layer {
     background-position: 55% center;
     inset: -3%;
+  }
+
+  .hero-layer-sky,
+  .hero-layer-night,
+  .celestial-sun,
+  .celestial-moon {
+    background-position: 85% -3.8rem;
+    background-size: auto 90%;
+  }
+
+  .experience-entry {
+    padding-block: 4.5rem 6rem;
   }
 
   .hero-inner {
@@ -1118,7 +1358,37 @@ html[data-theme="dark"] .about-section::before {
 
 @media (max-width: 340px) {
   html {
-    scroll-padding-top: 12rem;
+    scroll-padding-top: 8rem;
+  }
+
+  .site-nav {
+    column-gap: 0.75rem;
+  }
+
+  .site-nav a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme-transition] :is(.hero-layer-sky, .hero-layer-night) {
+    transition: opacity 850ms ease;
+  }
+
+  html[data-theme-transition] :is(.celestial-sun, .celestial-moon) {
+    transition: opacity 650ms ease, transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-theme-transition] :is(.theme-icon-light, .theme-icon-dark) {
+    transition: opacity 250ms ease, transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-theme-transition] :is(.hero-layer-ridges, .hero-layer-shore, .experience-backdrop img, .healem-image img) {
+    transition: filter 850ms ease;
+  }
+
+  html[data-theme-transition] .valley-layer path {
+    transition: fill 700ms ease;
   }
 }
 
@@ -1141,8 +1411,11 @@ html[data-theme="dark"] .about-section::before {
   }
 
   .hero-layer,
+  .hero-celestial,
+  .valley-layer,
+  .forest-layer,
+  .woodland-layer,
   .experience-backdrop,
-  .about-section::before,
   .hero-project-link:hover span {
     transform: none;
   }
