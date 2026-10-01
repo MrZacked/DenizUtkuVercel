@@ -11,12 +11,16 @@ const compiled = ts.transpileModule(source, {
 
 class Events {
   listeners = new Map();
-  addEventListener(type, listener) {
+  listenerOptions = new Map();
+  addEventListener(type, listener, options) {
     if (!this.listeners.has(type)) this.listeners.set(type, new Set());
+    if (!this.listenerOptions.has(type)) this.listenerOptions.set(type, new Map());
     this.listeners.get(type).add(listener);
+    this.listenerOptions.get(type).set(listener, options);
   }
   removeEventListener(type, listener) {
     this.listeners.get(type)?.delete(listener);
+    this.listenerOptions.get(type)?.delete(listener);
   }
   emit(type, event = {}) {
     for (const listener of [...(this.listeners.get(type) ?? [])]) listener(event);
@@ -261,7 +265,7 @@ test("live reduced-motion changes cancel work and preserve completed reveals", (
   assert.equal(page.preference.listenerCount(), 0);
 });
 
-test("scene frames are coalesced and require an active visible desktop scene", () => {
+test("scene frames are coalesced and require an active visible scene", () => {
   const page = mount({ scenes: [{ dataset: { motionScene: "card" }, top: 100, height: 400 }] });
   const observer = page.observers[1];
   page.window.emit("scroll");
@@ -282,13 +286,119 @@ test("scene frames are coalesced and require an active visible desktop scene", (
   assert.equal(page.scenes[0].properties.size, 0);
   page.intersect(observer, page.scenes[0]);
   page.window.emit("scroll");
-  assert.equal(page.frames.size, 0);
+  assert.equal(page.frames.size, 1);
+  page.flushFrame();
+  assert.equal(page.scenes[0].properties.get("--scene-shift"), "1.8px");
   page.desktop.matches = true;
   page.document.hidden = true;
   page.window.emit("scroll");
   assert.equal(page.frames.size, 0);
   page.document.hidden = false;
   page.document.emit("visibilitychange");
+  assert.equal(page.frames.size, 1);
+  page.cleanup();
+});
+
+test("valley and forest layers move at their own depths", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "valley" }, top: -400, height: 800 },
+    { dataset: { motionScene: "forest" }, top: -400, height: 800 },
+  ] });
+  for (const scene of page.scenes) page.intersect(page.observers[1], scene);
+  assert.equal(page.frames.size, 1);
+  page.flushFrame();
+  const [valley, forest] = page.scenes;
+  assert.equal(valley.properties.get("--valley-back-shift"), "12.0px");
+  assert.equal(valley.properties.get("--valley-front-shift"), "-19.0px");
+  assert.equal(forest.properties.get("--forest-shift"), "-12.0px");
+  assert.equal(valley.properties.has("--scene-shift"), false);
+  assert.equal(forest.properties.has("--scene-shift"), false);
+  page.cleanup();
+});
+
+test("landscape movement remains bounded above and below the viewport", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "valley" }, top: -5000, height: 800 },
+    { dataset: { motionScene: "forest" }, top: -5000, height: 800 },
+  ] });
+  const [valley, forest] = page.scenes;
+  for (const scene of page.scenes) page.intersect(page.observers[1], scene);
+  page.flushFrame();
+  assert.equal(valley.properties.get("--valley-back-shift"), "24.0px");
+  assert.equal(valley.properties.get("--valley-front-shift"), "-38.0px");
+  assert.equal(forest.properties.get("--forest-shift"), "-24.0px");
+  for (const scene of page.scenes) {
+    scene.bounds = { top: 5000, bottom: 5800, height: 800 };
+  }
+  page.window.emit("scroll");
+  page.flushFrame();
+  assert.equal(valley.properties.get("--valley-back-shift"), "-24.0px");
+  assert.equal(valley.properties.get("--valley-front-shift"), "38.0px");
+  assert.equal(forest.properties.get("--forest-shift"), "24.0px");
+  page.cleanup();
+});
+
+test("resizing clears stale offsets and reduced motion removes landscape movement", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "horizon" }, top: -400, height: 800 },
+    { dataset: { motionScene: "valley" }, top: -400, height: 800 },
+    { dataset: { motionScene: "forest" }, top: -400, height: 800 },
+    { dataset: { motionScene: "photo" }, top: -400, height: 800 },
+  ] });
+  for (const scene of page.scenes) page.intersect(page.observers[1], scene);
+  page.flushFrame();
+  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 1, 1]);
+  page.desktop.matches = false;
+  page.window.emit("resize");
+  assert.ok(page.scenes.every((scene) => scene.properties.size === 0));
+  assert.equal(page.frames.size, 1);
+  page.flushFrame();
+  assert.equal(page.scenes[0].properties.get("--sky-shift"), "25.2px");
+  assert.equal(page.scenes[1].properties.get("--valley-front-shift"), "-6.6px");
+  page.desktop.matches = true;
+  page.window.emit("resize");
+  page.flushFrame();
+  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 1, 1]);
+  page.setReduced(true);
+  assert.ok(page.scenes.every((scene) => scene.properties.size === 0));
+  assert.equal(page.frames.size, 0);
+  page.setReduced(false);
+  for (const scene of page.scenes) page.intersect(page.observers[3], scene);
+  page.flushFrame();
+  page.cleanup();
+  assert.ok(page.scenes.every((scene) => scene.properties.size === 0));
+  assert.equal(page.frames.size, 0);
+});
+
+test("narrow layouts use smaller movement from the first frame", () => {
+  const page = mount({ desktop: false, scenes: [
+    { dataset: { motionScene: "valley" }, top: -5000, height: 800 },
+    { dataset: { motionScene: "forest" }, top: -5000, height: 800 },
+  ] });
+  for (const scene of page.scenes) page.intersect(page.observers[1], scene);
+  page.flushFrame();
+  assert.equal(page.scenes[0].properties.get("--valley-back-shift"), "8.4px");
+  assert.equal(page.scenes[0].properties.get("--valley-front-shift"), "-13.3px");
+  assert.equal(page.scenes[1].properties.get("--forest-shift"), "-8.4px");
+  page.cleanup();
+});
+
+test("landscape movement observes native scrolling without intercepting it", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "valley" }, top: -400, height: 800 },
+  ] });
+  page.intersect(page.observers[1], page.scenes[0]);
+  page.flushFrame();
+  let prevented = false;
+  page.window.emit("scroll", { preventDefault: () => { prevented = true; } });
+  const scrollOptions = [...page.window.listenerOptions.get("scroll").values()];
+  assert.equal(scrollOptions.length, 1);
+  assert.equal(scrollOptions[0].passive, true);
+  assert.equal(prevented, false);
+  for (const type of ["wheel", "touchmove", "keydown"]) {
+    assert.equal(page.window.listeners.get(type)?.size ?? 0, 0);
+    assert.equal(page.document.listeners.get(type)?.size ?? 0, 0);
+  }
   assert.equal(page.frames.size, 1);
   page.cleanup();
 });

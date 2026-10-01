@@ -78,7 +78,8 @@ export function MotionEffects() {
 
       function updateScenes() {
         frame = 0;
-        if (!desktop.matches || document.hidden) return;
+        if (document.hidden) return;
+        const depth = desktop.matches ? 1 : 0.35;
         const viewportHeight = window.innerHeight;
         const updates = Array.from(activeScenes, (scene) => {
           const bounds = scene.getBoundingClientRect();
@@ -91,17 +92,22 @@ export function MotionEffects() {
 
         for (const { scene, progress, heroOffset } of updates) {
           if (scene.dataset.motionScene === "horizon") {
-            scene.style.setProperty("--sky-shift", `${Math.min(heroOffset * 0.18, 100).toFixed(1)}px`);
-            scene.style.setProperty("--ridge-shift", `${Math.min(heroOffset * 0.1, 60).toFixed(1)}px`);
-            scene.style.setProperty("--shore-shift", `${Math.max(heroOffset * -0.035, -24).toFixed(1)}px`);
+            scene.style.setProperty("--sky-shift", `${(Math.min(heroOffset * 0.18, 100) * depth).toFixed(1)}px`);
+            scene.style.setProperty("--ridge-shift", `${(Math.min(heroOffset * 0.1, 60) * depth).toFixed(1)}px`);
+            scene.style.setProperty("--shore-shift", `${(Math.max(heroOffset * -0.035, -24) * depth).toFixed(1)}px`);
+          } else if (scene.dataset.motionScene === "valley") {
+            scene.style.setProperty("--valley-back-shift", `${(progress * 24 * depth).toFixed(1)}px`);
+            scene.style.setProperty("--valley-front-shift", `${(progress * -38 * depth).toFixed(1)}px`);
+          } else if (scene.dataset.motionScene === "forest") {
+            scene.style.setProperty("--forest-shift", `${(progress * -24 * depth).toFixed(1)}px`);
           } else {
-            scene.style.setProperty("--scene-shift", `${(progress * 30).toFixed(1)}px`);
+            scene.style.setProperty("--scene-shift", `${(progress * 30 * depth).toFixed(1)}px`);
           }
         }
       }
 
       function schedule() {
-        if (!frame && activeScenes.size && desktop.matches && !document.hidden) {
+        if (!frame && activeScenes.size && !document.hidden) {
           frame = window.requestAnimationFrame(updateScenes);
         }
       }
@@ -115,20 +121,23 @@ export function MotionEffects() {
           }
           schedule();
         },
-        { rootMargin: "100px" },
+        { rootMargin: "300px" },
       );
       scenes.forEach((scene) => sceneObserver.observe(scene));
 
       function resetScenes() {
         for (const scene of scenes) {
-          for (const property of ["--sky-shift", "--ridge-shift", "--shore-shift", "--scene-shift"]) {
+          for (const property of [
+            "--sky-shift", "--ridge-shift", "--shore-shift", "--scene-shift",
+            "--valley-back-shift", "--valley-front-shift", "--forest-shift",
+          ]) {
             scene.style.removeProperty(property);
           }
         }
       }
 
       function resize() {
-        if (!desktop.matches) resetScenes();
+        resetScenes();
         schedule();
       }
 
