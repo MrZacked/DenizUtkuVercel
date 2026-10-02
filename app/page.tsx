@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { ColorComparison } from "./color-comparison";
+import { ColorGallery } from "./color-gallery";
+import { DetectionGallery } from "./detection-gallery";
+import { colorExamples, detectionExamples } from "./project-samples";
 import { MotionEffects } from "./motion-effects";
 import { ThemeToggle } from "./theme-toggle";
 import { ForestEdge, ValleyScene, WoodlandScene } from "./landscape-scenes";
@@ -189,36 +191,12 @@ export default function Home() {
             </div>
 
           <article className="project project-detection">
-            <figure className="project-figure detection-figure">
-              <div className="project-image" data-reveal="image">
-                <Image
-                  src="/work/object-detection.jpg"
-                  alt="Cat resting on a bench with detection boxes added to the photo"
-                  fill
-                  sizes="(max-width: 760px) calc(100vw - 2rem), (max-width: 1000px) calc(55vw - 2.75rem), (max-width: 1296px) calc(64vw - 2rem), 800px"
-                />
-              </div>
-              <figcaption>
-                I used a photo by{" "}
-                <a
-                  href="https://commons.wikimedia.org/wiki/File:Cat_on_a_bench_near_Sultanahmet_Meydan%C4%B1,_Istanbul,_20260605_0902_0926.jpg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Jakub Hałun
-                </a>
-                {" "}(
-                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
-                  CC BY 4.0
-                </a>
-                ) and added the detection boxes.
-              </figcaption>
-            </figure>
+            <DetectionGallery examples={detectionExamples} />
             <div className="project-copy" data-reveal="copy" data-reveal-delay="100">
               <h3>Object detection</h3>
               <p>
-                I built a Streamlit app that uses pretrained YOLO models to
-                find objects in images, video and webcam feeds. The project
+                I built a Streamlit app for object detection in
+                images, video and webcam feeds. The project
                 also has scripts for training models.
               </p>
               <p className="project-tools">Python / YOLO / OpenCV / Streamlit</p>
@@ -228,7 +206,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                YOLO code
+                Detection code
               </a>
             </div>
           </article>
@@ -240,7 +218,7 @@ export default function Home() {
                   src="/work/healem-room.webp"
                   alt="Pale upholstered chairs with wooden frames in a sunlit room"
                   fill
-                  sizes="(max-width: 520px) 100vw, (max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) 42vw, 520px"
+                  sizes="(max-width: 520px) 100vw, (max-width: 760px) calc(100vw - 2rem), (max-width: 1296px) calc(46vw - 1.38rem), 574px"
                 />
               </div>
             </figure>
@@ -269,7 +247,7 @@ export default function Home() {
                 <h3>Colorization</h3>
                 <p>
                   A command-line tool I made to colorize folders of grayscale
-                  photos. It uses OpenCV and a pretrained model.
+                  photos with OpenCV.
                 </p>
               </div>
               <div>
@@ -284,29 +262,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <figure className="colorization-figure">
-              <ColorComparison />
-              <figcaption>
-                {"I used Güldem Üstün's photo, “"}
-                <a
-                  href="https://commons.wikimedia.org/wiki/File:Izmir-Urla_Late_evening_street_view.jpg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Turkey (Izmir-Urla) Late evening street view
-                </a>
-                {"” ("}
-                <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">
-                  CC BY 2.0
-                </a>
-                ). I resized it, made the grayscale input and ran it through my
-                tool with a{" "}
-                <a href="https://github.com/richzhang/colorization" target="_blank" rel="noopener noreferrer">
-                  pretrained model
-                </a>
-                . The colors are estimates.
-              </figcaption>
-            </figure>
+            <ColorGallery examples={colorExamples} />
           </article>
           </div>
         </section>
