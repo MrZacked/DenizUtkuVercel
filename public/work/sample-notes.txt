@@ -1,0 +1,33 @@
+Project samples generated on 2 October 2026
+
+Detection
+Repository: https://github.com/MrZacked/ZackedObjectDetection
+Revision: 6248974d028e2be7a3195f39996a5834b80d1bb0
+Code: src/detect.py, ObjectDetector.detect_yolo
+Model: pretrained model from the detection repository
+Model SHA-256: 85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5
+Runtime: Ultralytics 8.4.171, PyTorch 2.14.1, CPU
+Inference size: 640, minimum confidence: 0.15, IoU: 0.7
+Inputs: a cat in Istanbul, a car in Tasmania and a Haflinger horse in a field.
+Photos were resized or cropped to 1280x853 before inference so boxes match the frame.
+Saved predictions: app/detection-results.json (percent coordinates and raw scores)
+Display: local WebP photos with browser-drawn boxes from the saved predictions.
+The confidence control filters these predictions. It does not run a model again.
+No latency or accuracy benchmark is claimed for these samples.
+
+Colorization
+Repository: https://github.com/MrZacked/ColorizationPython
+Revision: b387462d9a1c711b3b07f15f61c5440a1b886dd7
+Code: colorize.py, load_net and colorize_bgr
+Model: colorization_release_v2.caffemodel, Zhang, Isola and Efros (2016)
+Model SHA-256: f5af1e602646328c792e1094f9876fe9cd4c09ac46fa886e5708a1abc89137b1
+Upstream: https://github.com/richzhang/colorization/tree/caffe
+Runtime: OpenCV 4.11.0, NumPy 1.26.4, CPU
+Inputs: a lakeside cabin, Kyrenia harbour and a street in Porto, 1280x800.
+Photos were cropped to the same display ratio before grayscale conversion.
+Processing: convert to grayscale, call colorize_bgr, encode both images as WebP.
+No optional enhancement, upscaling or manual recoloring was applied.
+The comparison slider reveals saved output. It is not real-time color inference.
+
+Source photo credits and licenses: /licenses.txt
+Model weights and the Python runtime are not included in the website.

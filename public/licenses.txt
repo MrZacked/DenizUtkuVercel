@@ -36,6 +36,67 @@ estimated colors from a pretrained model (https://github.com/richzhang/colorizat
 
 These photo credits do not imply endorsement by the photographers.
 
+Project gallery photos
+
+public/work/detection-cat.webp
+Title: Cat on a bench near Sultanahmet Meydanı, Istanbul
+Photographer: Jakub Hałun
+Source: https://commons.wikimedia.org/wiki/File:Cat_on_a_bench_near_Sultanahmet_Meydan%C4%B1,_Istanbul,_20260605_0902_0926.jpg
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Changes: Resized before running through the detection code.
+The boxes shown on the page come from saved predictions.
+
+public/work/detection-car.webp
+Title: Car parked on roadside during sunset with green fields
+Photographer: Jackie Alexander
+Source: https://unsplash.com/photos/car-parked-on-roadside-during-sunset-with-green-fields-rtkzm5Bkb9Q
+License: Unsplash License (https://unsplash.com/license)
+Changes: Cropped and resized before running through the detection code.
+The boxes shown on the page come from saved predictions.
+
+public/work/detection-horse.webp
+Title: Haflinger horse in a field on Île d'Orléans
+Photographer: Hayden Soloviev
+Source: https://commons.wikimedia.org/wiki/File:Haflinger_horse_in_a_field_on_%C3%8Ele_d%27Orl%C3%A9ans.jpg
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Changes: Resized before running through the detection code.
+The boxes shown on the page come from saved predictions.
+
+public/work/color-cabin-input.webp and public/work/color-cabin-output.webp
+Title: Lake Livingston State Park Cabin
+Photographer: Larry D. Moore
+Source: https://commons.wikimedia.org/wiki/File:Lake_Livingston_State_Park_Cabin.jpg
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+Changes: Cropped and resized. Converted to grayscale then processed with the
+ColorizationPython tool and pretrained model. Output colors are estimates.
+
+public/work/color-harbour-input.webp and public/work/color-harbour-output.webp
+Title: Kyrenia Harbour - sunset
+Photographer: Mike Finn
+Source: https://commons.wikimedia.org/wiki/File:Kyrenia_Harbour_-_sunset_(15894792481).jpg
+Original source: https://www.flickr.com/photos/26445715@N00/15894792481
+License: Creative Commons Attribution 2.0 Generic (CC BY 2.0)
+License URL: https://creativecommons.org/licenses/by/2.0/
+Changes: Cropped and resized. Converted to grayscale then processed with the
+ColorizationPython tool and pretrained model. Output colors are estimates.
+
+public/work/color-porto-input.webp and public/work/color-porto-output.webp
+Title: Porto street scene
+Photographer: Bex Walton
+Source: https://commons.wikimedia.org/wiki/File:Porto_street_scene_(51707325059).jpg
+Original source: https://www.flickr.com/photos/7831824@N04/51707325059
+License: Creative Commons Attribution 2.0 Generic (CC BY 2.0)
+License URL: https://creativecommons.org/licenses/by/2.0/
+Changes: Cropped and resized. Converted to grayscale then processed with the
+ColorizationPython tool and pretrained model. Output colors are estimates.
+
+Model versions and generation details are recorded in public/work/sample-notes.txt.
+The website serves saved results only. No model weights are distributed or run
+in the browser and no visitor images are uploaded.
+
 -----------------------------------------------------------
 Inter font
 Source: https://github.com/google/fonts/tree/main/ofl/inter

@@ -52,17 +52,16 @@ function textContent(node) {
   return node === undefined || node === null ? "" : String(node);
 }
 
-function mount({ server = false } = {}) {
-  let position;
-  let initialized = false;
+function mount({ server = false, props, loaded = true } = {}) {
+  const state = [];
+  let cursor = 0;
+  let currentProps = props;
   let store;
   const Component = loadComponent({
     useState: (initial) => {
-      if (!initialized) {
-        position = initial;
-        initialized = true;
-      }
-      return [position, (next) => { position = next; }];
+      const index = cursor++;
+      if (!(index in state)) state[index] = typeof initial === "function" ? initial() : initial;
+      return [state[index], (next) => { state[index] = typeof next === "function" ? next(state[index]) : next; }];
     },
     useSyncExternalStore: (subscribe, getSnapshot, getServerSnapshot) => {
       store = { subscribe, getSnapshot, getServerSnapshot };
@@ -70,12 +69,23 @@ function mount({ server = false } = {}) {
     },
   });
   let tree;
-  const render = () => { tree = Component(); };
+  const render = () => { cursor = 0; tree = Component(currentProps); };
   render();
   const range = () => findElement(tree, (element) => element.type === "input");
+  const images = () => elements(tree).filter((element) => typeof element.type === "function" && element.props.fill);
+  if (loaded && !server) {
+    images().forEach((image) => image.props.onLoad());
+    render();
+  }
   return {
     tree: () => tree,
     range,
+    images,
+    render,
+    updateProps: (next) => { currentProps = next; render(); },
+    loadImage: (index) => { images()[index].props.onLoad(); render(); },
+    failImage: (index) => { images()[index].props.onError(); render(); },
+    feedback: () => findElement(tree, (element) => element.props.role === "status"),
     store: () => store,
     stage: () => findElement(tree, (element) => element.props.className === "comparison-stage"),
     help: () => findElement(tree, (element) => element.props.id === range().props["aria-describedby"]),
@@ -182,4 +192,81 @@ test("the no-script fallback links to both complete images", () => {
   assert.ok(renderedFallback);
   assert.match(renderedFallback, /href="\/work\/color-input\.jpg"/);
   assert.match(renderedFallback, /href="\/work\/color-output\.jpg"/);
+});
+
+test("example props update both images, descriptions and fallback links", () => {
+  const props = {
+    input: "/work/color-gallery/market-input.jpg",
+    output: "/work/color-gallery/market-output.jpg",
+    inputAlt: "Grayscale market stalls",
+    outputAlt: "Market stalls with estimated colors",
+    id: "color-position-market",
+  };
+  const comparison = mount({ props });
+  const images = elements(comparison.stage()).filter((element) => typeof element.type === "function");
+  assert.deepEqual(images.map((image) => [image.props.src, image.props.alt]), [
+    [props.input, props.inputAlt],
+    [props.output, props.outputAlt],
+  ]);
+  assert.equal(comparison.range().props.id, props.id);
+  assert.equal(comparison.range().props["aria-describedby"], `${props.id}-help`);
+  assert.equal(comparison.help().props.id, `${props.id}-help`);
+  const fallback = findElement(comparison.tree(), (element) => element.type === "noscript");
+  assert.deepEqual(elements(fallback).filter((element) => element.type === "a").map((link) => link.props.href), [props.input, props.output]);
+});
+
+test("comparison stays disabled until both photos have loaded", () => {
+  const comparison = mount({ loaded: false });
+  assert.equal(comparison.images().length, 2);
+  assert.equal(comparison.range().props.disabled, true);
+  assert.equal(comparison.stage().props["aria-busy"], true);
+  assert.equal(comparison.feedback().props.hidden, false);
+  assert.equal(textContent(comparison.feedback()), "Loading photos…");
+  comparison.loadImage(1);
+  assert.equal(comparison.range().props.disabled, true);
+  assert.equal(comparison.stage().props["aria-busy"], true);
+  comparison.loadImage(0);
+  assert.equal(comparison.range().props.disabled, false);
+  assert.equal(comparison.stage().props["aria-busy"], false);
+  assert.equal(comparison.feedback().props.className, "visually-hidden");
+  assert.equal(textContent(comparison.feedback()), "Comparison ready.");
+  assert.equal(comparison.feedback().props["aria-atomic"], "true");
+});
+
+test("either failed photo gives usable links and leaves the comparison disabled", () => {
+  for (const failedImage of [0, 1]) {
+    const comparison = mount({ loaded: false });
+    comparison.failImage(failedImage);
+    comparison.loadImage(1 - failedImage);
+    assert.equal(comparison.range().props.disabled, true);
+    assert.equal(comparison.stage().props["aria-busy"], false);
+    assert.match(textContent(comparison.feedback()), /This comparison couldn’t load/);
+    const links = elements(comparison.feedback()).filter((element) => element.type === "a");
+    assert.deepEqual(links.map((link) => link.props.href), comparison.images().map((image) => image.props.src));
+    assert.match(textContent(comparison.help()), /Open the photos above/);
+  }
+});
+
+test("new source pairs cannot reuse an earlier pair’s loaded state", () => {
+  const comparison = mount();
+  const firstImages = comparison.images();
+  comparison.updateProps({ input: "/work/color-market-input.jpg", output: "/work/color-market-output.jpg" });
+  assert.equal(comparison.range().props.disabled, true);
+  assert.equal(textContent(comparison.feedback()), "Loading photos…");
+  firstImages[0].props.onLoad();
+  firstImages[1].props.onError();
+  comparison.render();
+  assert.equal(comparison.range().props.disabled, true);
+  assert.equal(textContent(comparison.feedback()), "Loading photos…");
+  comparison.loadImage(0);
+  comparison.loadImage(1);
+  assert.equal(comparison.range().props.disabled, false);
+  assert.equal(comparison.images().length, 2);
+});
+
+test("loading feedback is hidden in static output so the photos remain visible without scripts", () => {
+  const comparison = mount({ server: true, loaded: false });
+  assert.equal(comparison.feedback().props.hidden, true);
+  assert.equal(comparison.stage().props["aria-busy"], false);
+  assert.equal(comparison.images().length, 2);
 });

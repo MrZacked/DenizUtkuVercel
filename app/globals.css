@@ -781,6 +781,228 @@ html[data-theme="dark"] .celestial-moon {
   object-position: center bottom;
 }
 
+.detection-stage {
+  aspect-ratio: 1280 / 853;
+}
+
+.detection-slide,
+.detection-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.detection-slide img {
+  object-fit: fill;
+}
+
+.detection-overlay {
+  pointer-events: none;
+}
+
+.gallery-feedback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  background: #253e35;
+  color: var(--light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.gallery-feedback[hidden] {
+  display: none;
+}
+
+.gallery-feedback p {
+  margin: 0;
+}
+
+.gallery-feedback a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding-inline: 0.5rem;
+  text-underline-offset: 0.25em;
+}
+
+.gallery-feedback a:focus-visible {
+  outline-color: var(--warm);
+}
+
+.gallery-photo-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.detection-box {
+  position: absolute;
+  border: 2px solid var(--warm);
+}
+
+.detection-box > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: 10rem;
+  padding: 0.12rem 0.3rem;
+  overflow: hidden;
+  background: var(--warm);
+  color: #142820;
+  font-size: clamp(0.63rem, 1vw, 0.8rem);
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.detection-box[data-label-align="right"] > span {
+  right: 0;
+  left: auto;
+}
+
+.gallery-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.gallery-current {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.gallery-count {
+  flex: none;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery-arrows {
+  display: flex;
+  flex: none;
+  gap: 0.15rem;
+}
+
+.gallery-arrows button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.gallery-arrows button:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.gallery-arrows button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gallery-arrows svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.gallery-arrows button:focus-visible,
+.sample-playground :is(summary, input):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.detection-figure figcaption {
+  min-height: 3em;
+}
+
+.sample-playground {
+  margin-top: 0.8rem;
+  font-size: 0.88rem;
+}
+
+.sample-playground summary {
+  width: fit-content;
+  min-height: 2.75rem;
+  padding-block: 0.65rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.sample-settings > p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.confidence-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sample-settings input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 2.75rem;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.boxes-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.boxes-label input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.sample-settings .sample-results {
+  margin-top: 0.6rem;
+  color: var(--ink);
+}
+
+.sample-settings .sample-limit {
+  font-size: 0.8rem;
+}
+
 .project-figure figcaption,
 .colorization-figure figcaption {
   margin-top: 0.8rem;
@@ -1338,10 +1560,6 @@ figcaption a {
     grid-column: auto;
   }
 
-  .comparison-stage {
-    aspect-ratio: 4 / 5;
-  }
-
   .project-healem {
     margin-inline: -1rem;
   }
@@ -1390,6 +1608,24 @@ figcaption a {
   html[data-theme-transition] .valley-layer path {
     transition: fill 700ms ease;
   }
+
+  .gallery-frame[data-direction="next"] > .gallery-slide {
+    animation: gallery-next 240ms ease-out both;
+  }
+
+  .gallery-frame[data-direction="previous"] > .gallery-slide {
+    animation: gallery-previous 240ms ease-out both;
+  }
+}
+
+@keyframes gallery-next {
+  from { opacity: 0.65; transform: translateX(1.25rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gallery-previous {
+  from { opacity: 0.65; transform: translateX(-1.25rem); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
