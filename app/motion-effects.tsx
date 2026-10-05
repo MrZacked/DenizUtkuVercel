@@ -99,7 +99,11 @@ export function MotionEffects() {
             scene.style.setProperty("--valley-back-shift", `${(progress * 24 * depth).toFixed(1)}px`);
             scene.style.setProperty("--valley-front-shift", `${(progress * -38 * depth).toFixed(1)}px`);
           } else if (scene.dataset.motionScene === "forest") {
-            scene.style.setProperty("--forest-shift", `${(progress * -24 * depth).toFixed(1)}px`);
+            scene.style.setProperty("--forest-back-shift", `${(progress * 30 * depth).toFixed(1)}px`);
+            scene.style.setProperty("--forest-front-shift", `${(progress * -58 * depth).toFixed(1)}px`);
+          } else if (scene.dataset.motionScene === "cave") {
+            scene.style.setProperty("--cave-back-shift", `${(progress * 18 * depth).toFixed(1)}px`);
+            scene.style.setProperty("--cave-front-shift", `${(progress * -24 * depth).toFixed(1)}px`);
           } else {
             scene.style.setProperty("--scene-shift", `${(progress * 30 * depth).toFixed(1)}px`);
           }
@@ -129,7 +133,9 @@ export function MotionEffects() {
         for (const scene of scenes) {
           for (const property of [
             "--sky-shift", "--ridge-shift", "--shore-shift", "--scene-shift",
-            "--valley-back-shift", "--valley-front-shift", "--forest-shift",
+            "--valley-back-shift", "--valley-front-shift",
+            "--forest-back-shift", "--forest-front-shift", "--forest-shift",
+            "--cave-back-shift", "--cave-front-shift",
           ]) {
             scene.style.removeProperty(property);
           }

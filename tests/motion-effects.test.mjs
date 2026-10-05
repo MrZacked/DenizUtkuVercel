@@ -299,20 +299,26 @@ test("scene frames are coalesced and require an active visible scene", () => {
   page.cleanup();
 });
 
-test("valley and forest layers move at their own depths", () => {
+test("valley, forest and cave layers move at their own depths", () => {
   const page = mount({ scenes: [
     { dataset: { motionScene: "valley" }, top: -400, height: 800 },
     { dataset: { motionScene: "forest" }, top: -400, height: 800 },
+    { dataset: { motionScene: "cave" }, top: -400, height: 800 },
   ] });
   for (const scene of page.scenes) page.intersect(page.observers[1], scene);
   assert.equal(page.frames.size, 1);
   page.flushFrame();
-  const [valley, forest] = page.scenes;
+  const [valley, forest, cave] = page.scenes;
   assert.equal(valley.properties.get("--valley-back-shift"), "12.0px");
   assert.equal(valley.properties.get("--valley-front-shift"), "-19.0px");
-  assert.equal(forest.properties.get("--forest-shift"), "-12.0px");
+  assert.equal(forest.properties.get("--forest-back-shift"), "15.0px");
+  assert.equal(forest.properties.get("--forest-front-shift"), "-29.0px");
+  assert.equal(forest.properties.has("--forest-shift"), false);
+  assert.equal(cave.properties.get("--cave-back-shift"), "9.0px");
+  assert.equal(cave.properties.get("--cave-front-shift"), "-12.0px");
   assert.equal(valley.properties.has("--scene-shift"), false);
   assert.equal(forest.properties.has("--scene-shift"), false);
+  assert.equal(cave.properties.has("--scene-shift"), false);
   page.cleanup();
 });
 
@@ -320,13 +326,17 @@ test("landscape movement remains bounded above and below the viewport", () => {
   const page = mount({ scenes: [
     { dataset: { motionScene: "valley" }, top: -5000, height: 800 },
     { dataset: { motionScene: "forest" }, top: -5000, height: 800 },
+    { dataset: { motionScene: "cave" }, top: -5000, height: 800 },
   ] });
-  const [valley, forest] = page.scenes;
+  const [valley, forest, cave] = page.scenes;
   for (const scene of page.scenes) page.intersect(page.observers[1], scene);
   page.flushFrame();
   assert.equal(valley.properties.get("--valley-back-shift"), "24.0px");
   assert.equal(valley.properties.get("--valley-front-shift"), "-38.0px");
-  assert.equal(forest.properties.get("--forest-shift"), "-24.0px");
+  assert.equal(forest.properties.get("--forest-back-shift"), "30.0px");
+  assert.equal(forest.properties.get("--forest-front-shift"), "-58.0px");
+  assert.equal(cave.properties.get("--cave-back-shift"), "18.0px");
+  assert.equal(cave.properties.get("--cave-front-shift"), "-24.0px");
   for (const scene of page.scenes) {
     scene.bounds = { top: 5000, bottom: 5800, height: 800 };
   }
@@ -334,8 +344,43 @@ test("landscape movement remains bounded above and below the viewport", () => {
   page.flushFrame();
   assert.equal(valley.properties.get("--valley-back-shift"), "-24.0px");
   assert.equal(valley.properties.get("--valley-front-shift"), "38.0px");
-  assert.equal(forest.properties.get("--forest-shift"), "24.0px");
+  assert.equal(forest.properties.get("--forest-back-shift"), "-30.0px");
+  assert.equal(forest.properties.get("--forest-front-shift"), "58.0px");
+  assert.equal(cave.properties.get("--cave-back-shift"), "-18.0px");
+  assert.equal(cave.properties.get("--cave-front-shift"), "24.0px");
   page.cleanup();
+});
+
+test("forest depths follow continuous midpoint progress through scheduled frames", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "forest" }, top: 400, height: 800 },
+  ] });
+  const forest = page.scenes[0];
+  page.intersect(page.observers[1], forest);
+  assert.equal(forest.properties.size, 0);
+  page.flushFrame();
+  assert.equal(forest.properties.get("--forest-back-shift"), "-15.0px");
+  assert.equal(forest.properties.get("--forest-front-shift"), "29.0px");
+
+  for (const [top, back, front] of [
+    [200, "-7.5px", "14.5px"],
+    [0, "0.0px", "0.0px"],
+    [-200, "7.5px", "-14.5px"],
+  ]) {
+    const previousBack = forest.properties.get("--forest-back-shift");
+    const previousFront = forest.properties.get("--forest-front-shift");
+    forest.bounds = { top, bottom: top + 800, height: 800 };
+    page.window.emit("scroll");
+    assert.equal(forest.properties.get("--forest-back-shift"), previousBack);
+    assert.equal(forest.properties.get("--forest-front-shift"), previousFront);
+    assert.equal(page.frames.size, 1);
+    page.flushFrame();
+    assert.equal(forest.properties.get("--forest-back-shift"), back);
+    assert.equal(forest.properties.get("--forest-front-shift"), front);
+  }
+
+  page.cleanup();
+  assert.equal(forest.properties.size, 0);
 });
 
 test("resizing clears stale offsets and reduced motion removes landscape movement", () => {
@@ -344,10 +389,12 @@ test("resizing clears stale offsets and reduced motion removes landscape movemen
     { dataset: { motionScene: "valley" }, top: -400, height: 800 },
     { dataset: { motionScene: "forest" }, top: -400, height: 800 },
     { dataset: { motionScene: "photo" }, top: -400, height: 800 },
+    { dataset: { motionScene: "cave" }, top: -400, height: 800 },
   ] });
   for (const scene of page.scenes) page.intersect(page.observers[1], scene);
   page.flushFrame();
-  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 1, 1]);
+  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 2, 1, 2]);
+  page.scenes[2].properties.set("--forest-shift", "-12.0px");
   page.desktop.matches = false;
   page.window.emit("resize");
   assert.ok(page.scenes.every((scene) => scene.properties.size === 0));
@@ -355,10 +402,18 @@ test("resizing clears stale offsets and reduced motion removes landscape movemen
   page.flushFrame();
   assert.equal(page.scenes[0].properties.get("--sky-shift"), "25.2px");
   assert.equal(page.scenes[1].properties.get("--valley-front-shift"), "-6.6px");
+  assert.equal(page.scenes[2].properties.get("--forest-back-shift"), "5.3px");
+  assert.equal(page.scenes[2].properties.get("--forest-front-shift"), "-10.1px");
+  assert.equal(page.scenes[2].properties.has("--forest-shift"), false);
+  assert.equal(page.scenes[4].properties.get("--cave-back-shift"), "3.1px");
+  assert.equal(page.scenes[4].properties.get("--cave-front-shift"), "-4.2px");
   page.desktop.matches = true;
   page.window.emit("resize");
   page.flushFrame();
-  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 1, 1]);
+  assert.deepEqual(page.scenes.map((scene) => scene.properties.size), [3, 2, 2, 1, 2]);
+  page.scenes[2].properties.set("--forest-shift", "-12.0px");
+  page.window.emit("scroll");
+  assert.equal(page.frames.size, 1);
   page.setReduced(true);
   assert.ok(page.scenes.every((scene) => scene.properties.size === 0));
   assert.equal(page.frames.size, 0);
@@ -374,13 +429,58 @@ test("narrow layouts use smaller movement from the first frame", () => {
   const page = mount({ desktop: false, scenes: [
     { dataset: { motionScene: "valley" }, top: -5000, height: 800 },
     { dataset: { motionScene: "forest" }, top: -5000, height: 800 },
+    { dataset: { motionScene: "cave" }, top: -5000, height: 800 },
   ] });
   for (const scene of page.scenes) page.intersect(page.observers[1], scene);
   page.flushFrame();
   assert.equal(page.scenes[0].properties.get("--valley-back-shift"), "8.4px");
   assert.equal(page.scenes[0].properties.get("--valley-front-shift"), "-13.3px");
-  assert.equal(page.scenes[1].properties.get("--forest-shift"), "-8.4px");
+  assert.equal(page.scenes[1].properties.get("--forest-back-shift"), "10.5px");
+  assert.equal(page.scenes[1].properties.get("--forest-front-shift"), "-20.3px");
+  assert.equal(page.scenes[2].properties.get("--cave-back-shift"), "6.3px");
+  assert.equal(page.scenes[2].properties.get("--cave-front-shift"), "-8.4px");
+  for (const scene of page.scenes) {
+    scene.bounds = { top: 5000, bottom: 5800, height: 800 };
+  }
+  page.window.emit("scroll");
+  page.flushFrame();
+  assert.equal(page.scenes[1].properties.get("--forest-back-shift"), "-10.5px");
+  assert.equal(page.scenes[1].properties.get("--forest-front-shift"), "20.3px");
+  assert.equal(page.scenes[2].properties.get("--cave-back-shift"), "-6.3px");
+  assert.equal(page.scenes[2].properties.get("--cave-front-shift"), "8.4px");
   page.cleanup();
+});
+
+test("inactive cave scenes and hidden documents skip motion updates", () => {
+  const page = mount({ scenes: [
+    { dataset: { motionScene: "cave" }, top: -400, height: 800 },
+  ] });
+  const cave = page.scenes[0];
+  const observer = page.observers[1];
+  page.intersect(observer, cave, false);
+  page.window.emit("scroll");
+  assert.equal(page.frames.size, 0);
+  assert.equal(cave.properties.size, 0);
+
+  page.intersect(observer, cave);
+  page.document.hidden = true;
+  page.flushFrame();
+  assert.equal(cave.properties.size, 0);
+  page.window.emit("scroll");
+  assert.equal(page.frames.size, 0);
+
+  page.document.hidden = false;
+  page.document.emit("visibilitychange");
+  page.flushFrame();
+  assert.equal(cave.properties.get("--cave-back-shift"), "9.0px");
+  assert.equal(cave.properties.get("--cave-front-shift"), "-12.0px");
+  page.intersect(observer, cave, false);
+  cave.bounds = { top: -5000, bottom: -4200, height: 800 };
+  page.window.emit("scroll");
+  assert.equal(page.frames.size, 0);
+  assert.equal(cave.properties.get("--cave-back-shift"), "9.0px");
+  page.cleanup();
+  assert.equal(cave.properties.size, 0);
 });
 
 test("landscape movement observes native scrolling without intercepting it", () => {
