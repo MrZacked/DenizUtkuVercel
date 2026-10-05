@@ -36,7 +36,10 @@ test("each section surface changes with the selected theme", () => {
 test("both palettes keep normal text, muted text and links readable on section surfaces", () => {
   for (const [mode, palette] of Object.entries({ light, dark })) {
     for (const surface of surfaces) {
-      for (const foreground of ["--ink", "--muted", "--accent", "--link-hover"]) {
+      const foregrounds = ["--about-bg", "--contact-bg"].includes(surface)
+        ? ["--cave-ink", "--cave-muted", "--cave-accent", "--cave-hover"]
+        : ["--ink", "--muted", "--accent", "--link-hover"];
+      for (const foreground of foregrounds) {
         const ratio = contrast(palette[surface], palette[foreground]);
         assert.ok(ratio >= 4.5, `${mode} ${foreground} on ${surface}: ${ratio.toFixed(2)}`);
       }
@@ -44,16 +47,33 @@ test("both palettes keep normal text, muted text and links readable on section s
   }
 });
 
-test("photo overlays and clay panels retain contrasting text and focus colors", () => {
-  for (const palette of [light, dark]) {
-    for (const surface of ["--deep", "--clay"]) {
-      for (const foreground of ["--light", "--warm-hover"]) {
-        assert.ok(contrast(palette[surface], palette[foreground]) >= 4.5);
-      }
-      assert.ok(contrast(palette[surface], palette["--warm"]) >= 3);
-    }
-    assert.ok(contrast(palette["--deep"], palette["--warm"]) >= 4.5);
+test("light sections are genuinely light rather than slightly different dark greens", () => {
+  for (const surface of [...surfaces, "--valley-bg", "--clay", "--cave-distant", "--cave-rock", "--cave-facet", "--cave-near", "--cave-water"]) {
+    assert.ok(luminance(light[surface]) >= 0.5, `${surface} must stay light in the daytime palette`);
+    assert.ok(luminance(dark[surface]) < 0.1, `${surface} must stay dark in the nighttime palette`);
   }
+  assert.notEqual(light["--experience-bg"], light["--projects-bg"]);
+  assert.notEqual(light["--projects-bg"], light["--about-bg"]);
+});
+
+test("clay panels retain contrasting text, links and focus colors in both themes", () => {
+  for (const palette of [light, dark]) {
+    for (const foreground of ["--clay-ink", "--clay-muted", "--clay-accent", "--clay-hover"]) {
+      assert.ok(contrast(palette["--clay"], palette[foreground]) >= 4.5, foreground);
+    }
+  }
+  assert.match(css, /\.project-healem\s*\{[^}]*color:\s*var\(--clay-ink\)/);
+  assert.match(css, /\.project-healem a:focus-visible\s*\{[^}]*var\(--clay-accent\)/);
+});
+
+test("the hero and construction photo use separate day and night overlays and text", () => {
+  for (const name of ["--hero-ink", "--hero-accent", "--hero-hover", "--hero-overlay", "--experience-photo-ink", "--experience-photo-muted", "--experience-photo-accent", "--experience-overlay", "--experience-overlay-mobile"]) {
+    assert.notEqual(light[name], dark[name], name);
+  }
+  assert.match(css, /\.hero::before\s*\{[^}]*background:\s*var\(--hero-overlay\)/);
+  assert.match(css, /\.experience-heading::before\s*\{[^}]*background:\s*var\(--experience-overlay\)/);
+  assert.match(css, /\.experience-heading::before\s*\{[^}]*background:\s*var\(--experience-overlay-mobile\)/);
+  assert.match(css, /\.experience-lead\s*\{[^}]*color:\s*var\(--experience-photo-muted\)/);
 });
 
 test("theme control borders and hover states are visible in both palettes", () => {
@@ -96,4 +116,7 @@ test("theme animation is limited to explicit changes and honors reduced motion",
   }
   const motionRules = css.slice(css.indexOf("@media (prefers-reduced-motion: no-preference)"));
   assert.doesNotMatch(motionRules, /transition:\s*(?:background-color|color)/);
+  for (const [, properties] of motionRules.matchAll(/transition:\s*([^;]+);/g)) {
+    assert.doesNotMatch(properties, /(?:^|,)\s*(?:fill|stroke|background(?:-color)?|color|all)\b/);
+  }
 });

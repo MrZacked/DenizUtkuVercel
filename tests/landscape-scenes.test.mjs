@@ -44,6 +44,13 @@ function contrast(first, second) {
   return (brighter + 0.05) / (darker + 0.05);
 }
 
+function blendedColor(foreground, background, opacity) {
+  const channel = (hex, position) => parseInt(hex.slice(position, position + 2), 16);
+  return `#${[1, 3, 5].map((position) => Math.round(
+    channel(foreground, position) * opacity + channel(background, position) * (1 - opacity),
+  ).toString(16).padStart(2, "0")).join("")}`;
+}
+
 const compiled = ts.transpileModule(source, {
   compilerOptions: {
     module: ts.ModuleKind.CommonJS,
@@ -69,7 +76,7 @@ test("the experience entry does not clip the landscape at the section boundary",
     assert.doesNotMatch(block, /(?:margin-top|top):\s*-/);
   }
   assert.match(rules[0], /background:\s*var\(--valley-bg\)/);
-  assert.match(rules[0], /color:\s*var\(--light\)/);
+  assert.match(rules[0], /color:\s*var\(--scene-ink\)/);
 });
 
 test("only the decorative artwork extends upward and cannot intercept input", () => {
@@ -115,14 +122,14 @@ test("both themes keep the experience copy readable on the green landscape plane
   const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
   for (const [mode, palette] of Object.entries({ light, dark })) {
     for (const surface of ["--valley-bg", "--scene-distant", "--scene-middle", "--scene-foreground"]) {
-      const ratio = contrast(palette["--light"], palette[surface]);
+      const ratio = contrast(palette["--scene-ink"], palette[surface]);
       assert.ok(ratio >= 4.5, `${mode} text on ${surface}: ${ratio.toFixed(2)}`);
     }
   }
 });
 
 test("landscape illustrations are decorative with no focusable or interactive content", () => {
-  for (const name of ["ValleyScene", "ForestEdge", "WoodlandScene"]) {
+  for (const name of ["ValleyScene", "ExperienceTerrain", "ForestEdge", "CaveScene", "CaveFloor"]) {
     const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports[name]));
     assert.match(markup, /^<div\b[^>]*\baria-hidden="true"/);
     const drawings = Array.from(markup.matchAll(/<svg\b[^>]*>/g), ([drawing]) => drawing);
@@ -130,6 +137,133 @@ test("landscape illustrations are decorative with no focusable or interactive co
     for (const drawing of drawings) assert.match(drawing, /\bfocusable="false"/);
     assert.doesNotMatch(markup, /<(?:a|button|input|select|textarea|iframe)\b|\btabindex=|\bon\w+=/i);
   }
+});
+
+test("Experience has quiet terrain behind its details without covering controls", () => {
+  assert.match(pageSource, /className="experience-section"[^>]*>\s*<ExperienceTerrain\s*\/>/);
+  assert.ok(zIndexFor(".experience-body") > zIndexFor(".experience-terrain"));
+  assert.ok(rulesFor(".experience-terrain").some((block) => /pointer-events:\s*none/.test(block)));
+  assert.match(rulesFor(".experience-terrain").join("\n"), /opacity:\s*var\(--experience-terrain-opacity\)/);
+  const light = paletteFor(":root");
+  const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
+  assert.ok(Number(light["--experience-terrain-opacity"]) > 0);
+  assert.ok(Number(light["--experience-terrain-opacity"]) <= 0.2);
+  assert.ok(Number(dark["--experience-terrain-opacity"]) > Number(light["--experience-terrain-opacity"]));
+  assert.ok(Number(dark["--experience-terrain-opacity"]) <= 0.3);
+  for (const [mode, palette] of Object.entries({ light, dark })) {
+    const opacity = Number(palette["--experience-terrain-opacity"]);
+    for (const terrain of ["--forest-distant", "--forest-middle", "--forest-trail"]) {
+      const surface = blendedColor(palette[terrain], palette["--experience-bg"], opacity);
+      for (const foreground of ["--ink", "--muted"]) {
+        assert.ok(contrast(palette[foreground], surface) >= 4.5, `${mode} ${foreground} behind ${terrain}`);
+      }
+    }
+  }
+  const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports.ExperienceTerrain));
+  assert.doesNotMatch(markup, /preserveAspectRatio="none"/);
+  assert.match(markup, /experience-terrain-upper/);
+  assert.match(markup, /experience-terrain-lower/);
+});
+
+test("the forest spans the projects and the cave joins About to Contact", () => {
+  const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
+  assert.match(forest, /forest-depth-back/);
+  assert.match(forest, /forest-depth-front/);
+  assert.ok(rulesFor(".projects-section").some((block) => /padding-bottom:\s*clamp\(8rem,/.test(block)));
+  assert.ok(rulesFor(".forest-edge").every((block) => !/height:\s*22rem/.test(block)));
+  assert.match(pageSource, /id="about"[^>]*data-motion-scene="cave"/);
+  assert.match(pageSource, /<CaveScene\s*\/>/);
+  assert.match(pageSource, /<footer[^>]*>[\s\S]*?<CaveFloor\s*\/>/);
+  assert.doesNotMatch(pageSource, /WoodlandScene/);
+  const light = paletteFor(":root");
+  const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
+  for (const palette of [light, dark]) assert.equal(palette["--about-bg"], palette["--contact-bg"]);
+});
+
+test("the irregular cave entrance overlaps only decorative space above About", () => {
+  const rules = rulesFor(".cave-mouth").join("\n");
+  assert.match(rules, /(?:inset|top):\s*-\d/);
+  assert.ok(rulesFor(".about-section").every((block) => !/overflow:\s*(?:hidden|clip)/.test(block)));
+  assert.ok(zIndexFor(".about-inner") > zIndexFor(".cave-scene"));
+  assert.ok(rulesFor(".cave-scene").some((block) => /pointer-events:\s*none/.test(block)));
+  const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
+  assert.match(cave, /cave-root/);
+  assert.match(cave, /cave-stratum/);
+  assert.match(cave, /cave-water/);
+});
+
+test("both cave palettes keep copy, links and focus visible on the rock planes", () => {
+  const light = paletteFor(":root");
+  const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
+  for (const [mode, palette] of Object.entries({ light, dark })) {
+    for (const surface of ["--about-bg", "--contact-bg", "--cave-distant", "--cave-rock", "--cave-facet", "--cave-near", "--cave-water"]) {
+      for (const foreground of ["--cave-ink", "--cave-muted", "--cave-accent", "--cave-hover"]) {
+        const ratio = contrast(palette[foreground], palette[surface]);
+        assert.ok(ratio >= 4.5, `${mode} ${foreground} on ${surface}: ${ratio.toFixed(2)}`);
+      }
+    }
+  }
+  assert.match(css, /\.about-section,\s*\.contact\s*\{[\s\S]*?--ink:\s*var\(--cave-ink\)/);
+  const reducedRules = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+  assert.match(reducedRules, /\.forest-depth,[\s\S]*?\.cave-layer,[\s\S]*?transform:\s*none/);
+});
+
+test("forest layers behind copy retain contrast in both themes", () => {
+  const light = paletteFor(":root");
+  const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
+  const opacity = Number(rulesFor(".forest-edge").join("\n").match(/opacity:\s*([\d.]+)\s*;/)?.[1]);
+  assert.ok(opacity > 0 && opacity <= 1);
+  for (const [mode, palette] of Object.entries({ light, dark })) {
+    for (const tree of ["--forest-distant", "--forest-middle", "--forest-foreground"]) {
+      const surface = blendedColor(palette[tree], palette["--projects-bg"], opacity);
+      for (const foreground of ["--ink", "--muted", "--accent", "--link-hover"]) {
+        assert.ok(contrast(palette[foreground], surface) >= 4.5, `${mode} ${foreground} behind ${tree}`);
+      }
+    }
+  }
+  for (const selector of [".forest-layer", ".forest-depth"]) {
+    assert.ok(rulesFor(selector).every((block) => !/opacity:/.test(block)), "opacity belongs on the shared artwork wrapper");
+  }
+});
+
+test("forest and cave artwork keep their proportions as the content height changes", () => {
+  for (const name of ["ForestEdge", "CaveScene"]) {
+    const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports[name]));
+    assert.doesNotMatch(markup, /preserveAspectRatio="none"/);
+    assert.match(markup, /preserveAspectRatio="x(?:Mid|Max)YMid slice"/);
+  }
+  const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
+  for (const grove of ["upper", "middle", "lower"]) assert.match(forest, new RegExp(`forest-grove-${grove}`));
+  const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
+  assert.match(cave, /forest-threshold-trees/);
+  assert.match(cave, /cave-striation/);
+});
+
+test("paired forest panels retain edge trees instead of cropping them out on phones", () => {
+  for (const name of ["ForestEdge", "CaveScene"]) {
+    const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports[name]));
+    const panels = Array.from(markup.matchAll(/<div class="forest-panels">([\s\S]*?)<\/div>/g), ([, contents]) => contents);
+    assert.ok(panels.length);
+    for (const panel of panels) {
+      assert.equal((panel.match(/<svg\b/g) || []).length, 2);
+      assert.match(panel, /preserveAspectRatio="xMinYMid slice"/);
+      assert.match(panel, /preserveAspectRatio="xMaxYMid slice"/);
+    }
+  }
+  assert.match(rulesFor(".forest-panels svg").join("\n"), /width:\s*50%/);
+  assert.match(rulesFor(".forest-panels svg:first-child").join("\n"), /left:\s*0/);
+  assert.match(rulesFor(".forest-panels svg:last-child").join("\n"), /right:\s*0/);
+});
+
+test("the scenic handoff has a bounded spacing budget instead of two large blank sections", () => {
+  const projects = rulesFor(".projects-section")[0];
+  const about = rulesFor(".about-section")[0];
+  assert.match(projects, /padding-bottom:\s*clamp\(8rem,\s*11vw,\s*11rem\)/);
+  assert.match(about, /padding-top:\s*clamp\(8rem,\s*11vw,\s*11rem\)/);
+  assert.match(about, /min-height:\s*40rem/);
+  assert.ok(rulesFor(".about-section").some((block) => /padding-block:\s*8rem\s+5rem/.test(block)));
+  assert.ok(rulesFor(".forest-depth-back").some((block) => /var\(--forest-back-shift/.test(block)));
+  assert.ok(rulesFor(".forest-depth-front").some((block) => /var\(--forest-front-shift/.test(block)));
 });
 
 test("valley silhouettes enter below the canvas top instead of starting with a flat roof", () => {

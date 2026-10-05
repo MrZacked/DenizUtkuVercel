@@ -1,3 +1,43 @@
+import type { ReactNode } from "react";
+
+function Pine({ x, y, scale, className, lean = false }: { x: number; y: number; scale: number; className: string; lean?: boolean }) {
+  return (
+    <path
+      className={className}
+      transform={`translate(${x} ${y}) scale(${scale})`}
+      d={lean
+        ? "M5 0 0 26-6 38 3 33-10 59-27 72-13 69-31 92-49 101-29 97-51 125-70 137-45 131-70 158-93 169-62 162-84 187-110 199-57 191-12 174-20 277-4 277 2 175 28 190 64 198 47 181 77 187 59 165 34 144 63 153 47 135 55 137 33 116 20 95 45 101 31 83 36 86 20 66 9 45 28 51 14 31 10 17Z"
+        : "M0 0-5 18-13 32-7 30-20 49-29 57-18 55-35 76-45 84-26 82-47 108-62 116-39 114-64 143-78 151-54 148-79 174-94 182-64 177-85 198-101 208-49 200-8 179-11 275 5 275 4 180 29 195 74 206 56 188 78 194 61 174 38 152 70 161 50 140 60 144 39 120 25 99 52 107 36 87 45 90 24 65 12 44 30 52 15 29 8 14Z"}
+    />
+  );
+}
+
+function ForestPanels({ children, height = 780 }: { children: ReactNode; height?: number }) {
+  return (
+    <div className="forest-panels">
+      <svg viewBox={`0 0 1600 ${height}`} preserveAspectRatio="xMinYMid slice" focusable="false">{children}</svg>
+      <svg viewBox={`0 0 1600 ${height}`} preserveAspectRatio="xMaxYMid slice" focusable="false">{children}</svg>
+    </div>
+  );
+}
+
+function ForestGrove({ lower = false }: { lower?: boolean }) {
+  return (
+    <ForestPanels>
+      <path className="forest-distant-trees" d={lower
+        ? "M0 332c71-45 122-73 188-40 63 32 73 103 139 126l82 13-94 73-119 83L0 673Zm1600-36c-71-5-123 52-159 102-31 44-78 82-147 99l58 94 248 97Z"
+        : "M0 140c82-18 144 25 175 90 22 47 81 55 124 78l-15 142L0 574Zm1600 12c-91-35-146 21-179 83-27 52-82 56-143 84l27 159 295 28Z"} />
+      <Pine className="forest-trees" x={38} y={lower ? 110 : 30} scale={1.45} lean />
+      <Pine className="forest-trees" x={183} y={lower ? 250 : 165} scale={1.1} />
+      <Pine className="forest-trees" x={290} y={lower ? 368 : 300} scale={0.72} lean />
+      <Pine className="forest-trees" x={1328} y={lower ? 330 : 292} scale={0.95} />
+      <Pine className="forest-trees" x={1447} y={lower ? 148 : 112} scale={1.55} lean />
+      <Pine className="forest-trees" x={1580} y={lower ? 36 : 2} scale={2} />
+      <path className="forest-bank" d="M0 578c137-48 259-5 354 66l174 65-97 71H0Zm1600-42c-107 7-185 70-271 102l-199 89 36 53h434Z" />
+    </ForestPanels>
+  );
+}
+
 export function ValleyScene() {
   return (
     <div className="valley-scene" aria-hidden="true">
@@ -22,35 +62,121 @@ export function ValleyScene() {
   );
 }
 
+function TerrainBank({ lower = false }: { lower?: boolean }) {
+  return (
+    <ForestPanels height={700}>
+      <path className="terrain-ridge" d={lower
+        ? "M0 182c139-19 201 69 285 111s137 43 212 37l-119 121-378 110Zm1600-14c-104 5-158 67-236 103-72 34-142 13-216 43l129 105 323 107Z"
+        : "M0 114c91 43 149 14 241 76 79 53 122 113 203 105l-81 150L0 493Zm1600-15c-105 8-149 66-233 96-79 29-145 16-217 82l-53 166 503 67Z"} />
+      <path className="terrain-slope" d="M0 304c105-33 183 31 243 105 44 55 122 55 194 111l-58 122H0Zm1600-24c-92 57-185 81-239 144-39 47-128 88-205 117l80 114h364Z" />
+      <Pine className="terrain-tree" x={36} y={lower ? 244 : 129} scale={0.93} lean />
+      <Pine className="terrain-tree" x={204} y={lower ? 365 : 292} scale={0.54} />
+      <Pine className="terrain-tree" x={1455} y={lower ? 233 : 168} scale={0.79} />
+      <path className="terrain-contour" d="M0 342c100-5 152 34 199 92m-199-58c89 1 135 38 167 84m1433-110c-94 38-145 44-194 100m194-53c-69 26-101 44-136 85" />
+    </ForestPanels>
+  );
+}
+
+export function ExperienceTerrain() {
+  return (
+    <div className="experience-terrain" aria-hidden="true">
+      <div className="experience-terrain-panel experience-terrain-upper"><TerrainBank /></div>
+      <div className="experience-terrain-panel experience-terrain-lower"><TerrainBank lower /></div>
+    </div>
+  );
+}
+
 export function ForestEdge() {
   return (
     <div className="forest-edge" aria-hidden="true">
       <div className="forest-layer">
-        <svg viewBox="0 0 1600 360" preserveAspectRatio="none" focusable="false">
-          <path className="forest-ground" d="M0 30 164 72l223-28 214 31 207-49 211 27 242-25 169 31 170-40v341H0Z" />
-          <path className="forest-trees" d="m0 76 30-76 31 76H43v24h33l24-64 25 64h-15v49h32l-38-19H0Zm1514 119h28v-39h-20l35-98 36 98h-21v39h28v86h-86ZM15 192l16-49 17 49H37v24H25v-24Zm1464-82 23-62 24 62h-16v34h-17v-34Z" />
+        <ForestPanels>
+          <path className="forest-distant-trees" d="M0 158c109-29 197 10 234 91 29 64 95 89 193 107l-98 134L0 544Zm1600-30c-116 2-187 76-219 155-25 63-85 68-176 99l106 151 289-59Z" />
+          <Pine className="forest-trees" x={43} y={53} scale={1.8} lean />
+          <Pine className="forest-trees" x={180} y={171} scale={1.3} />
+          <Pine className="forest-trees" x={307} y={266} scale={0.95} lean />
+          <Pine className="forest-trees" x={1298} y={255} scale={0.85} />
+          <Pine className="forest-trees" x={1421} y={135} scale={1.4} lean />
+          <Pine className="forest-trees" x={1556} y={39} scale={1.95} />
+        </ForestPanels>
+      </div>
+      <div className="forest-depth forest-depth-back">
+        <div className="forest-grove forest-grove-upper"><ForestGrove /></div>
+        <div className="forest-grove forest-grove-lower"><ForestGrove lower /></div>
+      </div>
+      <div className="forest-depth forest-depth-front">
+        <div className="forest-grove forest-grove-middle">
+          <ForestPanels>
+            <Pine className="forest-near-trees" x={-13} y={37} scale={2.6} />
+            <Pine className="forest-near-trees" x={1620} y={91} scale={2.3} lean />
+            <path className="forest-bough" d="M0 218c76 30 94 38 168 47l-14 12-93-14 52 27-10 8-103-40Zm1600 124-167 61 73-5-40 25 7 11 127-52Z" />
+          </ForestPanels>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CaveScene() {
+  return (
+    <div className="cave-scene" aria-hidden="true">
+      <div className="cave-mouth">
+        <svg viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <path className="forest-ground" d="M0 145h1600v141l-158-21-137 30-147-19-192 40-134-19-141 17-148 5-137-39-182-13C138 242 97 233 0 256Z" />
+        </svg>
+        <div className="cave-forest">
+          <ForestPanels height={640}>
+            <Pine className="forest-threshold-trees" x={-4} y={4} scale={1.1} lean />
+            <Pine className="forest-threshold-trees" x={119} y={105} scale={0.72} />
+            <Pine className="forest-threshold-trees" x={260} y={180} scale={0.38} lean />
+            <Pine className="forest-threshold-trees" x={1338} y={143} scale={0.62} />
+            <Pine className="forest-threshold-trees" x={1474} y={44} scale={1.02} lean />
+            <Pine className="forest-threshold-trees" x={1615} y={-12} scale={1.26} />
+          </ForestPanels>
+        </div>
+        <svg viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <path className="cave-soil" d="M0 256c97-23 138-14 224 11l182 13 137 39 148-5 141-17 134 19 192-40 147 19 137-30 158 21v354H0Z" />
+          <path className="cave-stratum" d="m0 303 128-12 94 32 184-1 153 34 132-6 165-14 111 22 191-31 143 11 130-23 169 33v292H0Z" />
+          <path className="cave-roof" d="m0 359 93-10 135 46 173-10 121 49 173-19 138-30 140 39 179-40 144 14 131-35 173 30v247H0Z" />
+          <path className="cave-root" d="m123 269 12 67-15 40 8 51m6-82 29 34 15 44m-44-78-27 35-4 40m1187-145-12 69 13 48-23 57m13-78-31 19-10 42m239-163-26 61 3 53-18 34" />
+          <path className="cave-root-fine" d="m125 385-24 29-9 32m72-50 24 20 4 22m1137-27 27 9 11 33m154-63-21 10-12 30" />
+          <path className="cave-root-fine" d="m650 320 5 32-18 34 5 26m13-60 18 17 10 30m192-94-12 46 19 35-8 36" />
+        </svg>
+      </div>
+      <div className="cave-layer cave-layer-back">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMid slice" focusable="false">
+          <path className="cave-distant" d="M729 0h871v900H736l52-175 3-156 57-165 118-138 128-52 115 4 119 56 93 109 31 174-12 164 60 179h-107l-82-94-188-22-137 45-232-41-90 84Z" />
+          <path className="cave-facet" d="m729 0 191 121 125-43 141 42 131-26 125 49 91-34 67 94V0Zm6 900 53-175 3-156 57-165 118-138-16 132-72 124 9 160-58 112-12 106Z" />
+          <path className="cave-rock" d="m950 398 89-139 139-52 119 8 112 50 12 82-99-34-81-33-101 40-83 94-54 131-16 174-60 87 34-164-26-120Zm469-78 53 63 31 174-12 164 60 179h49V246l-158-103-79 122Z" />
+          <path className="cave-facet" d="m1056 184 60 29 38 129 19-111 38 18 38 85 8-97 67 44 27 101 8-106 64 71-47-168-103-74-115-19Zm407 382-82 125 15 143 86 66 69-73-60-106Z" />
+          <path className="cave-near" d="m1417 900-61-90-182-13-124 27-127-19 37-66 108 21 95-33 123 24 79-7 52 116Z" />
+          <path className="cave-seam" d="m920 121-97 57-36 151-47 31m305-282 49 64-28 54 41 66m79-142 33 34-24 69 48 75m174-147-35 146 43 144-39 161 14 132m-423-259-47 73-8 174-37 93" />
+          <path className="cave-striation" d="m805 236 76-61 74-27m-152 139 44-25 33-12m504-77 63 42 38 38m-29 22 49 61m-11 103 33 39-13 94m-419-159-38 60-12 92m-54 37-15 78" />
+          <path className="cave-water" d="m915 804 124-20 136 23 167-17 81 30 120 80H784Z" />
+          <path className="cave-water-shadow" d="m785 900 251-49 139 16 158-9 211 42Z" />
+          <path className="cave-water-line" d="m1044 826 103-6 65 3m-249 31 68-4m167-15 62-3 69 5m-210 32 78 3 61-6m-416 26 125-9 111 4m105 0 53-2" />
+        </svg>
+      </div>
+      <div className="cave-layer cave-layer-front">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMid slice" focusable="false">
+          <path className="cave-near" d="M0 56 37 149l-12 70 39 114-24 120 45 113-37 199 43 135H0Zm1600 28-63 131-23 124 25 170-37 115 9 97-68 179h157Z" />
+          <path className="cave-rock" d="m1427 900 18-110 22-52 15 29 9 108 30 25Zm121 0-1-271 13-67 16 74 9 229 15 35Z" />
+          <path className="cave-facet" d="m0 566 47 71-12 129 24 74-11 60H0Zm1537-351 63-131v202l-56 115-6-62Z" />
+          <path className="cave-seam" d="m26 370 18 61-21 72m1545 27-16 65 13 53" />
         </svg>
       </div>
     </div>
   );
 }
 
-export function WoodlandScene() {
+export function CaveFloor() {
   return (
-    <div className="woodland-scene" aria-hidden="true">
-      <div className="woodland-layer woodland-layer-back">
-        <svg viewBox="0 0 1600 780" preserveAspectRatio="xMaxYMax slice" focusable="false">
-          <path className="landscape-distant" d="m682 494 183-169 141 25 153-153 139 86 154-163 148 113v547H682Z" />
-          <path className="landscape-middle" d="m598 591 219-123 170 67 167-145 181 72 130-144 135 74v388H598Z" />
-          <path className="woodland-trail" d="m1489 289-99 183-164 51 39 96-157 74 37 87h46l-25-76 163-73-35-103 151-40 94-199Z" />
-        </svg>
-      </div>
-      <div className="woodland-layer woodland-layer-front">
-        <svg viewBox="0 0 1600 780" preserveAspectRatio="xMaxYMax slice" focusable="false">
-          <path className="landscape-foreground" d="m0 780 518-3 233-95 230 35 147-75 169 24 182-95 121 60v149Z" />
-          <path className="landscape-foreground" d="m1509 565-59-180-59 180h37v116h44V565Zm-162 39-35-113-37 113h24v93h25v-93Zm209-128-35-101-36 101h22v70h26v-70Z" />
-        </svg>
-      </div>
+    <div className="cave-floor" aria-hidden="true">
+      <svg viewBox="0 0 1600 380" preserveAspectRatio="none" focusable="false">
+        <path className="cave-distant" d="M0 283 197 263l169 29 258-20 229 36 204-49 177 25 211-47 155 18v125H0Z" />
+        <path className="cave-rock" d="m1203 380 30-128 17-25 22 89 26 64Zm178 0 27-196 20-36 23 42 36 190Z" />
+        <path className="cave-near" d="M0 341 197 314l147 34 273-19 173 23 258-27 221 23 174-35 157 28v39H0Z" />
+      </svg>
     </div>
   );
 }

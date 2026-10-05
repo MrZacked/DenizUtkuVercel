@@ -4,7 +4,7 @@ import { DetectionGallery } from "./detection-gallery";
 import { colorExamples, detectionExamples } from "./project-samples";
 import { MotionEffects } from "./motion-effects";
 import { ThemeToggle } from "./theme-toggle";
-import { ForestEdge, ValleyScene, WoodlandScene } from "./landscape-scenes";
+import { CaveFloor, CaveScene, ExperienceTerrain, ForestEdge, ValleyScene } from "./landscape-scenes";
 
 export default function Home() {
   return (
@@ -68,6 +68,7 @@ export default function Home() {
           </section>
 
           <section className="experience-section" id="experience" aria-labelledby="experience-title">
+            <ExperienceTerrain />
             <div className="experience-entry" data-motion-scene="valley">
               <ValleyScene />
               <div className="site-shell">
@@ -267,8 +268,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section about-section" id="about" aria-labelledby="about-title" data-motion-scene="forest">
-          <WoodlandScene />
+        <section className="section about-section" id="about" aria-labelledby="about-title" data-motion-scene="cave">
+          <CaveScene />
           <div className="site-shell about-inner">
             <div className="section-intro" data-reveal="copy">
               <h2 id="about-title">About</h2>
@@ -290,6 +291,7 @@ export default function Home() {
       <MotionEffects />
 
       <footer className="contact" id="contact">
+        <CaveFloor />
         <div className="site-shell contact-inner">
           <div>
             <h2>Get in touch</h2>

@@ -4,33 +4,60 @@
   --ink: #1b2922;
   --muted: #46534a;
   --line: #b7bcae;
-  --accent: #954124;
+  --accent: #873b23;
   --deep: #142820;
   --light: #fbf5e7;
   --warm: #f3b47e;
   --warm-hover: #ffd0a3;
   --link-hover: #75321d;
   --header-bg: #f3eee1;
-  --projects-bg: #e3e7da;
-  --contact-bg: #ded6c1;
+  --projects-bg: #e0e5d6;
+  --contact-bg: #e7e3d6;
   --toggle-border: #778473;
   --toggle-hover: #e0dfce;
-  --clay: #843d29;
-  --experience-bg: #f3eee1;
-  --about-bg: #e8dfca;
+  --clay: #e5c6b0;
+  --clay-ink: #392d26;
+  --clay-muted: #544237;
+  --clay-accent: #793a22;
+  --clay-hover: #672d18;
+  --experience-bg: #e9e9dc;
+  --experience-terrain-opacity: 0.18;
+  --about-bg: #e7e3d6;
+  --hero-ink: #1b2922;
+  --hero-accent: #793a22;
+  --hero-hover: #672d18;
+  --hero-overlay: linear-gradient(180deg, rgb(243 238 225 / 12%) 8%, rgb(243 238 225 / 78%) 56%, rgb(243 238 225 / 95%) 100%), linear-gradient(90deg, rgb(243 238 225 / 80%), rgb(243 238 225 / 45%) 64%, transparent);
+  --experience-photo-ink: #1b2922;
+  --experience-photo-muted: #36473b;
+  --experience-photo-accent: #793a22;
+  --experience-overlay: linear-gradient(90deg, rgb(243 238 225 / 96%) 0%, rgb(243 238 225 / 90%) 42%, rgb(243 238 225 / 12%) 82%), linear-gradient(0deg, rgb(243 238 225 / 60%), transparent 60%);
+  --experience-overlay-mobile: linear-gradient(0deg, rgb(243 238 225 / 97%) 0%, rgb(243 238 225 / 94%) 52%, rgb(243 238 225 / 12%) 100%);
   --hero-day: url("/work/horizon-sky.svg");
   --hero-night: url("/work/horizon-night.svg");
-  --landscape-filter: none;
+  --landscape-filter: brightness(1.15) saturate(0.8);
   --photo-filter: saturate(0.85) contrast(1.04);
-  --valley-bg: #0b1a17;
-  --scene-distant: #263f37;
-  --scene-middle: #1d362e;
-  --scene-foreground: #142e26;
-  --scene-stone: #5e6250;
+  --valley-bg: #e7e4d4;
+  --scene-ink: #1b2922;
+  --scene-distant: #d7dfcc;
+  --scene-middle: #cad5c0;
+  --scene-foreground: #c0cdb7;
+  --scene-stone: #d5c0a3;
   --forest-distant: #b3bfaa;
   --forest-middle: #879d87;
   --forest-foreground: #627861;
   --forest-trail: #c08b62;
+  --cave-ink: #1b2922;
+  --cave-muted: #36473b;
+  --cave-accent: #793a22;
+  --cave-hover: #672d18;
+  --cave-soil: #93a488;
+  --cave-stratum: #bdad91;
+  --cave-distant: #d9dfce;
+  --cave-rock: #cdd6c2;
+  --cave-facet: #dfe1cd;
+  --cave-near: #c6d0ba;
+  --cave-seam: #977354;
+  --cave-water: #c6d6cf;
   --section-space: clamp(4.5rem, 7vw, 8rem);
 }
 
@@ -45,22 +72,50 @@ html[data-theme="dark"] {
   --link-hover: #ffd0a3;
   --header-bg: #102019;
   --projects-bg: #142820;
-  --contact-bg: #102019;
+  --contact-bg: #10231f;
   --toggle-border: #839687;
   --toggle-hover: #274536;
   --clay: #4f2c24;
+  --clay-ink: #fbf5e7;
+  --clay-muted: #f5d5c3;
+  --clay-accent: #f3b47e;
+  --clay-hover: #ffd0a3;
   --experience-bg: #1b2b23;
-  --about-bg: #24352b;
+  --experience-terrain-opacity: 0.28;
+  --about-bg: #10231f;
+  --hero-ink: #fbf5e7;
+  --hero-accent: #f3b47e;
+  --hero-hover: #ffd0a3;
+  --hero-overlay: linear-gradient(180deg, rgb(12 30 26 / 10%) 20%, rgb(11 26 23 / 68%) 70%, rgb(11 26 23 / 92%) 100%), linear-gradient(90deg, rgb(11 27 23 / 58%), transparent 64%);
+  --experience-photo-ink: #fbf5e7;
+  --experience-photo-muted: #f1ede2;
+  --experience-photo-accent: #f3b47e;
+  --experience-overlay: linear-gradient(90deg, rgb(9 24 20 / 92%) 0%, rgb(9 24 20 / 75%) 34%, rgb(9 24 20 / 18%) 78%), linear-gradient(0deg, rgb(9 24 20 / 54%), transparent 60%);
+  --experience-overlay-mobile: linear-gradient(0deg, rgb(9 24 20 / 94%) 0%, rgb(9 24 20 / 78%) 34%, rgb(9 24 20 / 16%) 100%);
   --landscape-filter: brightness(0.65) saturate(0.7);
   --photo-filter: brightness(0.8) saturate(0.7) contrast(1.04);
+  --valley-bg: #0b1a17;
+  --scene-ink: #fbf5e7;
   --scene-distant: #213730;
   --scene-middle: #192e27;
   --scene-foreground: #0d201c;
   --scene-stone: #37453b;
   --forest-distant: #3b5142;
   --forest-middle: #2b4435;
-  --forest-foreground: #152b21;
+  --forest-foreground: #3c5540;
   --forest-trail: #796349;
+  --cave-ink: #fbf5e7;
+  --cave-muted: #bdccbe;
+  --cave-accent: #f3b47e;
+  --cave-hover: #ffd0a3;
+  --cave-soil: #3c5540;
+  --cave-stratum: #3f4938;
+  --cave-distant: #19382e;
+  --cave-rock: #213e32;
+  --cave-facet: #2c4637;
+  --cave-near: #0a1a17;
+  --cave-seam: #91795a;
+  --cave-water: #25483f;
 }
 
 * {
@@ -228,9 +283,8 @@ html[data-theme="dark"] .theme-icon-dark {
   color: var(--link-hover);
 }
 
-.hero a:focus-visible,
-.project-healem a:focus-visible {
-  outline-color: var(--warm);
+.hero a:focus-visible {
+  outline-color: var(--hero-accent);
 }
 
 .intro-flow {
@@ -243,7 +297,7 @@ html[data-theme="dark"] .theme-icon-dark {
   min-height: clamp(42rem, 82svh, 57rem);
   overflow: hidden;
   background: var(--deep);
-  color: var(--light);
+  color: var(--hero-ink);
 }
 
 .hero-scene {
@@ -328,8 +382,7 @@ html[data-theme="dark"] .celestial-moon {
   position: absolute;
   z-index: 1;
   inset: 0;
-  background: linear-gradient(180deg, rgb(12 30 26 / 10%) 20%, rgb(11 26 23 / 68%) 70%, rgb(11 26 23 / 92%) 100%),
-    linear-gradient(90deg, rgb(11 27 23 / 58%), transparent 64%);
+  background: var(--hero-overlay);
   content: "";
 }
 
@@ -364,7 +417,7 @@ html[data-theme="dark"] .celestial-moon {
 
 .hero-role {
   margin: 0 0 1.8rem;
-  color: var(--warm);
+  color: var(--hero-accent);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -386,7 +439,7 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .hero h1 span:last-child {
-  color: var(--warm);
+  color: var(--hero-accent);
   animation-delay: 130ms;
 }
 
@@ -413,7 +466,7 @@ html[data-theme="dark"] .celestial-moon {
   align-items: center;
   gap: 0.55rem;
   min-height: 2.75rem;
-  color: var(--warm);
+  color: var(--hero-accent);
   font-size: clamp(1.45rem, 2.1vw, 1.85rem);
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -428,11 +481,11 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .hero-project-link:hover {
-  color: var(--warm-hover);
+  color: var(--hero-hover);
 }
 
 .hero .text-link:hover {
-  color: var(--warm-hover);
+  color: var(--hero-hover);
 }
 
 .hero-project-link:hover span {
@@ -455,6 +508,7 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .experience-section {
+  position: relative;
   background: var(--experience-bg);
   padding-bottom: var(--section-space);
 }
@@ -463,7 +517,7 @@ html[data-theme="dark"] .celestial-moon {
   position: relative;
   padding-block: clamp(6rem, 10vw, 9rem) clamp(6rem, 9vw, 8rem);
   background: var(--valley-bg);
-  color: var(--light);
+  color: var(--scene-ink);
 }
 
 .experience-entry .section-intro {
@@ -473,7 +527,7 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .experience-entry .section-intro p {
-  color: var(--light);
+  color: var(--scene-ink);
 }
 
 .experience-body {
@@ -483,8 +537,10 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .valley-scene,
+.experience-terrain,
 .forest-edge,
-.woodland-scene {
+.cave-scene,
+.cave-floor {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -505,8 +561,12 @@ html[data-theme="dark"] .celestial-moon {
 
 .valley-layer svg,
 .valley-ground,
+.experience-terrain svg,
 .forest-layer svg,
-.woodland-layer svg {
+.forest-depth svg,
+.cave-mouth svg,
+.cave-layer svg,
+.cave-floor svg {
   display: block;
   width: 100%;
   height: 100%;
@@ -538,7 +598,7 @@ html[data-theme="dark"] .celestial-moon {
 
 .landscape-contour {
   fill: none;
-  stroke: var(--warm);
+  stroke: var(--scene-stone);
   stroke-width: 3;
   opacity: 0.25;
 }
@@ -550,17 +610,54 @@ html[data-theme="dark"] .celestial-moon {
   fill: var(--experience-bg);
 }
 
-.forest-edge {
-  bottom: auto;
-  height: 22rem;
+.experience-terrain {
+  z-index: 0;
   overflow: hidden;
-  background: var(--experience-bg);
+  opacity: var(--experience-terrain-opacity);
+  mask-image: linear-gradient(to right, black, transparent 38%, transparent 62%, black);
+}
+
+.experience-terrain-panel {
+  position: absolute;
+  width: 100%;
+  height: clamp(32rem, 44vw, 44rem);
+  mask-image: linear-gradient(transparent, black 18%, black 76%, transparent);
+}
+
+.experience-terrain-upper {
+  top: 34%;
+}
+
+.experience-terrain-lower {
+  bottom: -3rem;
+}
+
+.terrain-ridge {
+  fill: var(--forest-distant);
+}
+
+.terrain-slope,
+.terrain-tree {
+  fill: var(--forest-middle);
+}
+
+.terrain-contour {
+  fill: none;
+  stroke: var(--forest-trail);
+  stroke-width: 3;
+}
+
+.forest-edge {
+  overflow: hidden;
+  opacity: 0.22;
+  background: linear-gradient(var(--experience-bg), transparent 24rem);
 }
 
 .forest-layer {
   position: absolute;
-  inset: -2rem 0;
-  transform: translate3d(0, var(--forest-shift, 0px), 0);
+  inset: -2rem 0 auto;
+  height: clamp(34rem, 48vw, 48rem);
+  transform: translate3d(0, var(--forest-back-shift, 0px), 0);
 }
 
 .forest-ground {
@@ -569,7 +666,78 @@ html[data-theme="dark"] .celestial-moon {
 
 .forest-trees {
   fill: var(--forest-middle);
-  opacity: 0.45;
+}
+
+.forest-depth {
+  position: absolute;
+  inset: -4rem 0;
+  mask-image: linear-gradient(to right, black, transparent 26%, transparent 74%, black),
+    linear-gradient(to bottom, transparent 8rem, black 24rem);
+  mask-composite: intersect;
+}
+
+.forest-depth-back {
+  transform: translate3d(0, var(--forest-back-shift, 0px), 0);
+}
+
+.forest-depth-front {
+  transform: translate3d(0, var(--forest-front-shift, 0px), 0);
+}
+
+.forest-grove {
+  position: absolute;
+  width: 100%;
+  height: clamp(34rem, 48vw, 48rem);
+}
+
+.forest-panels {
+  position: absolute;
+  inset: 0;
+}
+
+.forest-panels svg {
+  position: absolute;
+  width: 50%;
+}
+
+.forest-panels svg:first-child {
+  left: 0;
+}
+
+.forest-panels svg:last-child {
+  right: 0;
+}
+
+.forest-grove-upper {
+  top: 18%;
+}
+
+.forest-grove-middle {
+  top: 38%;
+}
+
+.forest-grove-lower {
+  bottom: 0;
+}
+
+.forest-distant-trees {
+  fill: var(--forest-distant);
+  opacity: 0.7;
+}
+
+.forest-bank,
+.forest-near-trees,
+.forest-floor,
+.forest-bough {
+  fill: var(--forest-foreground);
+}
+
+.forest-near-trees {
+  opacity: 0.8;
+}
+
+.forest-threshold-trees {
+  fill: var(--forest-foreground);
 }
 
 .section-intro {
@@ -609,8 +777,8 @@ html[data-theme="dark"] .celestial-moon {
   overflow: hidden;
   isolation: isolate;
   padding: clamp(2.5rem, 5vw, 4.5rem);
-  background: var(--deep);
-  color: var(--light);
+  background: var(--experience-bg);
+  color: var(--experience-photo-ink);
 }
 
 .experience-backdrop {
@@ -630,8 +798,7 @@ html[data-theme="dark"] .celestial-moon {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, rgb(9 24 20 / 92%) 0%, rgb(9 24 20 / 75%) 34%, rgb(9 24 20 / 18%) 78%),
-    linear-gradient(0deg, rgb(9 24 20 / 54%), transparent 60%);
+  background: var(--experience-overlay);
   content: "";
 }
 
@@ -656,7 +823,7 @@ html[data-theme="dark"] .celestial-moon {
 .experience-lead {
   max-width: 31rem;
   margin: 2rem 0 0;
-  color: #f1ede2;
+  color: var(--experience-photo-muted);
   font-size: clamp(1.05rem, 1.45vw, 1.2rem);
   line-height: 1.55;
 }
@@ -668,7 +835,7 @@ html[data-theme="dark"] .celestial-moon {
 }
 
 .experience-heading .experience-date {
-  color: var(--warm);
+  color: var(--experience-photo-accent);
 }
 
 .experience-points {
@@ -740,6 +907,7 @@ html[data-theme="dark"] .celestial-moon {
   overflow: hidden;
   background: var(--projects-bg);
   color: var(--ink);
+  padding-bottom: clamp(8rem, 11vw, 11rem);
 }
 
 .projects-section .section-intro p,
@@ -1048,7 +1216,11 @@ figcaption a {
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
   margin-block: 0 clamp(4rem, 7vw, 7rem);
   background: var(--clay);
-  color: var(--light);
+  color: var(--clay-ink);
+}
+
+.project-healem a:focus-visible {
+  outline-color: var(--clay-accent);
 }
 
 .healem-figure {
@@ -1082,18 +1254,18 @@ figcaption a {
 
 .project-kind {
   margin: 0 0 1.2rem;
-  color: #f5d5c3;
+  color: var(--clay-muted);
   font-size: 0.93rem;
   font-weight: 650;
 }
 
 .project-healem .project-tools {
   margin: 1.8rem 0;
-  color: #f5d5c3;
+  color: var(--clay-muted);
 }
 
 .project-healem .project-link:hover {
-  color: var(--warm-hover);
+  color: var(--clay-hover);
 }
 
 .project-colorization {
@@ -1235,54 +1407,140 @@ figcaption a {
 
 .about-section {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
+  min-height: 40rem;
+  padding-top: clamp(8rem, 11vw, 11rem);
+  padding-bottom: clamp(5rem, 8vw, 8rem);
   background: var(--about-bg);
+  color: var(--ink);
 }
 
-.about-section::after {
+.about-section,
+.contact {
+  --ink: var(--cave-ink);
+  --muted: var(--cave-muted);
+  --accent: var(--cave-accent);
+  --link-hover: var(--cave-hover);
+}
+
+.cave-scene {
+  z-index: 0;
+}
+
+.cave-scene::before {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  background: radial-gradient(ellipse at 76% 65%, var(--cave-distant), transparent 56%);
+  mask-image: linear-gradient(transparent, black 8rem, black 70%, transparent);
   content: "";
 }
 
-.woodland-scene {
-  overflow: hidden;
-}
-
-.woodland-layer {
+.cave-mouth {
   position: absolute;
-  inset: -2.5rem 0;
+  inset: -10rem 0 auto;
+  height: clamp(24rem, 35vw, 35rem);
 }
 
-.woodland-layer-back {
-  transform: translate3d(0, var(--forest-shift, 0px), 0);
+.cave-mouth > svg {
+  position: absolute;
+  inset: 0;
 }
 
-.woodland-layer-front {
-  transform: translate3d(0, calc(var(--forest-shift, 0px) * -0.6), 0);
+.cave-forest {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(transparent, black 5rem);
 }
 
-.woodland-scene .landscape-distant {
-  fill: var(--forest-distant);
+.cave-layer {
+  position: absolute;
+  inset: 2rem 0 -1px;
+  overflow: hidden;
+  mask-image: linear-gradient(transparent, black 8rem, black 92%, transparent);
 }
 
-.woodland-scene .landscape-middle {
-  fill: var(--forest-middle);
+.cave-layer-back {
+  transform: translate3d(0, var(--cave-back-shift, 0px), 0);
 }
 
-.woodland-scene .landscape-foreground {
-  fill: var(--forest-foreground);
+.cave-layer-front {
+  transform: translate3d(0, var(--cave-front-shift, 0px), 0);
 }
 
-.woodland-trail {
-  fill: var(--forest-trail);
+.cave-soil {
+  fill: var(--cave-soil);
 }
 
-.about-section::after {
-  background: linear-gradient(0deg, var(--contact-bg), transparent 12%),
-    linear-gradient(90deg, var(--about-bg) 0%, var(--about-bg) 26%, transparent 67%);
+.cave-stratum {
+  fill: var(--cave-stratum);
+}
+
+.cave-roof {
+  fill: var(--about-bg);
+}
+
+.cave-distant {
+  fill: var(--cave-distant);
+}
+
+.cave-rock {
+  fill: var(--cave-rock);
+}
+
+.cave-facet {
+  fill: var(--cave-facet);
+}
+
+.cave-near {
+  fill: var(--cave-near);
+}
+
+.cave-root,
+.cave-root-fine,
+.cave-seam,
+.cave-striation,
+.cave-water-line {
+  fill: none;
+  stroke: var(--cave-seam);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cave-root {
+  stroke-width: 5;
+}
+
+.cave-root-fine {
+  stroke-width: 2;
+}
+
+.cave-seam {
+  stroke-width: 3;
+  opacity: 0.5;
+}
+
+.cave-striation {
+  stroke-width: 2;
+  opacity: 0.22;
+}
+
+.cave-water {
+  fill: var(--cave-water);
+}
+
+.cave-water-shadow {
+  fill: var(--cave-near);
+  opacity: 0.35;
+}
+
+.cave-water-line {
+  stroke-width: 2;
+  opacity: 0.45;
+}
+
+.cave-floor {
+  overflow: hidden;
+  mask-image: linear-gradient(transparent, black 55%);
 }
 
 .about-inner {
@@ -1297,6 +1555,11 @@ figcaption a {
 
 .about-copy {
   max-width: 34rem;
+}
+
+.about-section a:focus-visible,
+.contact a:focus-visible {
+  outline-color: var(--cave-accent);
 }
 
 .about-copy > p {
@@ -1322,12 +1585,16 @@ figcaption a {
 }
 
 .contact {
-  padding-block: clamp(3rem, 5vw, 5rem);
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(3rem, 5vw, 5rem) clamp(7rem, 10vw, 10rem);
   background: var(--contact-bg);
   color: var(--ink);
 }
 
 .contact-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: end;
@@ -1367,22 +1634,6 @@ figcaption a {
   .project-detection {
     grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.9fr);
     gap: 2rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .about-section {
-    padding-bottom: clamp(20rem, 48vw, 29rem);
-  }
-
-  .woodland-scene {
-    inset: auto 0 0;
-    height: clamp(20rem, 48vw, 29rem);
-  }
-
-  .about-section::after {
-    background: linear-gradient(0deg, var(--contact-bg), transparent 8%),
-      linear-gradient(180deg, var(--about-bg) 0%, var(--about-bg) 52%, transparent 80%);
   }
 }
 
@@ -1480,7 +1731,7 @@ figcaption a {
   }
 
   .experience-heading::before {
-    background: linear-gradient(0deg, rgb(9 24 20 / 94%) 0%, rgb(9 24 20 / 78%) 34%, rgb(9 24 20 / 16%) 100%);
+    background: var(--experience-overlay-mobile);
   }
 
   .experience-points {
@@ -1522,6 +1773,31 @@ figcaption a {
   .contact-inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .forest-depth {
+    mask-image: linear-gradient(to right, black, transparent 18%, transparent 82%, black),
+      linear-gradient(to bottom, transparent 8rem, black 24rem);
+  }
+
+  .forest-grove,
+  .forest-layer {
+    height: 34rem;
+  }
+
+  .about-section {
+    min-height: 39rem;
+    padding-block: 8rem 5rem;
+  }
+
+  .cave-mouth {
+    top: -8rem;
+    height: 24rem;
+  }
+
+  .cave-layer {
+    top: 3rem;
+    opacity: 0.55;
   }
 }
 
@@ -1605,10 +1881,6 @@ figcaption a {
     transition: filter 850ms ease;
   }
 
-  html[data-theme-transition] .valley-layer path {
-    transition: fill 700ms ease;
-  }
-
   .gallery-frame[data-direction="next"] > .gallery-slide {
     animation: gallery-next 240ms ease-out both;
   }
@@ -1650,7 +1922,8 @@ figcaption a {
   .hero-celestial,
   .valley-layer,
   .forest-layer,
-  .woodland-layer,
+  .forest-depth,
+  .cave-layer,
   .experience-backdrop,
   .hero-project-link:hover span {
     transform: none;
