@@ -31,6 +31,7 @@ function loadComponent({ hooks = React, useTheme, browser = {} }) {
     require: (name) => {
       if (name === "react") return hooks;
       if (name === "react/jsx-runtime") return jsxRuntime;
+      if (name === "react-dom") return { flushSync: (callback) => callback() };
       if (name === "next-themes") return { useTheme };
       assert.equal(name, "lucide-react");
       return { Moon: Icon, Sun: Icon };
@@ -39,7 +40,14 @@ function loadComponent({ hooks = React, useTheme, browser = {} }) {
   return exportsHolder.exports.ThemeToggle;
 }
 
-function mount({ server = false, resolvedTheme = "light", reducedMotion = false } = {}) {
+function deferred() {
+  let resolve;
+  let reject;
+  const promise = new Promise((complete, fail) => { resolve = complete; reject = fail; });
+  return { promise, resolve, reject };
+}
+
+function mount({ server = false, resolvedTheme = "light", reducedMotion = false, nativeReveal = false, nativeFailure = false } = {}) {
   let beforeHydration = server;
   let selectedTheme = resolvedTheme;
   let store;
@@ -48,16 +56,33 @@ function mount({ server = false, resolvedTheme = "light", reducedMotion = false 
   const attributes = new Map();
   const timers = new Map();
   const events = [];
-  const ref = { current: null };
+  const refs = [];
+  let refIndex = 0;
+  const reveals = [];
   let cleanup;
   let nextTimer = 1;
   const root = {
     setAttribute: (name, value) => { attributes.set(name, value); events.push(`set:${name}`); },
     removeAttribute: (name) => { attributes.delete(name); events.push(`remove:${name}`); },
   };
+  const browserDocument = { documentElement: root };
+  if (nativeReveal) {
+    browserDocument.startViewTransition = (update) => {
+      if (nativeFailure) throw new Error("Transition unavailable");
+      const ready = deferred();
+      const finished = deferred();
+      const state = { update, ready, finished, skips: 0 };
+      reveals.push(state);
+      return {
+        ready: ready.promise,
+        finished: finished.promise,
+        skipTransition: () => { state.skips++; ready.reject(new Error("Transition skipped")); },
+      };
+    };
+  }
   const Component = loadComponent({
     hooks: {
-      useRef: () => ref,
+      useRef: (initial) => refs[refIndex++] ?? (refs[refIndex - 1] = { current: initial }),
       useEffect: (effect) => { cleanup ??= effect(); },
       useSyncExternalStore: (subscribe, getSnapshot, getServerSnapshot) => {
         store = { subscribe, getSnapshot, getServerSnapshot };
@@ -73,7 +98,7 @@ function mount({ server = false, resolvedTheme = "light", reducedMotion = false 
       },
     }),
     browser: {
-      document: { documentElement: root },
+      document: browserDocument,
       window: {
         matchMedia: (query) => {
           assert.equal(query, "(prefers-reduced-motion: reduce)");
@@ -93,7 +118,7 @@ function mount({ server = false, resolvedTheme = "light", reducedMotion = false 
       },
     },
   });
-  const render = () => { tree = Component(); };
+  const render = () => { refIndex = 0; tree = Component(); };
   render();
   return {
     button: () => tree,
@@ -102,6 +127,10 @@ function mount({ server = false, resolvedTheme = "light", reducedMotion = false 
     attributes: () => attributes,
     timers: () => timers,
     events: () => events,
+    reveals: () => reveals,
+    updateReveal: (index = reveals.length - 1) => { reveals[index].update(); render(); },
+    finishReveal: (index = reveals.length - 1) => { reveals[index].ready.resolve(); reveals[index].finished.resolve(); },
+    setReducedMotion: (value) => { reducedMotion = value; },
     finishTransition: () => {
       const [id, timer] = timers.entries().next().value;
       timers.delete(id);
@@ -260,4 +289,110 @@ test("a pre-hydration click cannot write theme or motion state", () => {
   assert.deepEqual(toggle.changes(), []);
   assert.deepEqual(toggle.events(), []);
   assert.equal(toggle.timers().size, 0);
+});
+
+test("supported browsers reveal a coherent palette without a fallback timer", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  assert.equal(toggle.reveals().length, 1);
+  assert.equal(toggle.attributes().has("data-theme-reveal"), true);
+  assert.equal(toggle.attributes().has("data-theme-transition"), false);
+  assert.equal(toggle.timers().size, 0);
+  assert.equal(toggle.events().includes("style"), false);
+  assert.deepEqual(toggle.changes(), []);
+  toggle.updateReveal();
+  assert.deepEqual(toggle.changes(), ["dark"]);
+  assert.equal(toggle.button().props["aria-label"], "Switch to light mode");
+  toggle.finishReveal();
+  await Promise.resolve();
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("rapid clicks before capture keep the latest requested theme", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  toggle.click();
+  assert.equal(toggle.reveals()[0].skips, 1);
+  toggle.updateReveal(0);
+  assert.deepEqual(toggle.changes(), []);
+  toggle.finishReveal(0);
+  await Promise.resolve();
+  assert.equal(toggle.attributes().has("data-theme-reveal"), true);
+  toggle.updateReveal(1);
+  assert.deepEqual(toggle.changes(), ["light"]);
+  toggle.finishReveal(1);
+  await Promise.resolve();
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("rapid clicks after capture reverse the theme and replace the active reveal", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  toggle.updateReveal(0);
+  toggle.click();
+  toggle.updateReveal(1);
+  assert.deepEqual(toggle.changes(), ["dark", "light"]);
+  assert.equal(toggle.reveals()[0].skips, 1);
+  toggle.finishReveal(0);
+  await Promise.resolve();
+  assert.equal(toggle.attributes().has("data-theme-reveal"), true);
+  toggle.finishReveal(1);
+  await Promise.resolve();
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("reduced motion bypasses the native reveal", () => {
+  const toggle = mount({ nativeReveal: true, reducedMotion: true });
+  toggle.click();
+  assert.deepEqual(toggle.changes(), ["dark"]);
+  assert.equal(toggle.reveals().length, 0);
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("a reduced-motion click cancels pending capture without a stale theme update", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  toggle.setReducedMotion(true);
+  toggle.click();
+  assert.deepEqual(toggle.changes(), ["light"]);
+  assert.equal(toggle.reveals()[0].skips, 1);
+  assert.equal(toggle.attributes().size, 0);
+  toggle.updateReveal(0);
+  toggle.finishReveal(0);
+  await Promise.resolve();
+  assert.deepEqual(toggle.changes(), ["light"]);
+});
+
+test("unmounting cancels capture and prevents pending theme changes", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  toggle.unmount();
+  assert.equal(toggle.reveals()[0].skips, 1);
+  assert.equal(toggle.attributes().size, 0);
+  toggle.updateReveal(0);
+  toggle.finishReveal(0);
+  await Promise.resolve();
+  assert.deepEqual(toggle.changes(), []);
+});
+
+test("a native API failure keeps the existing theme-switch fallback", () => {
+  const toggle = mount({ nativeReveal: true, nativeFailure: true });
+  toggle.click();
+  assert.deepEqual(toggle.changes(), ["dark"]);
+  assert.equal(toggle.attributes().has("data-theme-reveal"), false);
+  assert.equal(toggle.attributes().has("data-theme-transition"), true);
+  assert.equal(toggle.timers().size, 1);
+  toggle.finishTransition();
+  assert.equal(toggle.attributes().size, 0);
+});
+
+test("a failed reveal clears its marker without an unhandled rejection", async () => {
+  const toggle = mount({ nativeReveal: true });
+  toggle.click();
+  toggle.updateReveal();
+  toggle.reveals()[0].ready.reject(new Error("Capture unavailable"));
+  toggle.reveals()[0].finished.reject(new Error("Capture unavailable"));
+  await Promise.resolve();
+  assert.deepEqual(toggle.changes(), ["dark"]);
+  assert.equal(toggle.attributes().size, 0);
 });

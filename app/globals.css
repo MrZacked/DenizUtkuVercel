@@ -305,7 +305,7 @@ html[data-theme="dark"] .theme-icon-dark {
   z-index: 0;
   inset: 0;
   pointer-events: none;
-  animation: scene-arrive 1300ms ease-out both;
+  animation: scene-arrive 600ms ease-out both;
 }
 
 .hero-layer {
@@ -408,11 +408,11 @@ html[data-theme="dark"] .celestial-moon {
 
 .hero-role,
 .hero-intro {
-  animation: copy-arrive 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: copy-arrive 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-intro {
-  animation-delay: 220ms;
+  animation-delay: 80ms;
 }
 
 .hero-role {
@@ -435,12 +435,12 @@ html[data-theme="dark"] .celestial-moon {
 
 .hero h1 span {
   display: block;
-  animation: title-arrive 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: title-arrive 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero h1 span:last-child {
   color: var(--hero-accent);
-  animation-delay: 130ms;
+  animation-delay: 60ms;
 }
 
 .hero-intro {
@@ -1881,6 +1881,26 @@ figcaption a {
     transition: filter 850ms ease;
   }
 
+  html[data-theme-reveal]::view-transition {
+    pointer-events: none;
+  }
+
+  html[data-theme-reveal]::view-transition-group(root),
+  html[data-theme-reveal]::view-transition-old(root),
+  html[data-theme-reveal]::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  html[data-theme-reveal]::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  html[data-theme-reveal]::view-transition-new(root) {
+    z-index: 2;
+    animation: theme-reveal 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
   .gallery-frame[data-direction="next"] > .gallery-slide {
     animation: gallery-next 240ms ease-out both;
   }
@@ -1893,6 +1913,11 @@ figcaption a {
 @keyframes gallery-next {
   from { opacity: 0.65; transform: translateX(1.25rem); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes theme-reveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
 }
 
 @keyframes gallery-previous {
@@ -1916,6 +1941,13 @@ figcaption a {
   .hero h1 span,
   .hero-intro {
     animation: none;
+  }
+
+  html[data-theme-reveal]::view-transition-group(root),
+  html[data-theme-reveal]::view-transition-old(root),
+  html[data-theme-reveal]::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
   }
 
   .hero-layer,
@@ -1944,8 +1976,8 @@ figcaption a {
 
 @keyframes copy-arrive {
   from {
-    opacity: 0;
-    transform: translateY(0.75rem);
+    opacity: 1;
+    transform: translateY(0.5rem);
   }
 
   to {
@@ -1956,8 +1988,8 @@ figcaption a {
 
 @keyframes title-arrive {
   from {
-    opacity: 0;
-    transform: translateY(0.4em);
+    opacity: 1;
+    transform: translateY(0.15em);
   }
 
   to {

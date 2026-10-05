@@ -120,3 +120,26 @@ test("theme animation is limited to explicit changes and honors reduced motion",
     assert.doesNotMatch(properties, /(?:^|,)\s*(?:fill|stroke|background(?:-color)?|color|all)\b/);
   }
 });
+
+test("the native theme reveal clips complete palettes instead of fading text", () => {
+  assert.match(css, /html\[data-theme-reveal\]::view-transition\s*\{\s*pointer-events:\s*none/);
+  assert.match(css, /html\[data-theme-reveal\]::view-transition-new\(root\)\s*\{\s*z-index:\s*2;\s*animation:\s*theme-reveal 500ms/);
+  const revealFrames = css.slice(css.indexOf("@keyframes theme-reveal") + "@keyframes theme-reveal".length).split("@keyframes")[0];
+  assert.match(revealFrames, /from\s*\{\s*clip-path:\s*inset\(0 0 100% 0\)/);
+  assert.match(revealFrames, /to\s*\{\s*clip-path:\s*inset\(0\)/);
+  assert.doesNotMatch(revealFrames, /opacity:|transform:/);
+  const reducedRules = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+  assert.match(reducedRules, /html\[data-theme-reveal\]::view-transition-new\(root\)\s*\{\s*animation:\s*none;\s*mix-blend-mode:\s*normal/);
+});
+
+test("hero entrances finish quickly with the main text visible from the first frame", () => {
+  assert.match(css, /\.hero-scene\s*\{[^}]*animation:\s*scene-arrive 600ms/);
+  assert.match(css, /\.hero-intro\s*\{[^}]*animation:\s*copy-arrive 480ms/);
+  assert.match(css, /\.hero h1 span\s*\{[^}]*animation:\s*title-arrive 520ms/);
+  assert.match(css, /\.hero-intro\s*\{\s*animation-delay:\s*80ms/);
+  assert.match(css, /\.hero h1 span:last-child\s*\{[^}]*animation-delay:\s*60ms/);
+  for (const name of ["copy-arrive", "title-arrive"]) {
+    const frames = css.slice(css.indexOf(`@keyframes ${name}`) + `@keyframes ${name}`.length).split("@keyframes")[0];
+    assert.match(frames, /from\s*\{\s*opacity:\s*1;/);
+  }
+});
