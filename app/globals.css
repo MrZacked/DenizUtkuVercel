@@ -12,7 +12,7 @@
   --link-hover: #75321d;
   --header-bg: #f3eee1;
   --projects-bg: #e0e5d6;
-  --contact-bg: #e7e3d6;
+  --contact-bg: #e5e0d3;
   --toggle-border: #778473;
   --toggle-hover: #e0dfce;
   --clay: #e5c6b0;
@@ -22,7 +22,7 @@
   --clay-hover: #672d18;
   --experience-bg: #e9e9dc;
   --experience-terrain-opacity: 0.14;
-  --about-bg: #e7e3d6;
+  --about-bg: #e5e0d3;
   --hero-ink: #1b2922;
   --hero-accent: #793a22;
   --hero-hover: #672d18;
@@ -50,15 +50,18 @@
   --cave-muted: #36473b;
   --cave-accent: #793a22;
   --cave-hover: #672d18;
-  --cave-soil: #93a488;
-  --cave-stratum: #bdad91;
-  --cave-distant: #d9dfce;
-  --cave-rock: #cdd6c2;
-  --cave-facet: #dfe1cd;
-  --cave-near: #c6d0ba;
-  --cave-seam: #977354;
-  --cave-water: #c6d6cf;
+  --cave-soil: #c4cbb5;
+  --cave-stratum: #d0c7b3;
+  --cave-distant: #dedac9;
+  --cave-rock: #d1c9b6;
+  --cave-facet: #e3dbc8;
+  --cave-near: #c9c5b2;
+  --cave-seam: #8c795e;
+  --cave-water: #c4cabb;
   --section-space: clamp(4.5rem, 7vw, 8rem);
+  --cave-opening: #f3e6bc;
+  --cave-glow: rgb(243 230 188 / 28%);
+  --cave-shadow: #bfc0aa;
 }
 
 html[data-theme="dark"] {
@@ -72,7 +75,7 @@ html[data-theme="dark"] {
   --link-hover: #ffd0a3;
   --header-bg: #102019;
   --projects-bg: #142820;
-  --contact-bg: #10231f;
+  --contact-bg: #19221d;
   --toggle-border: #839687;
   --toggle-hover: #274536;
   --clay: #4f2c24;
@@ -82,7 +85,7 @@ html[data-theme="dark"] {
   --clay-hover: #ffd0a3;
   --experience-bg: #1b2b23;
   --experience-terrain-opacity: 0.19;
-  --about-bg: #10231f;
+  --about-bg: #19221d;
   --hero-ink: #fbf5e7;
   --hero-accent: #f3b47e;
   --hero-hover: #ffd0a3;
@@ -108,14 +111,17 @@ html[data-theme="dark"] {
   --cave-muted: #bdccbe;
   --cave-accent: #f3b47e;
   --cave-hover: #ffd0a3;
-  --cave-soil: #3c5540;
-  --cave-stratum: #3f4938;
-  --cave-distant: #19382e;
-  --cave-rock: #213e32;
-  --cave-facet: #2c4637;
-  --cave-near: #0a1a17;
-  --cave-seam: #91795a;
-  --cave-water: #25483f;
+  --cave-soil: #3d4a37;
+  --cave-stratum: #454938;
+  --cave-distant: #253129;
+  --cave-rock: #2b352c;
+  --cave-facet: #394135;
+  --cave-near: #111914;
+  --cave-seam: #877659;
+  --cave-water: #334037;
+  --cave-opening: #b39a66;
+  --cave-glow: rgb(179 154 102 / 12%);
+  --cave-shadow: #18221a;
 }
 
 * {
@@ -1419,20 +1425,21 @@ figcaption a {
 
 .cave-scene {
   z-index: 0;
+  overflow: visible;
 }
 
 .cave-scene::before {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 76% 65%, var(--cave-distant), transparent 56%);
-  mask-image: linear-gradient(transparent, black 8rem, black 70%, transparent);
+  inset: 5rem 0 0 55%;
+  background: radial-gradient(ellipse at 68% 48%, var(--cave-glow), transparent 64%);
+  mask-image: linear-gradient(transparent, black 8rem);
   content: "";
 }
 
 .cave-mouth {
   position: absolute;
-  inset: -10rem 0 auto;
-  height: clamp(24rem, 35vw, 35rem);
+  inset: -9rem 0 auto;
+  height: clamp(22rem, 32vw, 32rem);
 }
 
 .cave-mouth > svg {
@@ -1440,17 +1447,11 @@ figcaption a {
   inset: 0;
 }
 
-.cave-forest {
-  position: absolute;
-  inset: 0;
-  mask-image: linear-gradient(transparent, black 5rem);
-}
-
 .cave-layer {
   position: absolute;
-  inset: 2rem 0 -1px;
+  inset: 1rem 0 -1px;
   overflow: hidden;
-  mask-image: linear-gradient(transparent, black 8rem, black 92%, transparent);
+  mask-image: linear-gradient(transparent, black 10rem, black calc(100% - 2rem), transparent);
 }
 
 .cave-layer-back {
@@ -1487,6 +1488,27 @@ figcaption a {
 
 .cave-near {
   fill: var(--cave-near);
+}
+
+.cave-shadow {
+  fill: var(--cave-shadow);
+}
+
+.cave-opening {
+  fill: url("#cavern-distance");
+}
+
+.cave-opening-rock {
+  fill: var(--cave-distant);
+}
+
+.cave-opening-rim {
+  fill: var(--cave-facet);
+}
+
+.cave-light-shaft {
+  fill: url("#cavern-light");
+  opacity: 0.65;
 }
 
 .cave-root,
@@ -1534,7 +1556,7 @@ figcaption a {
 
 .cave-floor {
   overflow: hidden;
-  mask-image: linear-gradient(transparent, black 55%);
+  mask-image: linear-gradient(transparent, black 38%);
 }
 
 .about-inner {
@@ -1628,6 +1650,14 @@ figcaption a {
   .project-detection {
     grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.9fr);
     gap: 2rem;
+  }
+
+  .cave-layer {
+    opacity: 0.35;
+  }
+
+  .cave-layer svg {
+    width: calc(100% + 12rem);
   }
 }
 
@@ -1786,12 +1816,15 @@ figcaption a {
 
   .cave-mouth {
     top: -8rem;
-    height: 24rem;
+    height: 23rem;
   }
 
   .cave-layer {
     top: 3rem;
-    opacity: 0.55;
+  }
+
+  .cave-light-shaft {
+    opacity: 0.35;
   }
 }
 

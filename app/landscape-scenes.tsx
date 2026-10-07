@@ -113,47 +113,48 @@ export function CaveScene() {
     <div className="cave-scene" aria-hidden="true">
       <div className="cave-mouth">
         <svg viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid slice" focusable="false">
-          <path className="forest-ground" d="M0 145h1600v141l-158-21-137 30-147-19-192 40-134-19-141 17-148 5-137-39-182-13C138 242 97 233 0 256Z" />
-        </svg>
-        <div className="cave-forest">
-          <ForestPanels height={640}>
-            <Pine className="forest-threshold-trees" x={-4} y={4} scale={1.1} lean />
-            <Pine className="forest-threshold-trees" x={119} y={105} scale={0.72} />
-            <Pine className="forest-threshold-trees" x={260} y={180} scale={0.38} lean />
-            <Pine className="forest-threshold-trees" x={1338} y={143} scale={0.62} />
-            <Pine className="forest-threshold-trees" x={1474} y={44} scale={1.02} lean />
-            <Pine className="forest-threshold-trees" x={1615} y={-12} scale={1.26} />
-          </ForestPanels>
-        </div>
-        <svg viewBox="0 0 1600 640" preserveAspectRatio="xMidYMid slice" focusable="false">
-          <path className="cave-soil" d="M0 256c97-23 138-14 224 11l182 13 137 39 148-5 141-17 134 19 192-40 147 19 137-30 158 21v354H0Z" />
-          <path className="cave-stratum" d="m0 303 128-12 94 32 184-1 153 34 132-6 165-14 111 22 191-31 143 11 130-23 169 33v292H0Z" />
-          <path className="cave-roof" d="m0 359 93-10 135 46 173-10 121 49 173-19 138-30 140 39 179-40 144 14 131-35 173 30v247H0Z" />
-          <path className="cave-root" d="m123 269 12 67-15 40 8 51m6-82 29 34 15 44m-44-78-27 35-4 40m1187-145-12 69 13 48-23 57m13-78-31 19-10 42m239-163-26 61 3 53-18 34" />
-          <path className="cave-root-fine" d="m125 385-24 29-9 32m72-50 24 20 4 22m1137-27 27 9 11 33m154-63-21 10-12 30" />
-          <path className="cave-root-fine" d="m650 320 5 32-18 34 5 26m13-60 18 17 10 30m192-94-12 46 19 35-8 36" />
+          <path className="forest-ground" d="M0 112c168 45 257 63 390 32 211-49 290 31 488 17 251-19 439-98 722-83v562H0Z" />
+          <path className="cave-soil" d="M0 198c123 16 219 77 364 43 180-41 265 62 449 42 255-29 441-123 787-71v428H0Z" />
+          <path className="cave-stratum" d="M0 244c128 17 187 91 330 69 136-22 224 57 377 32 147-24 203 32 333-13 157-55 259-120 560-64v372H0Z" />
+          <path className="cave-roof" d="M0 307c61-7 76 84 149 70 64-12 92 37 169 21 117-25 169 72 292 44 109-25 134 31 232 7 84-21 116 13 212-26 124-51 173-101 269-78 91 22 186-48 277-1v296H0Z" />
+          <path className="cave-root" d="M22 258c-9 47 13 70 5 96s-20 39-17 68m15-73c17 14 16 41 31 59m1300-146c17 44-21 77-24 117s-32 64-26 91m28-77c-41 15-61 47-69 78m183-151c-43 36-15 66-38 113" />
+          <path className="cave-root-fine" d="M54 400c-15 13-13 26-18 42m1239-34c-29 11-24 36-42 53m200-77c18 8 27 26 25 48m-791-92c11 27 0 46 12 72m-1-28c19 2 28 18 31 36" />
         </svg>
       </div>
       <div className="cave-layer cave-layer-back">
-        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMid slice" focusable="false">
-          <path className="cave-distant" d="M729 0h871v900H736l52-175 3-156 57-165 118-138 128-52 115 4 119 56 93 109 31 174-12 164 60 179h-107l-82-94-188-22-137 45-232-41-90 84Z" />
-          <path className="cave-facet" d="m729 0 191 121 125-43 141 42 131-26 125 49 91-34 67 94V0Zm6 900 53-175 3-156 57-165 118-138-16 132-72 124 9 160-58 112-12 106Z" />
-          <path className="cave-rock" d="m950 398 89-139 139-52 119 8 112 50 12 82-99-34-81-33-101 40-83 94-54 131-16 174-60 87 34-164-26-120Zm469-78 53 63 31 174-12 164 60 179h49V246l-158-103-79 122Z" />
-          <path className="cave-facet" d="m1056 184 60 29 38 129 19-111 38 18 38 85 8-97 67 44 27 101 8-106 64 71-47-168-103-74-115-19Zm407 382-82 125 15 143 86 66 69-73-60-106Z" />
-          <path className="cave-near" d="m1417 900-61-90-182-13-124 27-127-19 37-66 108 21 95-33 123 24 79-7 52 116Z" />
-          <path className="cave-seam" d="m920 121-97 57-36 151-47 31m305-282 49 64-28 54 41 66m79-142 33 34-24 69 48 75m174-147-35 146 43 144-39 161 14 132m-423-259-47 73-8 174-37 93" />
-          <path className="cave-striation" d="m805 236 76-61 74-27m-152 139 44-25 33-12m504-77 63 42 38 38m-29 22 49 61m-11 103 33 39-13 94m-419-159-38 60-12 92m-54 37-15 78" />
-          <path className="cave-water" d="m915 804 124-20 136 23 167-17 81 30 120 80H784Z" />
-          <path className="cave-water-shadow" d="m785 900 251-49 139 16 158-9 211 42Z" />
-          <path className="cave-water-line" d="m1044 826 103-6 65 3m-249 31 68-4m167-15 62-3 69 5m-210 32 78 3 61-6m-416 26 125-9 111 4m105 0 53-2" />
+        <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMaxYMid slice" focusable="false">
+          <defs>
+            <linearGradient id="cavern-light" x1="0" y1="0" x2="0.25" y2="1">
+              <stop stopColor="var(--cave-glow)" stopOpacity="0.3" />
+              <stop offset="1" stopColor="var(--cave-glow)" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="cavern-distance" x1="0" y1="0" x2="0.2" y2="1">
+              <stop stopColor="var(--cave-opening)" />
+              <stop offset="0.5" stopColor="var(--cave-opening)" stopOpacity="0.65" />
+              <stop offset="1" stopColor="var(--cave-distant)" />
+            </linearGradient>
+          </defs>
+          <path className="cave-distant" d="M658 0h942v1000H690c-3-151 31-275 8-406-35-199 21-333 142-428C895 122 941 46 1010 0Z" />
+          <path className="cave-shadow" d="M786 258c118-103 203-43 310-86 138-55 303 64 399 209 84 128 51 277 105 415v204H783c26-88 92-177 45-306-55-150-140-302-42-436Z" />
+          <path className="cave-rock" d="M712 0c82 85 64 183 191 210 91 19 113 80 212 49 78-25 116 55 185 33 147-47 180 42 300 150V0Zm36 1000c38-97 113-163 83-254-39-123-97-208-49-346 27-77 17-158 67-251-122 63-160 190-131 336 24 122-35 203-35 317-1 75-17 139-52 198Z" />
+          <path className="cave-facet" d="M846 123c36 71 59 93 129 93 86 0 103 75 177 38 96-48 105 48 185 8 87-44 125 20 195 88-76-140-171-226-295-202-65 12-87-28-160-13-79 16-119-36-170-20Zm-80 343c-33 100 23 192 35 288 12 97-33 158-53 246h52c16-68 46-149 29-231-24-114-72-172-37-313Z" />
+          <path className="cave-opening-rim" d="M1151 316c48-27 79-8 101 30 21 36 7 59 27 97 19 36 45 50 35 81-11 39-4 82-35 105-23 17-64-12-96-10-29 2-53-18-48-53 6-42-14-52-19-90-6-47 10-77 13-111 2-23 6-39 22-49Z" />
+          <path className="cave-opening" d="M1165 347c32-15 49 4 66 26 16 22 2 53 23 88 15 25 41 42 30 65-17 37-1 60-30 72-24 10-45-9-66-8-27 1-24-23-20-49 5-35-15-42-19-68-6-37 10-57 8-83-2-21-3-36 8-43Z" />
+          <path className="cave-opening-rock" d="M1154 509c15 2 9 30 24 32 25 3 19 24 39 17 20-8 20 25 38 16 14-8 18-23 27-41l-11 70c-45 8-68-1-107-12Z" />
+          <path className="cave-light-shaft" d="M1167 542c34 27 61 18 103-10l162 363c-107 40-281 60-368 3Z" />
+          <path className="cave-rock" d="M1600 201c-83 70-81 163-119 250-41 94 24 146-5 240-24 78 55 176 63 309h61Z" />
+          <path className="cave-near" d="M0 925c251 22 415-11 647 29 129 22 224-10 350-22 178-17 321-50 603-19v87H0Z" />
+          <path className="cave-water" d="M839 903c102-17 149-32 244-9 92 22 170-27 275-9l176 41c-159-12-245 29-372 23-153-7-249 7-354-8Z" />
+          <path className="cave-water-shadow" d="M892 944c126-19 204-6 320-11 79-3 149-16 222-12l100 5c-110 6-179 34-272 23-117-12-209 5-370-5Z" />
+          <path className="cave-seam" d="M790 59c39 56 30 100 83 124m143 35c58 13 82 56 111 44m245-59c49 31 53 75 90 84m-678 278c-21 77 22 150 16 235m-59 73c-8 36-21 69-34 101" />
+          <path className="cave-striation" d="M886 179c44 11 62 1 105 27m74 3c37 23 64 27 96 11m210 0c35 14 42 39 72 52m48 248c-16 25-20 49-14 82" />
+          <path className="cave-water-line" d="M1009 913c45-4 77 2 115-1m43 17c42 2 69-5 112-7m-335 13 50-2m315-15 52 1" />
         </svg>
       </div>
       <div className="cave-layer cave-layer-front">
-        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMid slice" focusable="false">
-          <path className="cave-near" d="M0 56 37 149l-12 70 39 114-24 120 45 113-37 199 43 135H0Zm1600 28-63 131-23 124 25 170-37 115 9 97-68 179h157Z" />
-          <path className="cave-rock" d="m1427 900 18-110 22-52 15 29 9 108 30 25Zm121 0-1-271 13-67 16 74 9 229 15 35Z" />
-          <path className="cave-facet" d="m0 566 47 71-12 129 24 74-11 60H0Zm1537-351 63-131v202l-56 115-6-62Z" />
-          <path className="cave-seam" d="m26 370 18 61-21 72m1545 27-16 65 13 53" />
+        <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMaxYMid slice" focusable="false">
+          <path className="cave-near" d="M0 164c44 35 13 98 49 145 34 45-26 111-3 176 18 54-19 113 4 154 34 62-9 124 1 183 12 72 40 124 32 178H0Zm1600-64c-66 55-28 123-82 200-48 68-11 127-20 189-14 98 55 140 37 217-18 80 32 137-13 218l-37 76h115Z" />
+          <path className="cave-facet" d="M1600 206c-40 49-51 87-55 138-5 62-35 98-8 151 13 26 9 55 19 87-41-71-61-129-38-206 23-74 22-106 82-170Z" />
         </svg>
       </div>
     </div>
@@ -163,10 +164,11 @@ export function CaveScene() {
 export function CaveFloor() {
   return (
     <div className="cave-floor" aria-hidden="true">
-      <svg viewBox="0 0 1600 380" preserveAspectRatio="none" focusable="false">
-        <path className="cave-distant" d="M0 283 197 263l169 29 258-20 229 36 204-49 177 25 211-47 155 18v125H0Z" />
-        <path className="cave-rock" d="m1203 380 30-128 17-25 22 89 26 64Zm178 0 27-196 20-36 23 42 36 190Z" />
-        <path className="cave-near" d="M0 341 197 314l147 34 273-19 173 23 258-27 221 23 174-35 157 28v39H0Z" />
+      <svg viewBox="0 0 1600 380" preserveAspectRatio="xMidYMax slice" focusable="false">
+        <path className="cave-distant" d="M0 236c219-12 343 30 505 12 161-18 230 42 410 19 167-22 425-92 685-36v149H0Z" />
+        <path className="cave-water" d="M765 286c114-17 175-4 271-14 149-15 295-9 437 19-168-3-248 33-429 23-103-6-175 7-279-28Z" />
+        <path className="cave-rock" d="M1504 380c-40-31-20-54-48-78-42-35-54-4-84-34-21-21-21-43-52-35-28 7-34 44-60 59-20 12-31 45-46 88Z" />
+        <path className="cave-near" d="M0 317c133-32 274 18 400 4 170-18 219 34 386 18 260-25 448 18 674-20l140 33v28H0Z" />
       </svg>
     </div>
   );

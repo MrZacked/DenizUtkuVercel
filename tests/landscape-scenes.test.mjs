@@ -141,6 +141,7 @@ test("both themes keep the experience copy readable on the green landscape plane
 });
 
 test("landscape illustrations are decorative with no focusable or interactive content", () => {
+  const ids = [];
   for (const name of ["ValleyScene", "ExperienceTerrain", "ForestEdge", "CaveScene", "CaveFloor"]) {
     const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports[name]));
     assert.match(markup, /^<div\b[^>]*\baria-hidden="true"/);
@@ -148,6 +149,13 @@ test("landscape illustrations are decorative with no focusable or interactive co
     assert.ok(drawings.length);
     for (const drawing of drawings) assert.match(drawing, /\bfocusable="false"/);
     assert.doesNotMatch(markup, /<(?:a|button|input|select|textarea|iframe)\b|\btabindex=|\bon\w+=/i);
+    ids.push(...Array.from(markup.matchAll(/\bid="([^"]+)"/g), ([, id]) => id));
+  }
+  assert.equal(new Set(ids).size, ids.length, "paired edge crops must not repeat gradient IDs");
+  const references = Array.from(css.matchAll(/url\(["']?#([^"')]+)["']?\)/g), ([, id]) => id);
+  assert.ok(references.length >= 2, "the cave gradients need matching references");
+  for (const id of references) {
+    assert.ok(ids.includes(id), `${id} must point to an existing drawing definition`);
   }
 });
 
@@ -206,13 +214,30 @@ test("the irregular cave entrance overlaps only decorative space above About", (
   assert.match(cave, /cave-root/);
   assert.match(cave, /cave-stratum/);
   assert.match(cave, /cave-water/);
+  assert.doesNotMatch(cave, /cave-forest|forest-threshold-trees|forest-trees/);
+  assert.doesNotMatch(componentSource("CaveScene"), /<Pine\b/);
+});
+
+test("the cavern has an opening, a rim and light without restarting the forest", () => {
+  const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
+  for (const className of ["cave-opening", "cave-opening-rim", "cave-light-shaft"]) {
+    assert.ok(countClass(cave, className) > 0, `${className} gives the cavern depth`);
+  }
+  assert.match(cave, /viewBox="0 0 1600 1000"/);
+  assert.match(cave, /cave-striation/);
+  const floor = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveFloor));
+  const paths = Array.from(floor.matchAll(/<path\b[^>]*\bclass="cave-(?:distant|rock|near)"[^>]*\bd="([^"]+)"/g), ([, path]) => path);
+  assert.ok(paths.length >= 2);
+  for (const path of paths) assert.match(path, /[cCqQ]/, "the floor should continue with curved rock shapes");
+  assert.ok(rulesFor(".cave-layer").every((block) => !/transparent\s+92%/.test(block)),
+    "the cave should not fade into a separate empty section above Contact");
 });
 
 test("both cave palettes keep copy, links and focus visible on the rock planes", () => {
   const light = paletteFor(":root");
   const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
   for (const [mode, palette] of Object.entries({ light, dark })) {
-    for (const surface of ["--about-bg", "--contact-bg", "--cave-distant", "--cave-rock", "--cave-facet", "--cave-near", "--cave-water"]) {
+    for (const surface of ["--about-bg", "--contact-bg", "--cave-distant", "--cave-rock", "--cave-facet", "--cave-near", "--cave-water", "--cave-shadow"]) {
       for (const foreground of ["--cave-ink", "--cave-muted", "--cave-accent", "--cave-hover"]) {
         const ratio = contrast(palette[foreground], palette[surface]);
         assert.ok(ratio >= 4.5, `${mode} ${foreground} on ${surface}: ${ratio.toFixed(2)}`);
@@ -251,12 +276,12 @@ test("forest and cave artwork keep their proportions as the content height chang
   const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
   for (const grove of ["upper", "middle", "lower"]) assert.match(forest, new RegExp(`forest-grove-${grove}`));
   const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
-  assert.match(cave, /forest-threshold-trees/);
+  assert.doesNotMatch(cave, /forest-threshold-trees/);
   assert.match(cave, /cave-striation/);
 });
 
-test("paired forest panels retain edge trees instead of cropping them out on phones", () => {
-  for (const name of ["ForestEdge", "CaveScene"]) {
+test("paired terrain and forest panels retain the edges on phones", () => {
+  for (const name of ["ExperienceTerrain", "ForestEdge"]) {
     const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports[name]));
     const panels = Array.from(markup.matchAll(/<div class="forest-panels">([\s\S]*?)<\/div>/g), ([, contents]) => contents);
     assert.ok(panels.length);
@@ -269,6 +294,38 @@ test("paired forest panels retain edge trees instead of cropping them out on pho
   assert.match(rulesFor(".forest-panels svg").join("\n"), /width:\s*50%/);
   assert.match(rulesFor(".forest-panels svg:first-child").join("\n"), /left:\s*0/);
   assert.match(rulesFor(".forest-panels svg:last-child").join("\n"), /right:\s*0/);
+});
+
+test("the cave stays cropped at the right edge on narrow screens", () => {
+  const narrow = css.slice(css.indexOf("@media (max-width: 1000px)"), css.indexOf("@media (max-width: 760px)"));
+  const canvas = narrow.match(/\.cave-layer svg\s*\{([^}]*)\}/)?.[1];
+  assert.ok(canvas, "the narrow layout needs its own cave framing");
+  const extension = canvas.match(/width:\s*calc\(100%\s*\+\s*([\d.]+)rem\)/);
+  assert.ok(extension);
+  assert.ok(Number(extension[1]) > 0 && Number(extension[1]) <= 16,
+    "the wider canvas should keep the opening away from copy without excessive clipping");
+  assert.ok(rulesFor(".cave-layer").some((block) => /overflow:\s*hidden/.test(block)),
+    "the wider artwork must not create page overflow");
+  const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
+  assert.equal((cave.match(/preserveAspectRatio="xMaxYMid slice"/g) || []).length, 2);
+});
+
+test("the narrow cave opening stays readable beneath About text", () => {
+  const narrow = css.slice(css.indexOf("@media (max-width: 1000px)"), css.indexOf("@media (max-width: 760px)"));
+  const layer = narrow.match(/\.cave-layer\s*\{([^}]*)\}/)?.[1];
+  assert.ok(layer);
+  const opacity = Number(layer.match(/opacity:\s*([\d.]+)/)?.[1]);
+  assert.ok(opacity > 0 && opacity <= 0.35);
+  const light = paletteFor(":root");
+  const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
+  for (const [mode, palette] of Object.entries({ light, dark })) {
+    const glow = palette["--cave-glow"].match(/rgb\((\d+) (\d+) (\d+) \/ ([\d.]+)%\)/);
+    assert.ok(glow);
+    const glowColor = `#${glow.slice(1, 4).map((channel) => Number(channel).toString(16).padStart(2, "0")).join("")}`;
+    const background = blendedColor(glowColor, palette["--about-bg"], Number(glow[4]) / 100);
+    const surface = blendedColor(palette["--cave-opening"], background, opacity);
+    assert.ok(contrast(palette["--cave-ink"], surface) >= 4.5, `${mode} copy beneath the cave opening`);
+  }
 });
 
 test("the scenic handoff has a bounded spacing budget instead of two large blank sections", () => {
