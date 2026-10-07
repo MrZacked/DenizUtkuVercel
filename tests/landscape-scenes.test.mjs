@@ -18,6 +18,18 @@ function rulesFor(selector) {
     .map(([, , declarations]) => declarations);
 }
 
+function countClass(markup, name) {
+  return Array.from(markup.matchAll(/\bclass="([^"]+)"/g), ([, classes]) => classes.split(/\s+/))
+    .filter((classes) => classes.includes(name)).length;
+}
+
+function componentSource(name) {
+  const file = ts.createSourceFile("landscape-scenes.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const component = file.statements.find((node) => ts.isFunctionDeclaration(node) && node.name?.text === name);
+  assert.ok(component, `${name} is missing`);
+  return component.getText(file);
+}
+
 function paletteFor(selector) {
   return Object.fromEntries(rulesFor(selector).flatMap((block) =>
     Array.from(block.matchAll(/(--[\w-]+):\s*([^;]+);/g), ([, name, value]) => [name, value])));
@@ -161,8 +173,12 @@ test("Experience has quiet terrain behind its details without covering controls"
   }
   const markup = renderToStaticMarkup(React.createElement(exportsHolder.exports.ExperienceTerrain));
   assert.doesNotMatch(markup, /preserveAspectRatio="none"/);
-  assert.match(markup, /experience-terrain-upper/);
-  assert.match(markup, /experience-terrain-lower/);
+  assert.equal(countClass(markup, "experience-terrain-panel"), 1);
+  assert.equal(countClass(markup, "experience-terrain-continuous"), 1);
+  assert.equal(countClass(markup, "forest-panels"), 1);
+  assert.equal((markup.match(/viewBox="0 0 1600 1600"/g) || []).length, 2);
+  assert.doesNotMatch(markup, /terrain-tree|forest-trees|experience-terrain-(?:upper|lower)/);
+  assert.doesNotMatch(componentSource("ExperienceTerrain"), /<Pine\b/);
 });
 
 test("the forest spans the projects and the cave joins About to Contact", () => {

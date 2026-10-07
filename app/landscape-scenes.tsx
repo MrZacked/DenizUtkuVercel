@@ -52,7 +52,6 @@ export function ValleyScene() {
           <path className="landscape-stone" d="m1538 116 62 30v614h-178l49-133-37-85 72-90-30-93 49-113-29-61Z" />
           <path className="landscape-contour" d="m1600 218-51 54 15 61m36 71-65 53 18 41m47 67-69 39 13 44" />
           <path className="landscape-foreground" d="M0 415 152 387 310 426 442 401 623 446 777 454 968 420 1124 434 1274 346 1416 351 1528 277 1600 300V760H0Z" />
-          <path className="landscape-foreground" d="m1438 415-16-65-17 65h9v30h16v-30Zm-1241 98-18-78-19 78h10v34h17v-34Z" />
         </svg>
       </div>
       <svg className="valley-ground" viewBox="0 0 1600 160" preserveAspectRatio="none" focusable="false">
@@ -62,26 +61,18 @@ export function ValleyScene() {
   );
 }
 
-function TerrainBank({ lower = false }: { lower?: boolean }) {
-  return (
-    <ForestPanels height={700}>
-      <path className="terrain-ridge" d={lower
-        ? "M0 182c139-19 201 69 285 111s137 43 212 37l-119 121-378 110Zm1600-14c-104 5-158 67-236 103-72 34-142 13-216 43l129 105 323 107Z"
-        : "M0 114c91 43 149 14 241 76 79 53 122 113 203 105l-81 150L0 493Zm1600-15c-105 8-149 66-233 96-79 29-145 16-217 82l-53 166 503 67Z"} />
-      <path className="terrain-slope" d="M0 304c105-33 183 31 243 105 44 55 122 55 194 111l-58 122H0Zm1600-24c-92 57-185 81-239 144-39 47-128 88-205 117l80 114h364Z" />
-      <Pine className="terrain-tree" x={36} y={lower ? 244 : 129} scale={0.93} lean />
-      <Pine className="terrain-tree" x={204} y={lower ? 365 : 292} scale={0.54} />
-      <Pine className="terrain-tree" x={1455} y={lower ? 233 : 168} scale={0.79} />
-      <path className="terrain-contour" d="M0 342c100-5 152 34 199 92m-199-58c89 1 135 38 167 84m1433-110c-94 38-145 44-194 100m194-53c-69 26-101 44-136 85" />
-    </ForestPanels>
-  );
-}
+
 
 export function ExperienceTerrain() {
   return (
     <div className="experience-terrain" aria-hidden="true">
-      <div className="experience-terrain-panel experience-terrain-upper"><TerrainBank /></div>
-      <div className="experience-terrain-panel experience-terrain-lower"><TerrainBank lower /></div>
+      <div className="experience-terrain-panel experience-terrain-continuous">
+        <ForestPanels height={1600}>
+          <path className="terrain-ridge" d="M0 78c112 58 165 194 150 340-13 125 71 228 144 330 81 112 85 216 18 343-40 76-51 159 18 247l70 262H0Zm1600-78c-74 67-132 151-122 271 8 105-78 168-109 268-39 126 20 237-22 354-32 89-96 165-82 270 16 112-72 240-122 437h457Z" />
+          <path className="terrain-slope" d="M0 400c94 48 116 144 80 235-40 101 47 203 76 300 28 99-14 199 5 288 17 80 105 148 119 240l-26 137H0Zm1600-161c-51 122-37 254-97 357-55 95-27 190-39 286-18 136-90 239-78 353 8 89-24 241-89 365h303Z" />
+          <path className="terrain-contour" d="M1539 145c-61 112-32 168-88 250s-59 167-39 246c21 84-37 179-43 260s-46 179-64 244m-1271-650c107 86 45 164 67 257s107 151 89 256m1314 80c-30 95-49 168-87 257" />
+        </ForestPanels>
+      </div>
     </div>
   );
 }

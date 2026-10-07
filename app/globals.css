@@ -21,7 +21,7 @@
   --clay-accent: #793a22;
   --clay-hover: #672d18;
   --experience-bg: #e9e9dc;
-  --experience-terrain-opacity: 0.18;
+  --experience-terrain-opacity: 0.14;
   --about-bg: #e7e3d6;
   --hero-ink: #1b2922;
   --hero-accent: #793a22;
@@ -81,7 +81,7 @@ html[data-theme="dark"] {
   --clay-accent: #f3b47e;
   --clay-hover: #ffd0a3;
   --experience-bg: #1b2b23;
-  --experience-terrain-opacity: 0.28;
+  --experience-terrain-opacity: 0.19;
   --about-bg: #10231f;
   --hero-ink: #fbf5e7;
   --hero-accent: #f3b47e;
@@ -620,24 +620,18 @@ html[data-theme="dark"] .celestial-moon {
 .experience-terrain-panel {
   position: absolute;
   width: 100%;
-  height: clamp(32rem, 44vw, 44rem);
-  mask-image: linear-gradient(transparent, black 18%, black 76%, transparent);
+  mask-image: linear-gradient(transparent, black 15%, black 88%, transparent);
 }
 
-.experience-terrain-upper {
-  top: 34%;
-}
-
-.experience-terrain-lower {
-  bottom: -3rem;
+.experience-terrain-continuous {
+  inset: 12rem 0 -2rem;
 }
 
 .terrain-ridge {
   fill: var(--forest-distant);
 }
 
-.terrain-slope,
-.terrain-tree {
+.terrain-slope {
   fill: var(--forest-middle);
 }
 
