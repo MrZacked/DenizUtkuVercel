@@ -21,23 +21,6 @@ function ForestPanels({ children, height = 780 }: { children: ReactNode; height?
   );
 }
 
-function ForestGrove({ lower = false }: { lower?: boolean }) {
-  return (
-    <ForestPanels>
-      <path className="forest-distant-trees" d={lower
-        ? "M0 332c71-45 122-73 188-40 63 32 73 103 139 126l82 13-94 73-119 83L0 673Zm1600-36c-71-5-123 52-159 102-31 44-78 82-147 99l58 94 248 97Z"
-        : "M0 140c82-18 144 25 175 90 22 47 81 55 124 78l-15 142L0 574Zm1600 12c-91-35-146 21-179 83-27 52-82 56-143 84l27 159 295 28Z"} />
-      <Pine className="forest-trees" x={38} y={lower ? 110 : 30} scale={1.45} lean />
-      <Pine className="forest-trees" x={183} y={lower ? 250 : 165} scale={1.1} />
-      <Pine className="forest-trees" x={290} y={lower ? 368 : 300} scale={0.72} lean />
-      <Pine className="forest-trees" x={1328} y={lower ? 330 : 292} scale={0.95} />
-      <Pine className="forest-trees" x={1447} y={lower ? 148 : 112} scale={1.55} lean />
-      <Pine className="forest-trees" x={1580} y={lower ? 36 : 2} scale={2} />
-      <path className="forest-bank" d="M0 578c137-48 259-5 354 66l174 65-97 71H0Zm1600-42c-107 7-185 70-271 102l-199 89 36 53h434Z" />
-    </ForestPanels>
-  );
-}
-
 export function ValleyScene() {
   return (
     <div className="valley-scene" aria-hidden="true">
@@ -60,8 +43,6 @@ export function ValleyScene() {
     </div>
   );
 }
-
-
 
 export function ExperienceTerrain() {
   return (
@@ -92,15 +73,29 @@ export function ForestEdge() {
         </ForestPanels>
       </div>
       <div className="forest-depth forest-depth-back">
-        <div className="forest-grove forest-grove-upper"><ForestGrove /></div>
-        <div className="forest-grove forest-grove-lower"><ForestGrove lower /></div>
+        <div className="forest-trunks">
+          <ForestPanels height={1000}>
+            <path className="forest-distant-trees" d="M0 174c26 142 25 269 44 413 9 66 20 134 46 207l-4 82H0Zm1600-23c-31 153-23 270-42 405-14 99-16 166-46 251l12 69h76Z" />
+            <path className="forest-trunk" d="M21 243c16 150 9 293 26 443 6 51 10 88 23 119l39 40-43-11-24-28-13 29-28 8 18-42c-9-46-9-97-13-153L0 243Zm1571-45c-26 171-15 311-30 481-4 40-12 79-26 109l-32 49 34-14 19-28 9 32 32 15-22-49c14-103 4-166 8-267 3-103 3-216 29-328Z" />
+            <path className="forest-bough" d="m34 473 51-58 31-42-12-8-33 39-43 32Zm1553 41-52-50-26-48-13 8 25 52 59 61Z" />
+            <path className="forest-bark" d="M32 567c5 68 2 118 9 163m1512-108c-6 48-1 88-12 126" />
+            <path className="forest-bank" d="M0 822c67-41 101-12 171-40 75-30 118 38 211 17l38 201H0Zm1600-53c-96 1-152 40-233 19-56-14-112 43-178 47l-29 165h440Z" />
+          </ForestPanels>
+        </div>
+        <div className="forest-slope">
+          <ForestPanels height={1600}>
+            <path className="terrain-ridge" d="M0 58 88 119 131 249 225 345 203 461 278 598 239 726 346 855 322 984 410 1138 347 1270 474 1453 508 1600H0Zm1600-25-85 79-18 138-93 123 36 113-84 128 24 151-90 112 31 147-105 144 19 138-114 175-28 182h507Z" />
+            <path className="terrain-slope" d="M0 242 52 317 91 496 148 548 132 693 197 781 172 946 264 1077 209 1214 316 1384 305 1600H0Zm1600-119-36 201-56 112 17 160-78 107 28 178-80 121 18 145-79 171 29 123-91 143-17 138h345Z" />
+            <path className="terrain-contour" d="m61 394 58 139-16 137 57 124m1345-442-63 139 22 156-57 117m-1154 250 63 104-31 120 73 143m1078-365-58 117 15 144-70 142" />
+          </ForestPanels>
+        </div>
       </div>
       <div className="forest-depth forest-depth-front">
-        <div className="forest-grove forest-grove-middle">
-          <ForestPanels>
-            <Pine className="forest-near-trees" x={-13} y={37} scale={2.6} />
-            <Pine className="forest-near-trees" x={1620} y={91} scale={2.3} lean />
-            <path className="forest-bough" d="M0 218c76 30 94 38 168 47l-14 12-93-14 52 27-10 8-103-40Zm1600 124-167 61 73-5-40 25 7 11 127-52Z" />
+        <div className="forest-floor-transition">
+          <ForestPanels height={900}>
+            <path className="forest-bank" d="M0 371c76 139 108 207 238 257 98 38 187 137 232 272H0Zm1600-226c-102 136-62 301-176 421-73 78-164 164-194 334h370Z" />
+            <path className="forest-floor" d="M0 683c142-5 159 113 339 165l85 52H0Zm1600-34c-140 27-146 124-289 194l-106 57h395Z" />
+            <path className="forest-root" d="M65 562c12 62 67 96 88 135s24 94 70 112m-76-124c47 8 80 22 103 58m-74-18c-11 47-9 84 15 132m1307-438c-73 57-39 104-91 160s-96 111-112 181m105-169c-68 0-91 31-123 62m90-17c27 35 5 70-15 111" />
           </ForestPanels>
         </div>
       </div>

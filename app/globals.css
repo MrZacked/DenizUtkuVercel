@@ -46,6 +46,8 @@
   --forest-middle: #879d87;
   --forest-foreground: #627861;
   --forest-trail: #c08b62;
+  --forest-canopy-opacity: 0.16;
+  --forest-trunk-opacity: 0.18;
   --cave-ink: #1b2922;
   --cave-muted: #36473b;
   --cave-accent: #793a22;
@@ -58,10 +60,10 @@
   --cave-near: #c9c5b2;
   --cave-seam: #8c795e;
   --cave-water: #c4cabb;
-  --section-space: clamp(4.5rem, 7vw, 8rem);
   --cave-opening: #f3e6bc;
   --cave-glow: rgb(243 230 188 / 28%);
   --cave-shadow: #bfc0aa;
+  --section-space: clamp(4.5rem, 7vw, 8rem);
 }
 
 html[data-theme="dark"] {
@@ -107,6 +109,8 @@ html[data-theme="dark"] {
   --forest-middle: #2b4435;
   --forest-foreground: #3c5540;
   --forest-trail: #796349;
+  --forest-canopy-opacity: 0.32;
+  --forest-trunk-opacity: 0.24;
   --cave-ink: #fbf5e7;
   --cave-muted: #bdccbe;
   --cave-accent: #f3b47e;
@@ -649,14 +653,14 @@ html[data-theme="dark"] .celestial-moon {
 
 .forest-edge {
   overflow: hidden;
-  opacity: 0.22;
   background: linear-gradient(var(--experience-bg), transparent 24rem);
 }
 
 .forest-layer {
   position: absolute;
   inset: -2rem 0 auto;
-  height: clamp(34rem, 48vw, 48rem);
+  height: clamp(24rem, 36vw, 36rem);
+  opacity: var(--forest-canopy-opacity);
   transform: translate3d(0, var(--forest-back-shift, 0px), 0);
 }
 
@@ -670,24 +674,52 @@ html[data-theme="dark"] .celestial-moon {
 
 .forest-depth {
   position: absolute;
-  inset: -4rem 0;
-  mask-image: linear-gradient(to right, black, transparent 26%, transparent 74%, black),
-    linear-gradient(to bottom, transparent 8rem, black 24rem);
-  mask-composite: intersect;
+  inset: 0;
 }
 
 .forest-depth-back {
+  opacity: var(--forest-trunk-opacity);
+  mask-image: linear-gradient(to right, black, transparent 24%, transparent 76%, black),
+    linear-gradient(to bottom, transparent 10rem, black 28rem, black calc(100% - 8rem), transparent);
+  mask-composite: intersect;
   transform: translate3d(0, var(--forest-back-shift, 0px), 0);
 }
 
 .forest-depth-front {
+  mask-image: linear-gradient(to right, black, transparent 24%, transparent 76%, black);
   transform: translate3d(0, var(--forest-front-shift, 0px), 0);
 }
 
-.forest-grove {
+.forest-trunks {
   position: absolute;
-  width: 100%;
+  inset: 0 0 auto;
   height: clamp(34rem, 48vw, 48rem);
+  mask-image: linear-gradient(black, black calc(100% - 10rem), transparent);
+}
+
+.forest-slope {
+  position: absolute;
+  inset: clamp(27rem, 38vw, 38rem) 0 0;
+  mask-image: linear-gradient(transparent, black 10rem);
+}
+
+.forest-slope .terrain-ridge {
+  fill: var(--cave-soil);
+}
+
+.forest-slope .terrain-slope {
+  fill: var(--cave-stratum);
+}
+
+.forest-slope .terrain-contour {
+  stroke: var(--cave-seam);
+}
+
+.forest-floor-transition {
+  position: absolute;
+  inset: auto 0 -4rem;
+  height: clamp(22rem, 30vw, 30rem);
+  mask-image: linear-gradient(transparent, black 22%);
 }
 
 .forest-panels {
@@ -708,36 +740,33 @@ html[data-theme="dark"] .celestial-moon {
   right: 0;
 }
 
-.forest-grove-upper {
-  top: 18%;
-}
-
-.forest-grove-middle {
-  top: 38%;
-}
-
-.forest-grove-lower {
-  bottom: 0;
-}
-
 .forest-distant-trees {
   fill: var(--forest-distant);
   opacity: 0.7;
 }
 
 .forest-bank,
-.forest-near-trees,
 .forest-floor,
-.forest-bough {
+.forest-bough,
+.forest-trunk {
   fill: var(--forest-foreground);
 }
 
-.forest-near-trees {
-  opacity: 0.8;
+.forest-floor-transition .forest-bank {
+  fill: var(--cave-soil);
 }
 
-.forest-threshold-trees {
-  fill: var(--forest-foreground);
+.forest-floor-transition .forest-floor {
+  fill: var(--cave-stratum);
+}
+
+.forest-bark,
+.forest-root {
+  fill: none;
+  stroke: var(--forest-trail);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.45;
 }
 
 .section-intro {
@@ -1799,14 +1828,17 @@ figcaption a {
     flex-direction: column;
   }
 
-  .forest-depth {
+  .forest-depth-back {
     mask-image: linear-gradient(to right, black, transparent 18%, transparent 82%, black),
-      linear-gradient(to bottom, transparent 8rem, black 24rem);
+      linear-gradient(to bottom, transparent 8rem, black 24rem, black calc(100% - 8rem), transparent);
   }
 
-  .forest-grove,
   .forest-layer {
-    height: 34rem;
+    height: 25rem;
+  }
+
+  .forest-floor-transition {
+    height: 23rem;
   }
 
   .about-section {

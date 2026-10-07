@@ -189,6 +189,42 @@ test("Experience has quiet terrain behind its details without covering controls"
   assert.doesNotMatch(componentSource("ExperienceTerrain"), /<Pine\b/);
 });
 
+test("the descent has one woodland followed by a rocky slope and soil", () => {
+  const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
+  for (const className of ["forest-layer", "forest-trunks", "forest-slope", "forest-floor-transition"]) {
+    assert.equal(countClass(forest, className), 1, `${className} should not restart down the page`);
+  }
+  assert.equal(countClass(forest, "forest-panels"), 4);
+  assert.equal((componentSource("ForestEdge").match(/<Pine\b/g) || []).length, 6);
+  assert.equal(countClass(forest, "forest-trees"), 12, "the paired crops share the same six crown trees");
+  assert.equal((forest.match(/viewBox="0 0 1600 1000"/g) || []).length, 2);
+  assert.equal((forest.match(/viewBox="0 0 1600 1600"/g) || []).length, 2);
+  assert.equal((forest.match(/viewBox="0 0 1600 900"/g) || []).length, 2);
+  assert.doesNotMatch(forest, /viewBox="0 0 1600 2600"/);
+  const slope = componentSource("ForestEdge").match(/<div className="forest-slope">([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(slope);
+  for (const surface of ["terrain-ridge", "terrain-slope", "terrain-contour"]) assert.match(slope, new RegExp(surface));
+  assert.doesNotMatch(slope, /<Pine\b|forest-trunk|forest-trees/);
+  assert.doesNotMatch(source, /\bForestGrove\b|forest-grove/);
+  assert.doesNotMatch(css, /\.forest-grove(?:[\s.{:-]|$)/);
+  assert.doesNotMatch(forest, /forest-near-trees|forest-threshold-trees/);
+});
+
+test("longer project content extends the slope without stretching the woodland", () => {
+  const trunks = rulesFor(".forest-trunks");
+  const size = trunks.join("\n").match(/height:\s*clamp\(([\d.]+)rem,\s*([\d.]+)vw,\s*([\d.]+)rem\)/);
+  assert.ok(size, "tree height needs its own responsive bounds");
+  assert.ok(Number(size[1]) > 0 && Number(size[3]) <= 50 && Number(size[3]) >= Number(size[1]));
+  for (const block of trunks) {
+    assert.doesNotMatch(block, /height:\s*100(?:%|vh|dvh)/);
+    assert.doesNotMatch(block, /inset:\s*0\s*;/);
+  }
+  const slope = rulesFor(".forest-slope").join("\n");
+  assert.match(slope, /inset:\s*clamp\([^;]+\)\s+0\s+0/,
+    "rock should continue to the section bottom as projects become taller");
+  assert.doesNotMatch(slope, /(?:^|[;\n])\s*height:/);
+});
+
 test("the forest spans the projects and the cave joins About to Contact", () => {
   const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
   assert.match(forest, /forest-depth-back/);
@@ -252,19 +288,43 @@ test("both cave palettes keep copy, links and focus visible on the rock planes",
 test("forest layers behind copy retain contrast in both themes", () => {
   const light = paletteFor(":root");
   const dark = { ...light, ...paletteFor('html[data-theme="dark"]') };
-  const opacity = Number(rulesFor(".forest-edge").join("\n").match(/opacity:\s*([\d.]+)\s*;/)?.[1]);
-  assert.ok(opacity > 0 && opacity <= 1);
+  assert.ok(rulesFor(".forest-edge").every((block) => !/opacity:/.test(block)),
+    "the ground transition should not inherit the canopy opacity");
+  assert.match(rulesFor(".forest-layer").join("\n"), /opacity:\s*var\(--forest-canopy-opacity\)/);
+  assert.match(rulesFor(".forest-depth-back").join("\n"), /opacity:\s*var\(--forest-trunk-opacity\)/);
+  const distantOpacity = Number(rulesFor(".forest-distant-trees").join("\n").match(/opacity:\s*([\d.]+)\s*;/)?.[1]);
+  assert.ok(distantOpacity > 0 && distantOpacity <= 1);
   for (const [mode, palette] of Object.entries({ light, dark })) {
-    for (const tree of ["--forest-distant", "--forest-middle", "--forest-foreground"]) {
-      const surface = blendedColor(palette[tree], palette["--projects-bg"], opacity);
+    for (const layer of ["--forest-canopy-opacity", "--forest-trunk-opacity"]) {
+      const opacity = Number(palette[layer]);
+      assert.ok(opacity > 0 && opacity <= 0.35, `${mode} ${layer} should remain quiet behind copy`);
+      for (const tree of ["--forest-distant", "--forest-middle", "--forest-foreground"]) {
+        const pathOpacity = tree === "--forest-distant" ? distantOpacity : 1;
+        const surface = blendedColor(palette[tree], palette["--projects-bg"], opacity * pathOpacity);
+        for (const foreground of ["--ink", "--muted", "--accent", "--link-hover"]) {
+          assert.ok(contrast(palette[foreground], surface) >= 4.5, `${mode} ${foreground} behind ${tree} in ${layer}`);
+        }
+      }
+    }
+    for (const canopy of ["--forest-distant", "--forest-middle"]) {
+      const canopyOpacity = Number(palette["--forest-canopy-opacity"]) * (canopy === "--forest-distant" ? distantOpacity : 1);
+      const canopySurface = blendedColor(palette[canopy], palette["--projects-bg"], canopyOpacity);
+      for (const trunk of ["--forest-distant", "--forest-foreground"]) {
+        const trunkOpacity = Number(palette["--forest-trunk-opacity"]) * (trunk === "--forest-distant" ? distantOpacity : 1);
+        const surface = blendedColor(palette[trunk], canopySurface, trunkOpacity);
+        for (const foreground of ["--ink", "--muted", "--accent", "--link-hover"]) {
+          assert.ok(contrast(palette[foreground], surface) >= 4.5, `${mode} ${foreground} behind overlapping ${canopy} and ${trunk}`);
+        }
+      }
+    }
+    for (const soil of ["--cave-soil", "--cave-stratum"]) {
       for (const foreground of ["--ink", "--muted", "--accent", "--link-hover"]) {
-        assert.ok(contrast(palette[foreground], surface) >= 4.5, `${mode} ${foreground} behind ${tree}`);
+        assert.ok(contrast(palette[foreground], palette[soil]) >= 4.5, `${mode} ${foreground} on the full-strength ${soil} transition`);
       }
     }
   }
-  for (const selector of [".forest-layer", ".forest-depth"]) {
-    assert.ok(rulesFor(selector).every((block) => !/opacity:/.test(block)), "opacity belongs on the shared artwork wrapper");
-  }
+  assert.ok(rulesFor(".forest-depth").every((block) => !/opacity:/.test(block)),
+    "only the trunk layer should be faded, not the soil");
 });
 
 test("forest and cave artwork keep their proportions as the content height changes", () => {
@@ -273,11 +333,6 @@ test("forest and cave artwork keep their proportions as the content height chang
     assert.doesNotMatch(markup, /preserveAspectRatio="none"/);
     assert.match(markup, /preserveAspectRatio="x(?:Mid|Max)YMid slice"/);
   }
-  const forest = renderToStaticMarkup(React.createElement(exportsHolder.exports.ForestEdge));
-  for (const grove of ["upper", "middle", "lower"]) assert.match(forest, new RegExp(`forest-grove-${grove}`));
-  const cave = renderToStaticMarkup(React.createElement(exportsHolder.exports.CaveScene));
-  assert.doesNotMatch(cave, /forest-threshold-trees/);
-  assert.match(cave, /cave-striation/);
 });
 
 test("paired terrain and forest panels retain the edges on phones", () => {
@@ -294,6 +349,21 @@ test("paired terrain and forest panels retain the edges on phones", () => {
   assert.match(rulesFor(".forest-panels svg").join("\n"), /width:\s*50%/);
   assert.match(rulesFor(".forest-panels svg:first-child").join("\n"), /left:\s*0/);
   assert.match(rulesFor(".forest-panels svg:last-child").join("\n"), /right:\s*0/);
+});
+
+test("the forest floor keeps the center clear and covers its scroll movement", () => {
+  const front = rulesFor(".forest-depth-front").join("\n");
+  const mask = front.match(/mask-image:\s*linear-gradient\(to right,\s*black,\s*transparent\s+([\d.]+)%,\s*transparent\s+([\d.]+)%,\s*black\)/);
+  assert.ok(mask, "soil should stay near the outer edges");
+  assert.ok(Number(mask[1]) <= 30 && Number(mask[2]) >= 70, "the central copy area should remain clear");
+
+  const floor = rulesFor(".forest-floor-transition").join("\n");
+  const bottom = floor.match(/inset:\s*auto\s+0\s+(-[\d.]+)rem/);
+  const movement = motionSource.match(/"--forest-front-shift"[\s\S]*?progress\s*\*\s*-(\d+(?:\.\d+)?)\s*\*\s*depth/);
+  assert.ok(bottom, "the soil needs an overlap below the section edge");
+  assert.ok(movement, "the foreground movement needs a bounded distance");
+  assert.ok(Math.abs(Number(bottom[1])) * 16 >= Number(movement[1]),
+    "the overlap should cover the full foreground movement at the default text size");
 });
 
 test("the cave stays cropped at the right edge on narrow screens", () => {
